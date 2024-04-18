@@ -17,7 +17,7 @@ require (
 	github.com/tidwall/gjson v1.16.0
 	github.com/zserge/lorca v0.1.10
 	golang.org/x/mobile v0.0.0-20230531173138-3c911d8e3eda
-	google.golang.org/grpc v1.57.0
+	google.golang.org/grpc v1.57.1
 	google.golang.org/protobuf v1.33.0
 )
 
