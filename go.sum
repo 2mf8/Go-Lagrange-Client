@@ -1,5 +1,5 @@
-github.com/2mf8/LagrangeGo v0.1.0 h1:N/42LiFF59EcmKcTHS4uc7gyXZ7URcnKvYrOYFwM6/0=
-github.com/2mf8/LagrangeGo v0.1.0/go.mod h1:jNEJMrnBI8ENQTFSbE+dLoEUak/N6SMoIWbOr7fORZo=
+github.com/2mf8/LagrangeGo v0.0.13 h1:ZeDPBRtATja/dLE13sXnY0uwohu4XWczZb6AFm54/fI=
+github.com/2mf8/LagrangeGo v0.0.13/go.mod h1:jNEJMrnBI8ENQTFSbE+dLoEUak/N6SMoIWbOr7fORZo=
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/RomiChan/protobuf v0.1.1-0.20230204044148-2ed269a2e54d h1:/Xuj3fIiMY2ls1TwvPKmaqQrtJsPY+c9s+0lOScVHd8=

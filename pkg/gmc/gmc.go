@@ -94,7 +94,7 @@ func Login() {
 		KernelVersion: "10.0.22631",
 	}
 
-	qqclient := client.NewClient(0, set.SignServer, appInfo)
+	qqclient := client.NewClient(0, appInfo, set.SignServer)
 	qqclient.UseDevice(deviceInfo)
 	data, err := os.ReadFile("sig.bin")
 	if err != nil {

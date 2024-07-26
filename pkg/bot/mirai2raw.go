@@ -22,7 +22,14 @@ func MiraiMsgToRawMsg(cli *client.QQClient, messageChain []message.IMessageEleme
 			result += fmt.Sprintf(`<voice url="%s"/>`, html.EscapeString(elem.Url))
 		case *message.ReplyElement:
 			result += fmt.Sprintf(`<reply time="%d" sender="%d" raw_message="%s" reply_seq="%d"/>`, elem.Time, elem.SenderUin, html.EscapeString(MiraiMsgToRawMsg(cli, elem.Elements)), elem.ReplySeq)
+		case *message.ForwardMessage:
+			result += MiraiForwardToRawForward(cli, elem)
 		}
 	}
+	return result
+}
+
+func MiraiForwardToRawForward(cli *client.QQClient, elem *message.ForwardMessage) string {
+	result := fmt.Sprintf(`<forward res_id = "%s"/>`, elem.ResID)
 	return result
 }

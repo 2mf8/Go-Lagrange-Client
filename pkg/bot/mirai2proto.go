@@ -27,6 +27,8 @@ func MiraiMsgToProtoMsg(cli *client.QQClient, messageChain []message.IMessageEle
 			msgList = append(msgList, MiraiVideoToProtoVideo(cli, elem))
 		case *message.ReplyElement:
 			msgList = append(msgList, MiraiReplyToProtoReply(cli, elem))
+		case *message.ForwardMessage:
+			msgList = append(msgList, MiraiForwardToProtoForward(cli, elem))
 		}
 	}
 	return msgList
@@ -111,6 +113,15 @@ func MiraiReplyToProtoReply(cli *client.QQClient, elem *message.ReplyElement) *o
 			"sender":      strconv.FormatInt(int64(elem.SenderUin), 10),
 			"time":        strconv.FormatInt(int64(elem.Time), 10),
 			"raw_message": MiraiMsgToRawMsg(cli, elem.Elements),
+		},
+	}
+}
+
+func MiraiForwardToProtoForward(cli *client.QQClient, elem *message.ForwardMessage) *onebot.Message{
+	return &onebot.Message{
+		Type: "forward",
+		Data: map[string]string{
+			"res_id": elem.ResID,
 		},
 	}
 }

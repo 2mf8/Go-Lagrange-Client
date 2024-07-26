@@ -68,7 +68,7 @@ func TokenLogin() {
 										queryQRCodeMutex.Lock()
 										defer queryQRCodeMutex.Unlock()
 										appInfo := auth.AppList[set.Platform][set.AppVersion]
-										cli := client.NewClient(0, set.SignServer, appInfo)
+										cli := client.NewClient(0, appInfo, set.SignServer)
 										cli.UseDevice(devi)
 										cli.UseSig(sig)
 										cli.SessionLogin()
@@ -115,7 +115,7 @@ func TokenReLogin(userId int64, retryInterval int, retryCount int) {
 				if err == nil {
 					log.Warnf("%v 第 %v 次登录尝试", userId, times)
 					appInfo := auth.AppList[set.Platform][set.AppVersion]
-					cli := client.NewClient(0, set.SignServer, appInfo)
+					cli := client.NewClient(0, appInfo, set.SignServer)
 					cli.UseDevice(devi)
 					cli.UseSig(sig)
 					cli.SessionLogin()
@@ -151,6 +151,7 @@ func init() {
 	plugin.AddFriendMessageRecalledPlugin(plugins.ReportFriendMessageRecalled)
 	plugin.AddNewFriendAddedPlugin(plugins.ReportNewFriendAdded)
 	plugin.AddGroupMutePlugin(plugins.ReportGroupMute)
+	plugin.AddNotifyPlugin(plugins.ReportPoke)
 }
 
 func DeleteBot(c *gin.Context) {
@@ -224,24 +225,20 @@ func FetchQrCode(c *gin.Context) {
 	}
 	newDeviceInfo := device.GetDevice(req.DeviceSeed)
 	appInfo := auth.AppList[set.Platform][set.AppVersion]
+	qqclient := client.NewClient(0, appInfo, set.SignServer)
+	qqclient.UseDevice(newDeviceInfo)
+	qrCodeBot = qqclient
+	b, s, err := qrCodeBot.FetchQRCode(3, 4, 2)
 	if err != nil {
-		fmt.Println(err)
-	} else {
-		qqclient := client.NewClient(0, set.SignServer, appInfo)
-		qqclient.UseDevice(newDeviceInfo)
-		qrCodeBot = qqclient
-		b, s, err := qrCodeBot.FetchQRCode(3, 4, 2)
-		if err != nil {
-			c.String(http.StatusInternalServerError, fmt.Sprintf("failed to fetch qrcode, %+v", err))
-			return
-		}
-		resp := &dto.QRCodeLoginResp{
-			State:     dto.QRCodeLoginResp_QRCodeLoginState(http.StatusOK),
-			ImageData: b,
-			Sig:       []byte(s),
-		}
-		Return(c, resp)
+		c.String(http.StatusInternalServerError, fmt.Sprintf("failed to fetch qrcode, %+v", err))
+		return
 	}
+	resp := &dto.QRCodeLoginResp{
+		State:     dto.QRCodeLoginResp_QRCodeLoginState(http.StatusOK),
+		ImageData: b,
+		Sig:       []byte(s),
+	}
+	Return(c, resp)
 }
 
 func QueryQRCodeStatus(c *gin.Context) {

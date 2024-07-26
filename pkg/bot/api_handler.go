@@ -149,9 +149,9 @@ func HandleSendPrivateMsg(cli *client.QQClient, req *onebot.SendPrivateMsgReq) *
 	sendingMessage := &message.SendingMessage{Elements: messageChain}
 	log.Infof("Bot(%d) Private(%d) <- %s", cli.Uin, req.UserId, MiraiMsgToRawMsg(cli, miraiMsg))
 	ret, _ := cli.SendPrivateMessage(uint32(req.UserId), sendingMessage.Elements)
-	cache.PrivateMessageLru.Add(ret.Result, ret)
+	cache.PrivateMessageLru.Add(ret.Id, ret)
 	return &onebot.SendPrivateMsgResp{
-		MessageId: int32(ret.PrivateSequence),
+		MessageId: int32(ret.Id),
 	}
 }
 
@@ -185,14 +185,14 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 		return nil
 	}
 	ret, _ := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
-	if ret.GroupSequence.IsNone() {
+	if ret.Id < 1 {
 		config.Fragment = !config.Fragment
 		log.Warnf("发送群消息失败，可能被风控，下次发送将改变分片策略，Fragment: %+v", config.Fragment)
 		return nil
 	}
-	cache.GroupMessageLru.Add(int32(ret.GroupSequence.Unwrap()), ret)
+	cache.GroupMessageLru.Add(ret.Id, ret)
 	return &onebot.SendGroupMsgResp{
-		MessageId: int32(ret.GroupSequence.Unwrap()),
+		MessageId: ret.Id,
 	}
 }
 
@@ -214,22 +214,22 @@ func HandleSendMsg(cli *client.QQClient, req *onebot.SendMsgReq) *onebot.SendMsg
 			return nil
 		}
 		ret, _ := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
-		if ret.GroupSequence.IsNone() {
+		if ret.Id < 1 {
 			config.Fragment = !config.Fragment
 			log.Warnf("发送群消息失败，可能被风控，下次发送将改变分片策略，Fragment: %+v", config.Fragment)
 			return nil
 		}
-		cache.GroupMessageLru.Add(int32(ret.GroupSequence.Unwrap()), ret)
+		cache.GroupMessageLru.Add(ret.Id, ret)
 		return &onebot.SendMsgResp{
-			MessageId: int32(ret.GroupSequence.Unwrap()),
+			MessageId: ret.Id,
 		}
 	}
 
 	if req.UserId != 0 { // 私聊
 		ret, _ := cli.SendPrivateMessage(uint32(req.UserId), sendingMessage.Elements)
-		cache.PrivateMessageLru.Add(ret.Result, ret)
+		cache.PrivateMessageLru.Add(ret.Id, ret)
 		return &onebot.SendMsgResp{
-			MessageId: int32(ret.PrivateSequence),
+			MessageId: ret.Id,
 		}
 	}
 	log.Warnf("failed to send msg")

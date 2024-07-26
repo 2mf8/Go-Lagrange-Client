@@ -676,6 +676,19 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
+	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
+		resp.FrameType = onebot.Frame_TSendGroupMsgResp
+		if resp.Ok = isApiAllow(onebot.Frame_TSendGroupMsgReq); !resp.Ok {
+			return
+		}
+		r := &onebot.SendGroupMsgResp{}
+		data := &actionResp{
+			Status:  "ok",
+			RetCode: 0,
+			Data:    &r,
+			Echo:    req.Echo,
+		}
+		sendActionRespData(data, plugin, ws)
 	} else {
 		data := &actionResp{
 			Status:  "failure",

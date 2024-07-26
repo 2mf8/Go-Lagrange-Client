@@ -1,6 +1,7 @@
 package plugins
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -305,3 +306,19 @@ func ReportNewFriendAdded(cli *client.QQClient, event *event.NewFriendRequest) i
 	bot.HandleEventFrame(cli, eventProto)
 	return plugin.MessageIgnore
 }
+
+func ReportPoke(cli *client.QQClient, ievent event.INotifyEvent) int32 {
+	gp, ok := ievent.(*event.GroupPokeEvent)
+	if ok {
+		fmt.Println(gp.GroupUin, gp.Sender, gp.Receiver, gp.From(), gp.Content())
+	}
+	pp, ok := ievent.(*event.FriendPokeEvent)
+	if ok {
+		fmt.Println(pp.Action, pp.Receiver, pp.Sender, pp.Suffix, pp.From(), pp.Content())
+	}
+	return plugin.MessageIgnore
+}
+
+/*unc ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int32 {
+
+}*/

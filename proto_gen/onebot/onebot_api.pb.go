@@ -192,7 +192,7 @@ type Params struct {
 	UserId           int64      `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	GroupId          int64      `protobuf:"varint,2,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
 	Message          []*Message `protobuf:"bytes,3,rep,name=message,proto3" json:"message,omitempty"`
-	Messages         *anypb.Any `protobuf:"bytes,4,opt,name=messages,proto3" json:"messages,omitempty"`
+	Messages         any `protobuf:"bytes,4,opt,name=messages,proto3" json:"messages,omitempty"`
 	MessageType      string     `protobuf:"bytes,5,opt,name=message_type,json=messageType,proto3" json:"message_type,omitempty"`
 	AutoEscape       bool       `protobuf:"varint,6,opt,name=auto_escape,json=autoEscape,proto3" json:"auto_escape,omitempty"`
 	MessageId        int64      `protobuf:"varint,7,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
@@ -279,7 +279,7 @@ func (x *Params) GetMessage() []*Message {
 	return nil
 }
 
-func (x *Params) GetMessages() *anypb.Any {
+func (x *Params) GetMessages() any {
 	if x != nil {
 		return x.Messages
 	}
