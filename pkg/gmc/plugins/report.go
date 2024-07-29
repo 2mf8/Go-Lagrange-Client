@@ -435,7 +435,7 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 		}
 		bot.HandleEventFrame(cli, eventProto)
 	} else {
-		log.Infof("群 %v 内 %v(%s) 取消了管理员", event.GroupUin, event.TargetUin, event.TargetUid)
+		log.Infof("群 %v 内 %v(%s) 被取消了管理员", event.GroupUin, event.TargetUin, event.TargetUid)
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
 		}
