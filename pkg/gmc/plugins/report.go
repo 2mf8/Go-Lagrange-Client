@@ -395,7 +395,7 @@ func ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int3
 				SelfId:            int64(cli.Uin),
 				PostType:          "notice",
 				NoticeType:        "group_digest",
-				SubType:           "cancel",
+				SubType:           "unset",
 				GroupUin:          event.GroupUin,
 				MessageId:         event.MessageID,
 				InternalMessageId: event.InternalMessageID,
@@ -445,7 +445,7 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 				SelfId:     int64(cli.Uin),
 				PostType:   "notice",
 				NoticeType: "group_admin",
-				SubType:    "cancel",
+				SubType:    "unset",
 				GroupEvent: &onebot.GroupMessageEvent{
 					GroupId: int64(event.GroupUin),
 				},
