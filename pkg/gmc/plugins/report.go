@@ -1,7 +1,6 @@
 package plugins
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 
@@ -310,15 +309,236 @@ func ReportNewFriendAdded(cli *client.QQClient, event *event.NewFriendRequest) i
 func ReportPoke(cli *client.QQClient, ievent event.INotifyEvent) int32 {
 	gp, ok := ievent.(*event.GroupPokeEvent)
 	if ok {
-		fmt.Println(gp.GroupUin, gp.Sender, gp.Receiver, gp.From(), gp.Content())
+		if gp.Suffix != "" {
+			log.Infof("群 %v 内 %d%s%d的%s", gp.GroupUin, gp.Sender, gp.Action, gp.Receiver, gp.Suffix)
+		} else {
+			log.Infof("群 %v 内 %d%s%d", gp.GroupUin, gp.Sender, gp.Action, gp.Receiver)
+		}
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TGroupPokeEvent,
+		}
+		eventProto.PbData = &onebot.Frame_GroupPokeEvent{
+			GroupPokeEvent: &onebot.GroupPokeEvent{
+				Time:       time.Now().Unix(),
+				SelfId:     int64(cli.Uin),
+				PostType:   "notice",
+				NoticeType: "group_poke",
+				GroupUin:   gp.GroupUin,
+				Sender:     gp.Sender,
+				Receiver:   gp.Receiver,
+				Suffix:     gp.Suffix,
+				Action:     gp.Action,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
 	}
 	pp, ok := ievent.(*event.FriendPokeEvent)
 	if ok {
-		fmt.Println(pp.Action, pp.Receiver, pp.Sender, pp.Suffix, pp.From(), pp.Content())
+		if pp.Suffix != "" {
+			log.Infof("%d%s%d的%s", pp.Sender, pp.Action, pp.Receiver, pp.Suffix)
+		} else {
+			log.Infof("%d%s%d", pp.Sender, pp.Action, pp.Receiver)
+		}
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TFriendPokeEvent,
+		}
+		eventProto.PbData = &onebot.Frame_FriendPokeEvent{
+			FriendPokeEvent: &onebot.FriendPokeEvent{
+				Time:       time.Now().Unix(),
+				SelfId:     int64(cli.Uin),
+				PostType:   "notice",
+				NoticeType: "friend_poke",
+				Sender:     pp.Sender,
+				Receiver:   pp.Receiver,
+				Suffix:     pp.Suffix,
+				Action:     pp.Action,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
 	}
 	return plugin.MessageIgnore
 }
 
-/*unc ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int32 {
+func ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int32 {
+	if event.OperationType == 1 {
+		log.Infof("群 %v 内 %s 的消息被 %s 设置了精华消息", event.GroupUin, event.SenderNick, event.OperatorNick)
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TGroupDigestEvent,
+		}
+		eventProto.PbData = &onebot.Frame_GroupDigestEvent{
+			GroupDigestEvent: &onebot.GroupDigestEvent{
+				Time:              time.Now().Unix(),
+				SelfId:            int64(cli.Uin),
+				PostType:          "notice",
+				NoticeType:        "group_digest",
+				SubType:           "set",
+				GroupUin:          event.GroupUin,
+				MessageId:         event.MessageID,
+				InternalMessageId: event.InternalMessageID,
+				OperationType:     event.OperationType,
+				OperationTime:     event.OperateTime,
+				SenderUin:         event.SenderUin,
+				OperatorUin:       event.OperatorUin,
+				SenderNick:        event.SenderNick,
+				OperationNick:     event.OperatorNick,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
+	} else {
+		log.Infof("群 %v 内 %s 的消息被 %s 取消了精华消息", event.GroupUin, event.SenderNick, event.OperatorNick)
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TGroupDigestEvent,
+		}
+		eventProto.PbData = &onebot.Frame_GroupDigestEvent{
+			GroupDigestEvent: &onebot.GroupDigestEvent{
+				Time:              time.Now().Unix(),
+				SelfId:            int64(cli.Uin),
+				PostType:          "notice",
+				NoticeType:        "group_digest",
+				SubType:           "cancel",
+				GroupUin:          event.GroupUin,
+				MessageId:         event.MessageID,
+				InternalMessageId: event.InternalMessageID,
+				OperationType:     event.OperationType,
+				OperationTime:     event.OperateTime,
+				SenderUin:         event.SenderUin,
+				OperatorUin:       event.OperatorUin,
+				SenderNick:        event.SenderNick,
+				OperationNick:     event.OperatorNick,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
+	}
+	return plugin.MessageIgnore
+}
 
-}*/
+func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.GroupMemberPermissionChanged) int32 {
+	if event.IsAdmin {
+		log.Infof("群 %v 内 %v(%s) 成为了管理员", event.GroupUin, event.TargetUin, event.TargetUid)
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
+		}
+		eventProto.PbData = &onebot.Frame_GroupMemberPermissionChangeEvent{
+			GroupMemberPermissionChangeEvent: &onebot.GroupMemberPermissionChangedEvent{
+				Time:       time.Now().Unix(),
+				SelfId:     int64(cli.Uin),
+				PostType:   "notice",
+				NoticeType: "group_admin",
+				SubType:    "set",
+				GroupEvent: &onebot.GroupMessageEvent{
+					GroupId: int64(event.GroupUin),
+				},
+				TargetUin: event.TargetUin,
+				TargetUid: event.TargetUid,
+				IsAdmin:   event.IsAdmin,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
+	} else {
+		log.Infof("群 %v 内 %v(%s) 取消了管理员", event.GroupUin, event.TargetUin, event.TargetUid)
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
+		}
+		eventProto.PbData = &onebot.Frame_GroupMemberPermissionChangeEvent{
+			GroupMemberPermissionChangeEvent: &onebot.GroupMemberPermissionChangedEvent{
+				Time:       time.Now().Unix(),
+				SelfId:     int64(cli.Uin),
+				PostType:   "notice",
+				NoticeType: "group_admin",
+				SubType:    "cancel",
+				GroupEvent: &onebot.GroupMessageEvent{
+					GroupId: int64(event.GroupUin),
+				},
+				TargetUin: event.TargetUin,
+				TargetUid: event.TargetUid,
+				IsAdmin:   event.IsAdmin,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
+	}
+	return plugin.MessageIgnore
+}
+
+func ReportGroupNameUpdated(cli *client.QQClient, event *event.GroupNameUpdated) int32 {
+	log.Infof("群 %v 的名字变为了 %s ,操作者为 %v(%s)", event.GroupUin, event.NewName, event.OperatorUin, event.OperatorUid)
+	eventProto := &onebot.Frame{
+		FrameType: onebot.Frame_TGroupNameUpdatedEvent,
+	}
+	eventProto.PbData = &onebot.Frame_GroupNameUpdatedEvent{
+		GroupNameUpdatedEvent: &onebot.GroupNameUpdatedEvent{
+			Time:        time.Now().Unix(),
+			SelfId:      int64(cli.Uin),
+			PostType:    "notice",
+			NoticeType:  "group_name",
+			SubType:     "change",
+			GroupUin:    event.GroupUin,
+			NewName:     event.NewName,
+			OperatorUin: event.OperatorUin,
+			OperatorUid: event.OperatorUid,
+		},
+	}
+	bot.HandleEventFrame(cli, eventProto)
+	return plugin.MessageIgnore
+}
+
+func ReportMemberSpecialTitleUpdated(cli *client.QQClient, event *event.MemberSpecialTitleUpdated) int32 {
+	log.Infof("群 %v 内 %v 获得了 %s 头衔", event.GroupUin, event.Uin, event.NewTitle)
+	eventProto := &onebot.Frame{
+		FrameType: onebot.Frame_TMemberSpecialTitleUpdatedEvent,
+	}
+	eventProto.PbData = &onebot.Frame_MemberSpecialTitleUpdatedEvent{
+		MemberSpecialTitleUpdatedEvent: &onebot.MemberSpecialTitleUpdatedEvent{
+			Time:       time.Now().Unix(),
+			SelfId:     int64(cli.Uin),
+			PostType:   "notice",
+			NoticeType: "group_member_titile",
+			SubType:    "change",
+			GroupUin:   event.GroupUin,
+			Uin:        event.Uin,
+			NewTitle:   event.NewTitle,
+		},
+	}
+	bot.HandleEventFrame(cli, eventProto)
+	return plugin.MessageIgnore
+}
+
+func ReportRename(cli *client.QQClient, event *event.Rename) int32 {
+	if event.SubType == 0 {
+		log.Infof("机器人修改了自己的昵称为 %s", event.Nickname)
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TRenameEvent,
+		}
+		eventProto.PbData = &onebot.Frame_RenameEvent{
+			RenameEvent: &onebot.RenameEvent{
+				Time:       time.Now().Unix(),
+				SelfId:     int64(cli.Uin),
+				PostType:   "notice",
+				NoticeType: "rename",
+				SubType:    "self",
+				Uin:        event.Uin,
+				Uid:        event.Uid,
+				NickName:   event.Nickname,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
+	} else {
+		log.Infof("%v(%s) 的昵称被修改为 %s", event.Uin, event.Uid, event.Nickname)
+		eventProto := &onebot.Frame{
+			FrameType: onebot.Frame_TRenameEvent,
+		}
+		eventProto.PbData = &onebot.Frame_RenameEvent{
+			RenameEvent: &onebot.RenameEvent{
+				Time:       time.Now().Unix(),
+				SelfId:     int64(cli.Uin),
+				PostType:   "notice",
+				NoticeType: "rename",
+				SubType:    "other",
+				Uin:        event.Uin,
+				Uid:        event.Uid,
+				NickName:   event.Nickname,
+			},
+		}
+		bot.HandleEventFrame(cli, eventProto)
+	}
+	return plugin.MessageIgnore
+}

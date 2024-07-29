@@ -205,7 +205,6 @@ type CreateBotReq struct {
 	BotId          int64  `protobuf:"varint,1,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
 	Password       string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	DeviceSeed     int64  `protobuf:"varint,3,opt,name=device_seed,json=deviceSeed,proto3" json:"device_seed,omitempty"`             // 设备信息随机种子
-	ClientProtocol int32  `protobuf:"varint,4,opt,name=client_protocol,json=clientProtocol,proto3" json:"client_protocol,omitempty"` // 协议类型
 	SignServer     string `protobuf:"bytes,5,opt,name=sign_server,json=signServer,proto3" json:"sign_server,omitempty"`
 	SignServerAuth string `protobuf:"bytes,6,opt,name=sign_server_auth,json=signServerAuth,proto3" json:"sign_server_auth,omitempty"`
 }
@@ -259,13 +258,6 @@ func (x *CreateBotReq) GetPassword() string {
 func (x *CreateBotReq) GetDeviceSeed() int64 {
 	if x != nil {
 		return x.DeviceSeed
-	}
-	return 0
-}
-
-func (x *CreateBotReq) GetClientProtocol() int32 {
-	if x != nil {
-		return x.ClientProtocol
 	}
 	return 0
 }
@@ -595,7 +587,6 @@ type FetchQRCodeReq struct {
 	unknownFields protoimpl.UnknownFields
 
 	DeviceSeed     int64 `protobuf:"varint,1,opt,name=device_seed,json=deviceSeed,proto3" json:"device_seed,omitempty"`
-	ClientProtocol int32 `protobuf:"varint,2,opt,name=client_protocol,json=clientProtocol,proto3" json:"client_protocol,omitempty"` // 协议类型
 }
 
 func (x *FetchQRCodeReq) Reset() {
@@ -633,13 +624,6 @@ func (*FetchQRCodeReq) Descriptor() ([]byte, []int) {
 func (x *FetchQRCodeReq) GetDeviceSeed() int64 {
 	if x != nil {
 		return x.DeviceSeed
-	}
-	return 0
-}
-
-func (x *FetchQRCodeReq) GetClientProtocol() int32 {
-	if x != nil {
-		return x.ClientProtocol
 	}
 	return 0
 }

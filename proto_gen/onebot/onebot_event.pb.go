@@ -25,18 +25,18 @@ type PrivateMessageEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64                       `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64                       `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string                      `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	MessageType string                      `protobuf:"bytes,4,opt,name=message_type,json=messageType,proto3" json:"message_type"`
-	SubType     string                      `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	MessageId   int32                       `protobuf:"varint,6,opt,name=message_id,json=messageId,proto3" json:"message_id"`
-	UserId      int64                       `protobuf:"varint,7,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Message     []*Message                  `protobuf:"bytes,8,rep,name=message,proto3" json:"message"`
-	RawMessage  string                      `protobuf:"bytes,9,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message"`
-	Font        int32                       `protobuf:"varint,10,opt,name=font,proto3" json:"font"`
-	Sender      *PrivateMessageEvent_Sender `protobuf:"bytes,11,opt,name=sender,proto3" json:"sender"`
-	Extra       map[string]string           `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time        int64                       `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64                       `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string                      `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	MessageType string                      `protobuf:"bytes,4,opt,name=message_type,json=messageType,proto3" json:"message_type,omitempty"`
+	SubType     string                      `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	MessageId   int32                       `protobuf:"varint,6,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	UserId      int64                       `protobuf:"varint,7,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Message     []*Message                  `protobuf:"bytes,8,rep,name=message,proto3" json:"message,omitempty"`
+	RawMessage  string                      `protobuf:"bytes,9,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message,omitempty"`
+	Font        int32                       `protobuf:"varint,10,opt,name=font,proto3" json:"font,omitempty"`
+	Sender      *PrivateMessageEvent_Sender `protobuf:"bytes,11,opt,name=sender,proto3" json:"sender,omitempty"`
+	Extra       map[string]string           `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *PrivateMessageEvent) Reset() {
@@ -160,19 +160,19 @@ type GroupMessageEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64                        `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64                        `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string                       `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	MessageType string                       `protobuf:"bytes,4,opt,name=message_type,json=messageType,proto3" json:"message_type"`
-	SubType     string                       `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	MessageId   int32                        `protobuf:"varint,6,opt,name=message_id,json=messageId,proto3" json:"message_id"`
-	GroupId     int64                        `protobuf:"varint,7,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	UserId      int64                        `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Anonymous   *GroupMessageEvent_Anonymous `protobuf:"bytes,9,opt,name=anonymous,proto3" json:"anonymous"`
-	Message     []*Message                   `protobuf:"bytes,10,rep,name=message,proto3" json:"message"`
-	RawMessage  string                       `protobuf:"bytes,11,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message"`
-	Font        int32                        `protobuf:"varint,12,opt,name=font,proto3" json:"font"`
-	Sender      *GroupMessageEvent_Sender    `protobuf:"bytes,13,opt,name=sender,proto3" json:"sender"`
+	Time        int64                        `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64                        `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string                       `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	MessageType string                       `protobuf:"bytes,4,opt,name=message_type,json=messageType,proto3" json:"message_type,omitempty"`
+	SubType     string                       `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	MessageId   int32                        `protobuf:"varint,6,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	GroupId     int64                        `protobuf:"varint,7,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	UserId      int64                        `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Anonymous   *GroupMessageEvent_Anonymous `protobuf:"bytes,9,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
+	Message     []*Message                   `protobuf:"bytes,10,rep,name=message,proto3" json:"message,omitempty"`
+	RawMessage  string                       `protobuf:"bytes,11,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message,omitempty"`
+	Font        int32                        `protobuf:"varint,12,opt,name=font,proto3" json:"font,omitempty"`
+	Sender      *GroupMessageEvent_Sender    `protobuf:"bytes,13,opt,name=sender,proto3" json:"sender,omitempty"`
 	Extra       map[string]string            `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
@@ -311,16 +311,16 @@ type GroupTempMessageEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	MessageType string            `protobuf:"bytes,4,opt,name=message_type,json=messageType,proto3" json:"message_type"`
-	GroupId     int64             `protobuf:"varint,7,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	UserId      int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Message     []*Message        `protobuf:"bytes,10,rep,name=message,proto3" json:"message"`
-	RawMessage  string            `protobuf:"bytes,11,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message"`
-	MessageId   int32             `protobuf:"varint,15,opt,name=message_id,json=messageId,proto3" json:"message_id"`
-	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	MessageType string            `protobuf:"bytes,4,opt,name=message_type,json=messageType,proto3" json:"message_type,omitempty"`
+	GroupId     int64             `protobuf:"varint,7,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	UserId      int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Message     []*Message        `protobuf:"bytes,10,rep,name=message,proto3" json:"message,omitempty"`
+	RawMessage  string            `protobuf:"bytes,11,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message,omitempty"`
+	MessageId   int32             `protobuf:"varint,15,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupTempMessageEvent) Reset() {
@@ -430,14 +430,14 @@ type GroupUploadNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time       int64                        `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId     int64                        `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType   string                       `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType string                       `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	GroupId    int64                        `protobuf:"varint,5,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	UserId     int64                        `protobuf:"varint,6,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	File       *GroupUploadNoticeEvent_File `protobuf:"bytes,7,opt,name=file,proto3" json:"file"`
-	Extra      map[string]string            `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time       int64                        `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64                        `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string                       `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string                       `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	GroupId    int64                        `protobuf:"varint,5,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	UserId     int64                        `protobuf:"varint,6,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	File       *GroupUploadNoticeEvent_File `protobuf:"bytes,7,opt,name=file,proto3" json:"file,omitempty"`
+	Extra      map[string]string            `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupUploadNoticeEvent) Reset() {
@@ -533,17 +533,17 @@ type GroupNotifyEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time       int64  `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId     int64  `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType   string `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType string `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	GroupId    int64  `protobuf:"varint,5,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	GroupName  string `protobuf:"bytes,6,opt,name=group_name,json=groupName,proto3" json:"group_name"`
-	Sender     int64  `protobuf:"varint,7,opt,name=sender,proto3" json:"sender"`
-	SenderCard string `protobuf:"bytes,8,opt,name=sender_card,json=senderCard,proto3" json:"sender_card"`
-	TargetId   int64  `protobuf:"varint,9,opt,name=target_id,json=targetId,proto3" json:"target_id"`
-	TargetCard string `protobuf:"bytes,10,opt,name=target_card,json=targetCard,proto3" json:"target_card"`
-	Honor      string `protobuf:"bytes,11,opt,name=honor,proto3" json:"honor"`
+	Time       int64  `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64  `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	GroupId    int64  `protobuf:"varint,5,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	GroupName  string `protobuf:"bytes,6,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
+	Sender     int64  `protobuf:"varint,7,opt,name=sender,proto3" json:"sender,omitempty"`
+	SenderCard string `protobuf:"bytes,8,opt,name=sender_card,json=senderCard,proto3" json:"sender_card,omitempty"`
+	TargetId   int64  `protobuf:"varint,9,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	TargetCard string `protobuf:"bytes,10,opt,name=target_card,json=targetCard,proto3" json:"target_card,omitempty"`
+	Honor      string `protobuf:"bytes,11,opt,name=honor,proto3" json:"honor,omitempty"`
 }
 
 func (x *GroupNotifyEvent) Reset() {
@@ -660,14 +660,14 @@ type GroupAdminNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	GroupId    int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	UserId     int64             `protobuf:"varint,7,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupId    int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	UserId     int64             `protobuf:"varint,7,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupAdminNoticeEvent) Reset() {
@@ -763,18 +763,18 @@ type GroupDecreaseNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	SubType     string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	GroupId     int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	OperatorId  int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id"`
-	UserId      int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	MemberUid   string            `protobuf:"bytes,9,opt,name=member_uid,json=memberUid,proto3" json:"member_uid"`
-	OperatorUid string            `protobuf:"bytes,10,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid"`
-	ExitType    uint32            `protobuf:"varint,11,opt,name=exit_type,json=exitType,proto3" json:"exit_type"`
-	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType     string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupId     int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	OperatorId  int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	UserId      int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	MemberUid   string            `protobuf:"bytes,9,opt,name=member_uid,json=memberUid,proto3" json:"member_uid,omitempty"`
+	OperatorUid string            `protobuf:"bytes,10,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid,omitempty"`
+	ExitType    uint32            `protobuf:"varint,11,opt,name=exit_type,json=exitType,proto3" json:"exit_type,omitempty"`
+	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupDecreaseNoticeEvent) Reset() {
@@ -898,18 +898,18 @@ type GroupIncreaseNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	GroupId    int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	OperatorId int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id"`
-	UserId     int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	MemberUid  string            `protobuf:"bytes,9,opt,name=member_uid,json=memberUid,proto3" json:"member_uid"`
-	InvitorUid string            `protobuf:"bytes,10,opt,name=invitor_uid,json=invitorUid,proto3" json:"invitor_uid"`
-	JoinType   uint32            `protobuf:"varint,11,opt,name=join_type,json=joinType,proto3" json:"join_type"`
-	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupId    int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	OperatorId int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	UserId     int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	MemberUid  string            `protobuf:"bytes,9,opt,name=member_uid,json=memberUid,proto3" json:"member_uid,omitempty"`
+	InvitorUid string            `protobuf:"bytes,10,opt,name=invitor_uid,json=invitorUid,proto3" json:"invitor_uid,omitempty"`
+	JoinType   uint32            `protobuf:"varint,11,opt,name=join_type,json=joinType,proto3" json:"join_type,omitempty"`
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupIncreaseNoticeEvent) Reset() {
@@ -1033,18 +1033,18 @@ type GroupBanNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	SubType     string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	GroupId     int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	OperatorId  int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id"`
-	UserId      int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Duration    int64             `protobuf:"varint,9,opt,name=duration,proto3" json:"duration"`
-	OperatorUid string            `protobuf:"bytes,10,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid"`
-	TargetUid   string            `protobuf:"bytes,11,opt,name=target_uid,json=targetUid,proto3" json:"target_uid"`
-	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType     string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupId     int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	OperatorId  int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	UserId      int64             `protobuf:"varint,8,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Duration    int64             `protobuf:"varint,9,opt,name=duration,proto3" json:"duration,omitempty"`
+	OperatorUid string            `protobuf:"bytes,10,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid,omitempty"`
+	TargetUid   string            `protobuf:"bytes,11,opt,name=target_uid,json=targetUid,proto3" json:"target_uid,omitempty"`
+	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupBanNoticeEvent) Reset() {
@@ -1168,16 +1168,16 @@ type FriendAddNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	UserId     int64             `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	SourceUin  uint32            `protobuf:"varint,8,opt,name=source_uin,json=sourceUin,proto3" json:"source_uin"`
-	SourceUid  string            `protobuf:"bytes,9,opt,name=source_uid,json=sourceUid,proto3" json:"source_uid"`
-	Msg        string            `protobuf:"bytes,10,opt,name=msg,proto3" json:"msg"`
-	Source     string            `protobuf:"bytes,11,opt,name=source,proto3" json:"source"`
-	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	UserId     int64             `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SourceUin  uint32            `protobuf:"varint,8,opt,name=source_uin,json=sourceUin,proto3" json:"source_uin,omitempty"`
+	SourceUid  string            `protobuf:"bytes,9,opt,name=source_uid,json=sourceUid,proto3" json:"source_uid,omitempty"`
+	Msg        string            `protobuf:"bytes,10,opt,name=msg,proto3" json:"msg,omitempty"`
+	Source     string            `protobuf:"bytes,11,opt,name=source,proto3" json:"source,omitempty"`
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *FriendAddNoticeEvent) Reset() {
@@ -1287,19 +1287,19 @@ type GroupRecallNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	GroupId     int64             `protobuf:"varint,5,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	UserId      int64             `protobuf:"varint,6,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	OperatorId  int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id"`
-	MessageId   int32             `protobuf:"varint,8,opt,name=message_id,json=messageId,proto3" json:"message_id"`
-	AuthorUid   string            `protobuf:"bytes,10,opt,name=author_uid,json=authorUid,proto3" json:"author_uid"`
-	OperatorUid string            `protobuf:"bytes,11,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid"`
-	Sequence    uint64            `protobuf:"varint,12,opt,name=sequence,proto3" json:"sequence"`
-	Random      uint32            `protobuf:"varint,13,opt,name=random,proto3" json:"random"`
-	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	GroupId     int64             `protobuf:"varint,5,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	UserId      int64             `protobuf:"varint,6,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	OperatorId  int64             `protobuf:"varint,7,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	MessageId   int32             `protobuf:"varint,8,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	AuthorUid   string            `protobuf:"bytes,10,opt,name=author_uid,json=authorUid,proto3" json:"author_uid,omitempty"`
+	OperatorUid string            `protobuf:"bytes,11,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid,omitempty"`
+	Sequence    uint64            `protobuf:"varint,12,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Random      uint32            `protobuf:"varint,13,opt,name=random,proto3" json:"random,omitempty"`
+	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupRecallNoticeEvent) Reset() {
@@ -1430,16 +1430,16 @@ type FriendRecallNoticeEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type"`
-	UserId     int64             `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	MessageId  int32             `protobuf:"varint,6,opt,name=message_id,json=messageId,proto3" json:"message_id"`
-	FromUid    string            `protobuf:"bytes,8,opt,name=from_uid,json=fromUid,proto3" json:"from_uid"`
-	Sequence   uint64            `protobuf:"varint,9,opt,name=sequence,proto3" json:"sequence"`
-	Random     uint32            `protobuf:"varint,10,opt,name=random,proto3" json:"random"`
-	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	UserId     int64             `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	MessageId  int32             `protobuf:"varint,6,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	FromUid    string            `protobuf:"bytes,8,opt,name=from_uid,json=fromUid,proto3" json:"from_uid,omitempty"`
+	Sequence   uint64            `protobuf:"varint,9,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Random     uint32            `protobuf:"varint,10,opt,name=random,proto3" json:"random,omitempty"`
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *FriendRecallNoticeEvent) Reset() {
@@ -1549,18 +1549,18 @@ type FriendRequestEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	RequestType string            `protobuf:"bytes,4,opt,name=request_type,json=requestType,proto3" json:"request_type"`
-	UserId      int64             `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Comment     string            `protobuf:"bytes,6,opt,name=comment,proto3" json:"comment"`
-	Flag        string            `protobuf:"bytes,7,opt,name=flag,proto3" json:"flag"`
-	SourceUin   uint32            `protobuf:"varint,8,opt,name=source_uin,json=sourceUin,proto3" json:"source_uin"`
-	SourceUid   string            `protobuf:"bytes,9,opt,name=source_uid,json=sourceUid,proto3" json:"source_uid"`
-	Msg         string            `protobuf:"bytes,10,opt,name=msg,proto3" json:"msg"`
-	Source      string            `protobuf:"bytes,11,opt,name=source,proto3" json:"source"`
-	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	RequestType string            `protobuf:"bytes,4,opt,name=request_type,json=requestType,proto3" json:"request_type,omitempty"`
+	UserId      int64             `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Comment     string            `protobuf:"bytes,6,opt,name=comment,proto3" json:"comment,omitempty"`
+	Flag        string            `protobuf:"bytes,7,opt,name=flag,proto3" json:"flag,omitempty"`
+	SourceUin   uint32            `protobuf:"varint,8,opt,name=source_uin,json=sourceUin,proto3" json:"source_uin,omitempty"`
+	SourceUid   string            `protobuf:"bytes,9,opt,name=source_uid,json=sourceUid,proto3" json:"source_uid,omitempty"`
+	Msg         string            `protobuf:"bytes,10,opt,name=msg,proto3" json:"msg,omitempty"`
+	Source      string            `protobuf:"bytes,11,opt,name=source,proto3" json:"source,omitempty"`
+	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *FriendRequestEvent) Reset() {
@@ -1684,26 +1684,26 @@ type GroupRequestEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Time          int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time"`
-	SelfId        int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id"`
-	PostType      string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type"`
-	RequestType   string            `protobuf:"bytes,4,opt,name=request_type,json=requestType,proto3" json:"request_type"`
-	SubType       string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type"`
-	GroupId       int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id"`
-	UserId        int64             `protobuf:"varint,7,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Comment       string            `protobuf:"bytes,8,opt,name=comment,proto3" json:"comment"`
-	Flag          string            `protobuf:"bytes,9,opt,name=flag,proto3" json:"flag"`
-	RequestId     int64             `protobuf:"varint,10,opt,name=request_id,json=requestId,proto3" json:"request_id"`
-	UserNick      string            `protobuf:"bytes,11,opt,name=user_nick,json=userNick,proto3" json:"user_nick"`
-	GroupName     string            `protobuf:"bytes,12,opt,name=group_name,json=groupName,proto3" json:"group_name"`
-	ActionUinNick string            `protobuf:"bytes,13,opt,name=action_uin_nick,json=actionUinNick,proto3" json:"action_uin_nick"`
-	ActionUin     int64             `protobuf:"varint,14,opt,name=action_uin,json=actionUin,proto3" json:"action_uin"`
-	Check         bool              `protobuf:"varint,15,opt,name=check,proto3" json:"check"`
-	Suspicious    bool              `protobuf:"varint,16,opt,name=suspicious,proto3" json:"suspicious"`
-	TargetUid     string            `protobuf:"bytes,17,opt,name=target_uid,json=targetUid,proto3" json:"target_uid"`
-	InvitorUid    string            `protobuf:"bytes,18,opt,name=invitor_uid,json=invitorUid,proto3" json:"invitor_uid"`
-	Answer        string            `protobuf:"bytes,19,opt,name=answer,proto3" json:"answer"`
-	Extra         map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Time          int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId        int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType      string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	RequestType   string            `protobuf:"bytes,4,opt,name=request_type,json=requestType,proto3" json:"request_type,omitempty"`
+	SubType       string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupId       int64             `protobuf:"varint,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	UserId        int64             `protobuf:"varint,7,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Comment       string            `protobuf:"bytes,8,opt,name=comment,proto3" json:"comment,omitempty"`
+	Flag          string            `protobuf:"bytes,9,opt,name=flag,proto3" json:"flag,omitempty"`
+	RequestId     int64             `protobuf:"varint,10,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	UserNick      string            `protobuf:"bytes,11,opt,name=user_nick,json=userNick,proto3" json:"user_nick,omitempty"`
+	GroupName     string            `protobuf:"bytes,12,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
+	ActionUinNick string            `protobuf:"bytes,13,opt,name=action_uin_nick,json=actionUinNick,proto3" json:"action_uin_nick,omitempty"`
+	ActionUin     int64             `protobuf:"varint,14,opt,name=action_uin,json=actionUin,proto3" json:"action_uin,omitempty"`
+	Check         bool              `protobuf:"varint,15,opt,name=check,proto3" json:"check,omitempty"`
+	Suspicious    bool              `protobuf:"varint,16,opt,name=suspicious,proto3" json:"suspicious,omitempty"`
+	TargetUid     string            `protobuf:"bytes,17,opt,name=target_uid,json=targetUid,proto3" json:"target_uid,omitempty"`
+	InvitorUid    string            `protobuf:"bytes,18,opt,name=invitor_uid,json=invitorUid,proto3" json:"invitor_uid,omitempty"`
+	Answer        string            `protobuf:"bytes,19,opt,name=answer,proto3" json:"answer,omitempty"`
+	Extra         map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *GroupRequestEvent) Reset() {
@@ -1878,21 +1878,897 @@ func (x *GroupRequestEvent) GetExtra() map[string]string {
 	return nil
 }
 
+type GroupDigestEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time              int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId            int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType          string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType        string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType           string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupUin          uint32            `protobuf:"varint,6,opt,name=group_uin,json=groupUin,proto3" json:"group_uin,omitempty"`                              // GroupUin          uint32
+	MessageId         uint32            `protobuf:"varint,7,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`                           // MessageID         uint32
+	InternalMessageId uint32            `protobuf:"varint,8,opt,name=internal_message_id,json=internalMessageId,proto3" json:"internal_message_id,omitempty"` // InternalMessageID uint32
+	OperationType     uint32            `protobuf:"varint,9,opt,name=operation_type,json=operationType,proto3" json:"operation_type,omitempty"`               // OperationType     uint32 // 1 -> 设置精华消息, 2 -> 移除精华消息
+	OperationTime     uint32            `protobuf:"varint,10,opt,name=operation_time,json=operationTime,proto3" json:"operation_time,omitempty"`              // OperateTime       uint32
+	SenderUin         uint32            `protobuf:"varint,11,opt,name=sender_uin,json=senderUin,proto3" json:"sender_uin,omitempty"`                          // SenderUin         uint32
+	OperatorUin       uint32            `protobuf:"varint,12,opt,name=operator_uin,json=operatorUin,proto3" json:"operator_uin,omitempty"`                    // OperatorUin       uint32
+	SenderNick        string            `protobuf:"bytes,13,opt,name=sender_nick,json=senderNick,proto3" json:"sender_nick,omitempty"`                        // SenderNick        string
+	OperationNick     string            `protobuf:"bytes,14,opt,name=operation_nick,json=operationNick,proto3" json:"operation_nick,omitempty"`               // OperatorNick      string
+	Extra             map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *GroupDigestEvent) Reset() {
+	*x = GroupDigestEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GroupDigestEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupDigestEvent) ProtoMessage() {}
+
+func (x *GroupDigestEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupDigestEvent.ProtoReflect.Descriptor instead.
+func (*GroupDigestEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GroupDigestEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *GroupDigestEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *GroupDigestEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *GroupDigestEvent) GetGroupUin() uint32 {
+	if x != nil {
+		return x.GroupUin
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetMessageId() uint32 {
+	if x != nil {
+		return x.MessageId
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetInternalMessageId() uint32 {
+	if x != nil {
+		return x.InternalMessageId
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetOperationType() uint32 {
+	if x != nil {
+		return x.OperationType
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetOperationTime() uint32 {
+	if x != nil {
+		return x.OperationTime
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetSenderUin() uint32 {
+	if x != nil {
+		return x.SenderUin
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetOperatorUin() uint32 {
+	if x != nil {
+		return x.OperatorUin
+	}
+	return 0
+}
+
+func (x *GroupDigestEvent) GetSenderNick() string {
+	if x != nil {
+		return x.SenderNick
+	}
+	return ""
+}
+
+func (x *GroupDigestEvent) GetOperationNick() string {
+	if x != nil {
+		return x.OperationNick
+	}
+	return ""
+}
+
+func (x *GroupDigestEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
+type GroupMemberPermissionChangedEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time       int64              `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64              `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string             `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string             `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string             `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupEvent *GroupMessageEvent `protobuf:"bytes,6,opt,name=group_event,json=groupEvent,proto3" json:"group_event,omitempty"`
+	TargetUin  uint32             `protobuf:"varint,7,opt,name=target_uin,json=targetUin,proto3" json:"target_uin,omitempty"` //  TargetUin uint32
+	TargetUid  string             `protobuf:"bytes,8,opt,name=target_uid,json=targetUid,proto3" json:"target_uid,omitempty"`  //  TargetUid string
+	IsAdmin    bool               `protobuf:"varint,9,opt,name=is_admin,json=isAdmin,proto3" json:"is_admin,omitempty"`       //  IsAdmin   bool
+	Extra      map[string]string  `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *GroupMemberPermissionChangedEvent) Reset() {
+	*x = GroupMemberPermissionChangedEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GroupMemberPermissionChangedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupMemberPermissionChangedEvent) ProtoMessage() {}
+
+func (x *GroupMemberPermissionChangedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupMemberPermissionChangedEvent.ProtoReflect.Descriptor instead.
+func (*GroupMemberPermissionChangedEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetGroupEvent() *GroupMessageEvent {
+	if x != nil {
+		return x.GroupEvent
+	}
+	return nil
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetTargetUin() uint32 {
+	if x != nil {
+		return x.TargetUin
+	}
+	return 0
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetTargetUid() string {
+	if x != nil {
+		return x.TargetUid
+	}
+	return ""
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetIsAdmin() bool {
+	if x != nil {
+		return x.IsAdmin
+	}
+	return false
+}
+
+func (x *GroupMemberPermissionChangedEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
+type GroupNameUpdatedEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time        int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId      int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType    string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType  string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType     string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupUin    uint32            `protobuf:"varint,6,opt,name=group_uin,json=groupUin,proto3" json:"group_uin,omitempty"`          //  GroupUin    uint32
+	NewName     string            `protobuf:"bytes,7,opt,name=new_name,json=newName,proto3" json:"new_name,omitempty"`              //  NewName     string
+	OperatorUin uint32            `protobuf:"varint,8,opt,name=operator_uin,json=operatorUin,proto3" json:"operator_uin,omitempty"` //  OperatorUin uint32
+	OperatorUid string            `protobuf:"bytes,9,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid,omitempty"`  //  OperatorUid string
+	Extra       map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *GroupNameUpdatedEvent) Reset() {
+	*x = GroupNameUpdatedEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GroupNameUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupNameUpdatedEvent) ProtoMessage() {}
+
+func (x *GroupNameUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupNameUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*GroupNameUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GroupNameUpdatedEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *GroupNameUpdatedEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *GroupNameUpdatedEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *GroupNameUpdatedEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *GroupNameUpdatedEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *GroupNameUpdatedEvent) GetGroupUin() uint32 {
+	if x != nil {
+		return x.GroupUin
+	}
+	return 0
+}
+
+func (x *GroupNameUpdatedEvent) GetNewName() string {
+	if x != nil {
+		return x.NewName
+	}
+	return ""
+}
+
+func (x *GroupNameUpdatedEvent) GetOperatorUin() uint32 {
+	if x != nil {
+		return x.OperatorUin
+	}
+	return 0
+}
+
+func (x *GroupNameUpdatedEvent) GetOperatorUid() string {
+	if x != nil {
+		return x.OperatorUid
+	}
+	return ""
+}
+
+func (x *GroupNameUpdatedEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
+type MemberSpecialTitleUpdatedEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupUin   uint32            `protobuf:"varint,6,opt,name=group_uin,json=groupUin,proto3" json:"group_uin,omitempty"` //  GroupUin uint32
+	Uin        uint32            `protobuf:"varint,7,opt,name=uin,proto3" json:"uin,omitempty"`                           //  Uin      uint32
+	NewTitle   string            `protobuf:"bytes,8,opt,name=new_title,json=newTitle,proto3" json:"new_title,omitempty"`  //  NewTitle string
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) Reset() {
+	*x = MemberSpecialTitleUpdatedEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MemberSpecialTitleUpdatedEvent) ProtoMessage() {}
+
+func (x *MemberSpecialTitleUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MemberSpecialTitleUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*MemberSpecialTitleUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetGroupUin() uint32 {
+	if x != nil {
+		return x.GroupUin
+	}
+	return 0
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetUin() uint32 {
+	if x != nil {
+		return x.Uin
+	}
+	return 0
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetNewTitle() string {
+	if x != nil {
+		return x.NewTitle
+	}
+	return ""
+}
+
+func (x *MemberSpecialTitleUpdatedEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
+type RenameEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	Uin        uint32            `protobuf:"varint,6,opt,name=uin,proto3" json:"uin,omitempty"`                          //  Uin      uint32
+	Uid        string            `protobuf:"bytes,7,opt,name=uid,proto3" json:"uid,omitempty"`                           //  Uid      string
+	NickName   string            `protobuf:"bytes,8,opt,name=nick_name,json=nickName,proto3" json:"nick_name,omitempty"` //  Nickname string
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *RenameEvent) Reset() {
+	*x = RenameEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RenameEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RenameEvent) ProtoMessage() {}
+
+func (x *RenameEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RenameEvent.ProtoReflect.Descriptor instead.
+func (*RenameEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *RenameEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *RenameEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *RenameEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *RenameEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *RenameEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *RenameEvent) GetUin() uint32 {
+	if x != nil {
+		return x.Uin
+	}
+	return 0
+}
+
+func (x *RenameEvent) GetUid() string {
+	if x != nil {
+		return x.Uid
+	}
+	return ""
+}
+
+func (x *RenameEvent) GetNickName() string {
+	if x != nil {
+		return x.NickName
+	}
+	return ""
+}
+
+func (x *RenameEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
+// GroupPokeEvent
+// GroupUin uint32
+// Sender   uint32
+// Receiver uint32
+// Suffix   string
+// Action   string
+type GroupPokeEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	GroupUin   uint32            `protobuf:"varint,6,opt,name=group_uin,json=groupUin,proto3" json:"group_uin,omitempty"`
+	Sender     uint32            `protobuf:"varint,7,opt,name=sender,proto3" json:"sender,omitempty"`
+	Receiver   uint32            `protobuf:"varint,8,opt,name=receiver,proto3" json:"receiver,omitempty"`
+	Suffix     string            `protobuf:"bytes,9,opt,name=suffix,proto3" json:"suffix,omitempty"`
+	Action     string            `protobuf:"bytes,10,opt,name=action,proto3" json:"action,omitempty"`
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *GroupPokeEvent) Reset() {
+	*x = GroupPokeEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GroupPokeEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupPokeEvent) ProtoMessage() {}
+
+func (x *GroupPokeEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupPokeEvent.ProtoReflect.Descriptor instead.
+func (*GroupPokeEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *GroupPokeEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *GroupPokeEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *GroupPokeEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *GroupPokeEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *GroupPokeEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *GroupPokeEvent) GetGroupUin() uint32 {
+	if x != nil {
+		return x.GroupUin
+	}
+	return 0
+}
+
+func (x *GroupPokeEvent) GetSender() uint32 {
+	if x != nil {
+		return x.Sender
+	}
+	return 0
+}
+
+func (x *GroupPokeEvent) GetReceiver() uint32 {
+	if x != nil {
+		return x.Receiver
+	}
+	return 0
+}
+
+func (x *GroupPokeEvent) GetSuffix() string {
+	if x != nil {
+		return x.Suffix
+	}
+	return ""
+}
+
+func (x *GroupPokeEvent) GetAction() string {
+	if x != nil {
+		return x.Action
+	}
+	return ""
+}
+
+func (x *GroupPokeEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
+// FriendPokeEvent
+// Sender   uint32
+// Receiver uint32
+// Suffix   string
+// Action   string
+type FriendPokeEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Time       int64             `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId     int64             `protobuf:"varint,2,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType   string            `protobuf:"bytes,3,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	NoticeType string            `protobuf:"bytes,4,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	SubType    string            `protobuf:"bytes,5,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	Sender     uint32            `protobuf:"varint,6,opt,name=sender,proto3" json:"sender,omitempty"`
+	Receiver   uint32            `protobuf:"varint,7,opt,name=receiver,proto3" json:"receiver,omitempty"`
+	Suffix     string            `protobuf:"bytes,8,opt,name=suffix,proto3" json:"suffix,omitempty"`
+	Action     string            `protobuf:"bytes,9,opt,name=action,proto3" json:"action,omitempty"`
+	Extra      map[string]string `protobuf:"bytes,255,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *FriendPokeEvent) Reset() {
+	*x = FriendPokeEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_onebot_event_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FriendPokeEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FriendPokeEvent) ProtoMessage() {}
+
+func (x *FriendPokeEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_onebot_event_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FriendPokeEvent.ProtoReflect.Descriptor instead.
+func (*FriendPokeEvent) Descriptor() ([]byte, []int) {
+	return file_onebot_event_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *FriendPokeEvent) GetTime() int64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *FriendPokeEvent) GetSelfId() int64 {
+	if x != nil {
+		return x.SelfId
+	}
+	return 0
+}
+
+func (x *FriendPokeEvent) GetPostType() string {
+	if x != nil {
+		return x.PostType
+	}
+	return ""
+}
+
+func (x *FriendPokeEvent) GetNoticeType() string {
+	if x != nil {
+		return x.NoticeType
+	}
+	return ""
+}
+
+func (x *FriendPokeEvent) GetSubType() string {
+	if x != nil {
+		return x.SubType
+	}
+	return ""
+}
+
+func (x *FriendPokeEvent) GetSender() uint32 {
+	if x != nil {
+		return x.Sender
+	}
+	return 0
+}
+
+func (x *FriendPokeEvent) GetReceiver() uint32 {
+	if x != nil {
+		return x.Receiver
+	}
+	return 0
+}
+
+func (x *FriendPokeEvent) GetSuffix() string {
+	if x != nil {
+		return x.Suffix
+	}
+	return ""
+}
+
+func (x *FriendPokeEvent) GetAction() string {
+	if x != nil {
+		return x.Action
+	}
+	return ""
+}
+
+func (x *FriendPokeEvent) GetExtra() map[string]string {
+	if x != nil {
+		return x.Extra
+	}
+	return nil
+}
+
 type PrivateMessageEvent_Sender struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId   int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Nickname string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname"`
-	Sex      string `protobuf:"bytes,3,opt,name=sex,proto3" json:"sex"`
-	Age      int32  `protobuf:"varint,4,opt,name=age,proto3" json:"age"`
+	UserId   int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Nickname string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Sex      string `protobuf:"bytes,3,opt,name=sex,proto3" json:"sex,omitempty"`
+	Age      int32  `protobuf:"varint,4,opt,name=age,proto3" json:"age,omitempty"`
 }
 
 func (x *PrivateMessageEvent_Sender) Reset() {
 	*x = PrivateMessageEvent_Sender{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_onebot_event_proto_msgTypes[14]
+		mi := &file_onebot_event_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1905,7 +2781,7 @@ func (x *PrivateMessageEvent_Sender) String() string {
 func (*PrivateMessageEvent_Sender) ProtoMessage() {}
 
 func (x *PrivateMessageEvent_Sender) ProtoReflect() protoreflect.Message {
-	mi := &file_onebot_event_proto_msgTypes[14]
+	mi := &file_onebot_event_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1954,15 +2830,15 @@ type GroupMessageEvent_Anonymous struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
-	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
-	Flag string `protobuf:"bytes,3,opt,name=flag,proto3" json:"flag"`
+	Id   int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Flag string `protobuf:"bytes,3,opt,name=flag,proto3" json:"flag,omitempty"`
 }
 
 func (x *GroupMessageEvent_Anonymous) Reset() {
 	*x = GroupMessageEvent_Anonymous{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_onebot_event_proto_msgTypes[16]
+		mi := &file_onebot_event_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1975,7 +2851,7 @@ func (x *GroupMessageEvent_Anonymous) String() string {
 func (*GroupMessageEvent_Anonymous) ProtoMessage() {}
 
 func (x *GroupMessageEvent_Anonymous) ProtoReflect() protoreflect.Message {
-	mi := &file_onebot_event_proto_msgTypes[16]
+	mi := &file_onebot_event_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2017,21 +2893,21 @@ type GroupMessageEvent_Sender struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId   int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Nickname string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname"`
-	Card     string `protobuf:"bytes,3,opt,name=card,proto3" json:"card"`
-	Sex      string `protobuf:"bytes,4,opt,name=sex,proto3" json:"sex"`
-	Age      int32  `protobuf:"varint,5,opt,name=age,proto3" json:"age"`
-	Area     string `protobuf:"bytes,6,opt,name=area,proto3" json:"area"`
-	Level    string `protobuf:"bytes,7,opt,name=level,proto3" json:"level"`
-	Role     string `protobuf:"bytes,8,opt,name=role,proto3" json:"role"`
-	Title    string `protobuf:"bytes,9,opt,name=title,proto3" json:"title"`
+	UserId   int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Nickname string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Card     string `protobuf:"bytes,3,opt,name=card,proto3" json:"card,omitempty"`
+	Sex      string `protobuf:"bytes,4,opt,name=sex,proto3" json:"sex,omitempty"`
+	Age      int32  `protobuf:"varint,5,opt,name=age,proto3" json:"age,omitempty"`
+	Area     string `protobuf:"bytes,6,opt,name=area,proto3" json:"area,omitempty"`
+	Level    string `protobuf:"bytes,7,opt,name=level,proto3" json:"level,omitempty"`
+	Role     string `protobuf:"bytes,8,opt,name=role,proto3" json:"role,omitempty"`
+	Title    string `protobuf:"bytes,9,opt,name=title,proto3" json:"title,omitempty"`
 }
 
 func (x *GroupMessageEvent_Sender) Reset() {
 	*x = GroupMessageEvent_Sender{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_onebot_event_proto_msgTypes[17]
+		mi := &file_onebot_event_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2044,7 +2920,7 @@ func (x *GroupMessageEvent_Sender) String() string {
 func (*GroupMessageEvent_Sender) ProtoMessage() {}
 
 func (x *GroupMessageEvent_Sender) ProtoReflect() protoreflect.Message {
-	mi := &file_onebot_event_proto_msgTypes[17]
+	mi := &file_onebot_event_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2128,17 +3004,17 @@ type GroupUploadNoticeEvent_File struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Name  string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
-	Size  int64  `protobuf:"varint,3,opt,name=size,proto3" json:"size"`
-	Busid int64  `protobuf:"varint,4,opt,name=busid,proto3" json:"busid"`
-	Url   string `protobuf:"bytes,5,opt,name=url,proto3" json:"url"`
+	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name  string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Size  int64  `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	Busid int64  `protobuf:"varint,4,opt,name=busid,proto3" json:"busid,omitempty"`
+	Url   string `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
 }
 
 func (x *GroupUploadNoticeEvent_File) Reset() {
 	*x = GroupUploadNoticeEvent_File{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_onebot_event_proto_msgTypes[20]
+		mi := &file_onebot_event_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2151,7 +3027,7 @@ func (x *GroupUploadNoticeEvent_File) String() string {
 func (*GroupUploadNoticeEvent_File) ProtoMessage() {}
 
 func (x *GroupUploadNoticeEvent_File) ProtoReflect() protoreflect.Message {
-	mi := &file_onebot_event_proto_msgTypes[20]
+	mi := &file_onebot_event_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2630,9 +3506,192 @@ var file_onebot_event_proto_rawDesc = []byte{
 	0x74, 0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72,
 	0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
 	0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x0a, 0x5a,
-	0x08, 0x2e, 0x2f, 0x6f, 0x6e, 0x65, 0x62, 0x6f, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xd2, 0x04,
+	0x0a, 0x10, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x44, 0x69, 0x67, 0x65, 0x73, 0x74, 0x45, 0x76, 0x65,
+	0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x65, 0x6c, 0x66, 0x5f, 0x69,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x65, 0x6c, 0x66, 0x49, 0x64, 0x12,
+	0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1f, 0x0a, 0x0b,
+	0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x19, 0x0a,
+	0x08, 0x73, 0x75, 0x62, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x07, 0x73, 0x75, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x67, 0x72, 0x6f, 0x75,
+	0x70, 0x5f, 0x75, 0x69, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x67, 0x72, 0x6f,
+	0x75, 0x70, 0x55, 0x69, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x6d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x49, 0x64, 0x12, 0x2e, 0x0a, 0x13, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c,
+	0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28,
+	0x0d, 0x52, 0x11, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x49, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0d, 0x6f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x25, 0x0a, 0x0e, 0x6f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x0a, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x0d, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69,
+	0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x5f, 0x75, 0x69, 0x6e,
+	0x18, 0x0b, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x55, 0x69,
+	0x6e, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x75, 0x69,
+	0x6e, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x55, 0x69, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x5f, 0x6e,
+	0x69, 0x63, 0x6b, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x4e, 0x69, 0x63, 0x6b, 0x12, 0x25, 0x0a, 0x0e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x6e, 0x69, 0x63, 0x6b, 0x18, 0x0e, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x6f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x69, 0x63, 0x6b, 0x12, 0x3a, 0x0a, 0x05,
+	0x65, 0x78, 0x74, 0x72, 0x61, 0x18, 0xff, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6f,
+	0x6e, 0x65, 0x62, 0x6f, 0x74, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x44, 0x69, 0x67, 0x65, 0x73,
+	0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72,
+	0x79, 0x52, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78, 0x74, 0x72,
+	0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02,
+	0x38, 0x01, 0x22, 0xc5, 0x03, 0x0a, 0x21, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x4d, 0x65, 0x6d, 0x62,
+	0x65, 0x72, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x43, 0x68, 0x61, 0x6e,
+	0x67, 0x65, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07,
+	0x73, 0x65, 0x6c, 0x66, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73,
+	0x65, 0x6c, 0x66, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x74, 0x5f, 0x74, 0x79,
+	0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x74, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70,
+	0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54,
+	0x79, 0x70, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x75, 0x62, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x3a,
+	0x0a, 0x0b, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f, 0x74, 0x2e, 0x47, 0x72, 0x6f,
+	0x75, 0x70, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x0a,
+	0x67, 0x72, 0x6f, 0x75, 0x70, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x74, 0x61,
+	0x72, 0x67, 0x65, 0x74, 0x5f, 0x75, 0x69, 0x6e, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09,
+	0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x55, 0x69, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x74, 0x61, 0x72,
+	0x67, 0x65, 0x74, 0x5f, 0x75, 0x69, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x74,
+	0x61, 0x72, 0x67, 0x65, 0x74, 0x55, 0x69, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x69, 0x73, 0x5f, 0x61,
+	0x64, 0x6d, 0x69, 0x6e, 0x18, 0x09, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69, 0x73, 0x41, 0x64,
+	0x6d, 0x69, 0x6e, 0x12, 0x4b, 0x0a, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x18, 0xff, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f, 0x74, 0x2e, 0x47, 0x72, 0x6f,
+	0x75, 0x70, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x45,
+	0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61,
+	0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10,
+	0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79,
+	0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x96, 0x03, 0x0a, 0x15, 0x47,
+	0x72, 0x6f, 0x75, 0x70, 0x4e, 0x61, 0x6d, 0x65, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x45,
+	0x76, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x65, 0x6c, 0x66,
+	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x65, 0x6c, 0x66, 0x49,
+	0x64, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1f,
+	0x0a, 0x0b, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12,
+	0x19, 0x0a, 0x08, 0x73, 0x75, 0x62, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x67, 0x72,
+	0x6f, 0x75, 0x70, 0x5f, 0x75, 0x69, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x67,
+	0x72, 0x6f, 0x75, 0x70, 0x55, 0x69, 0x6e, 0x12, 0x19, 0x0a, 0x08, 0x6e, 0x65, 0x77, 0x5f, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6e, 0x65, 0x77, 0x4e, 0x61,
+	0x6d, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x75,
+	0x69, 0x6e, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x55, 0x69, 0x6e, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x5f, 0x75, 0x69, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x69, 0x64, 0x12, 0x3f, 0x0a, 0x05, 0x65, 0x78, 0x74, 0x72,
+	0x61, 0x18, 0xff, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f,
+	0x74, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x4e, 0x61, 0x6d, 0x65, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74,
+	0x72, 0x79, 0x52, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78, 0x74,
+	0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a,
+	0x02, 0x38, 0x01, 0x22, 0xf6, 0x02, 0x0a, 0x1e, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x53, 0x70,
+	0x65, 0x63, 0x69, 0x61, 0x6c, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x65,
+	0x6c, 0x66, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x65, 0x6c,
+	0x66, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x74, 0x54, 0x79, 0x70, 0x65,
+	0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x75, 0x62, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1b, 0x0a, 0x09,
+	0x67, 0x72, 0x6f, 0x75, 0x70, 0x5f, 0x75, 0x69, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x08, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x55, 0x69, 0x6e, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x6e,
+	0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x03, 0x75, 0x69, 0x6e, 0x12, 0x1b, 0x0a, 0x09, 0x6e,
+	0x65, 0x77, 0x5f, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x6e, 0x65, 0x77, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x48, 0x0a, 0x05, 0x65, 0x78, 0x74, 0x72,
+	0x61, 0x18, 0xff, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f,
+	0x74, 0x2e, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x53, 0x70, 0x65, 0x63, 0x69, 0x61, 0x6c, 0x54,
+	0x69, 0x74, 0x6c, 0x65, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74,
+	0x2e, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x05, 0x65, 0x78, 0x74,
+	0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b,
+	0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xc5, 0x02, 0x0a,
+	0x0b, 0x52, 0x65, 0x6e, 0x61, 0x6d, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04,
+	0x74, 0x69, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65,
+	0x12, 0x17, 0x0a, 0x07, 0x73, 0x65, 0x6c, 0x66, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x06, 0x73, 0x65, 0x6c, 0x66, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73,
+	0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f,
+	0x73, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74,
+	0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x75, 0x62, 0x5f, 0x74,
+	0x79, 0x70, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x03, 0x75, 0x69, 0x6e, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x69, 0x63, 0x6b, 0x5f, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x4e,
+	0x61, 0x6d, 0x65, 0x12, 0x35, 0x0a, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x18, 0xff, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f, 0x74, 0x2e, 0x52, 0x65, 0x6e,
+	0x61, 0x6d, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e,
+	0x74, 0x72, 0x79, 0x52, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78,
+	0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65,
+	0x3a, 0x02, 0x38, 0x01, 0x22, 0x8b, 0x03, 0x0a, 0x0e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x50, 0x6f,
+	0x6b, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x73,
+	0x65, 0x6c, 0x66, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x65,
+	0x6c, 0x66, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x74, 0x5f, 0x74, 0x79, 0x70,
+	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x74, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x75, 0x62, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1b, 0x0a,
+	0x09, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x5f, 0x75, 0x69, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x08, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x55, 0x69, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65,
+	0x6e, 0x64, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65, 0x72, 0x18, 0x08,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x72, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65, 0x72, 0x12, 0x16,
+	0x0a, 0x06, 0x73, 0x75, 0x66, 0x66, 0x69, 0x78, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x73, 0x75, 0x66, 0x66, 0x69, 0x78, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x0a, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x38,
+	0x0a, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x18, 0xff, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21,
+	0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f, 0x74, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x50, 0x6f, 0x6b,
+	0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72,
+	0x79, 0x52, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45, 0x78, 0x74, 0x72,
+	0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02,
+	0x38, 0x01, 0x22, 0xf0, 0x02, 0x0a, 0x0f, 0x46, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x50, 0x6f, 0x6b,
+	0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x65,
+	0x6c, 0x66, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x65, 0x6c,
+	0x66, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x74, 0x54, 0x79, 0x70, 0x65,
+	0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x75, 0x62, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x73, 0x65,
+	0x6e, 0x64, 0x65, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65, 0x72,
+	0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x72, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65, 0x72,
+	0x12, 0x16, 0x0a, 0x06, 0x73, 0x75, 0x66, 0x66, 0x69, 0x78, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x06, 0x73, 0x75, 0x66, 0x66, 0x69, 0x78, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x39, 0x0a, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x18, 0xff, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x22, 0x2e, 0x6f, 0x6e, 0x65, 0x62, 0x6f, 0x74, 0x2e, 0x46, 0x72, 0x69, 0x65, 0x6e, 0x64,
+	0x50, 0x6f, 0x6b, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x45, 0x78, 0x74, 0x72, 0x61, 0x45,
+	0x6e, 0x74, 0x72, 0x79, 0x52, 0x05, 0x65, 0x78, 0x74, 0x72, 0x61, 0x1a, 0x38, 0x0a, 0x0a, 0x45,
+	0x78, 0x74, 0x72, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x6f, 0x6e, 0x65, 0x62, 0x6f,
+	0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2647,67 +3706,89 @@ func file_onebot_event_proto_rawDescGZIP() []byte {
 	return file_onebot_event_proto_rawDescData
 }
 
-var file_onebot_event_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
+var file_onebot_event_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
 var file_onebot_event_proto_goTypes = []interface{}{
-	(*PrivateMessageEvent)(nil),         // 0: onebot.PrivateMessageEvent
-	(*GroupMessageEvent)(nil),           // 1: onebot.GroupMessageEvent
-	(*GroupTempMessageEvent)(nil),       // 2: onebot.GroupTempMessageEvent
-	(*GroupUploadNoticeEvent)(nil),      // 3: onebot.GroupUploadNoticeEvent
-	(*GroupNotifyEvent)(nil),            // 4: onebot.GroupNotifyEvent
-	(*GroupAdminNoticeEvent)(nil),       // 5: onebot.GroupAdminNoticeEvent
-	(*GroupDecreaseNoticeEvent)(nil),    // 6: onebot.GroupDecreaseNoticeEvent
-	(*GroupIncreaseNoticeEvent)(nil),    // 7: onebot.GroupIncreaseNoticeEvent
-	(*GroupBanNoticeEvent)(nil),         // 8: onebot.GroupBanNoticeEvent
-	(*FriendAddNoticeEvent)(nil),        // 9: onebot.FriendAddNoticeEvent
-	(*GroupRecallNoticeEvent)(nil),      // 10: onebot.GroupRecallNoticeEvent
-	(*FriendRecallNoticeEvent)(nil),     // 11: onebot.FriendRecallNoticeEvent
-	(*FriendRequestEvent)(nil),          // 12: onebot.FriendRequestEvent
-	(*GroupRequestEvent)(nil),           // 13: onebot.GroupRequestEvent
-	(*PrivateMessageEvent_Sender)(nil),  // 14: onebot.PrivateMessageEvent.Sender
-	nil,                                 // 15: onebot.PrivateMessageEvent.ExtraEntry
-	(*GroupMessageEvent_Anonymous)(nil), // 16: onebot.GroupMessageEvent.Anonymous
-	(*GroupMessageEvent_Sender)(nil),    // 17: onebot.GroupMessageEvent.Sender
-	nil,                                 // 18: onebot.GroupMessageEvent.ExtraEntry
-	nil,                                 // 19: onebot.GroupTempMessageEvent.ExtraEntry
-	(*GroupUploadNoticeEvent_File)(nil), // 20: onebot.GroupUploadNoticeEvent.File
-	nil,                                 // 21: onebot.GroupUploadNoticeEvent.ExtraEntry
-	nil,                                 // 22: onebot.GroupAdminNoticeEvent.ExtraEntry
-	nil,                                 // 23: onebot.GroupDecreaseNoticeEvent.ExtraEntry
-	nil,                                 // 24: onebot.GroupIncreaseNoticeEvent.ExtraEntry
-	nil,                                 // 25: onebot.GroupBanNoticeEvent.ExtraEntry
-	nil,                                 // 26: onebot.FriendAddNoticeEvent.ExtraEntry
-	nil,                                 // 27: onebot.GroupRecallNoticeEvent.ExtraEntry
-	nil,                                 // 28: onebot.FriendRecallNoticeEvent.ExtraEntry
-	nil,                                 // 29: onebot.FriendRequestEvent.ExtraEntry
-	nil,                                 // 30: onebot.GroupRequestEvent.ExtraEntry
-	(*Message)(nil),                     // 31: onebot.Message
+	(*PrivateMessageEvent)(nil),               // 0: onebot.PrivateMessageEvent
+	(*GroupMessageEvent)(nil),                 // 1: onebot.GroupMessageEvent
+	(*GroupTempMessageEvent)(nil),             // 2: onebot.GroupTempMessageEvent
+	(*GroupUploadNoticeEvent)(nil),            // 3: onebot.GroupUploadNoticeEvent
+	(*GroupNotifyEvent)(nil),                  // 4: onebot.GroupNotifyEvent
+	(*GroupAdminNoticeEvent)(nil),             // 5: onebot.GroupAdminNoticeEvent
+	(*GroupDecreaseNoticeEvent)(nil),          // 6: onebot.GroupDecreaseNoticeEvent
+	(*GroupIncreaseNoticeEvent)(nil),          // 7: onebot.GroupIncreaseNoticeEvent
+	(*GroupBanNoticeEvent)(nil),               // 8: onebot.GroupBanNoticeEvent
+	(*FriendAddNoticeEvent)(nil),              // 9: onebot.FriendAddNoticeEvent
+	(*GroupRecallNoticeEvent)(nil),            // 10: onebot.GroupRecallNoticeEvent
+	(*FriendRecallNoticeEvent)(nil),           // 11: onebot.FriendRecallNoticeEvent
+	(*FriendRequestEvent)(nil),                // 12: onebot.FriendRequestEvent
+	(*GroupRequestEvent)(nil),                 // 13: onebot.GroupRequestEvent
+	(*GroupDigestEvent)(nil),                  // 14: onebot.GroupDigestEvent
+	(*GroupMemberPermissionChangedEvent)(nil), // 15: onebot.GroupMemberPermissionChangedEvent
+	(*GroupNameUpdatedEvent)(nil),             // 16: onebot.GroupNameUpdatedEvent
+	(*MemberSpecialTitleUpdatedEvent)(nil),    // 17: onebot.MemberSpecialTitleUpdatedEvent
+	(*RenameEvent)(nil),                       // 18: onebot.RenameEvent
+	(*GroupPokeEvent)(nil),                    // 19: onebot.GroupPokeEvent
+	(*FriendPokeEvent)(nil),                   // 20: onebot.FriendPokeEvent
+	(*PrivateMessageEvent_Sender)(nil),        // 21: onebot.PrivateMessageEvent.Sender
+	nil,                                       // 22: onebot.PrivateMessageEvent.ExtraEntry
+	(*GroupMessageEvent_Anonymous)(nil),       // 23: onebot.GroupMessageEvent.Anonymous
+	(*GroupMessageEvent_Sender)(nil),          // 24: onebot.GroupMessageEvent.Sender
+	nil,                                       // 25: onebot.GroupMessageEvent.ExtraEntry
+	nil,                                       // 26: onebot.GroupTempMessageEvent.ExtraEntry
+	(*GroupUploadNoticeEvent_File)(nil),       // 27: onebot.GroupUploadNoticeEvent.File
+	nil,                                       // 28: onebot.GroupUploadNoticeEvent.ExtraEntry
+	nil,                                       // 29: onebot.GroupAdminNoticeEvent.ExtraEntry
+	nil,                                       // 30: onebot.GroupDecreaseNoticeEvent.ExtraEntry
+	nil,                                       // 31: onebot.GroupIncreaseNoticeEvent.ExtraEntry
+	nil,                                       // 32: onebot.GroupBanNoticeEvent.ExtraEntry
+	nil,                                       // 33: onebot.FriendAddNoticeEvent.ExtraEntry
+	nil,                                       // 34: onebot.GroupRecallNoticeEvent.ExtraEntry
+	nil,                                       // 35: onebot.FriendRecallNoticeEvent.ExtraEntry
+	nil,                                       // 36: onebot.FriendRequestEvent.ExtraEntry
+	nil,                                       // 37: onebot.GroupRequestEvent.ExtraEntry
+	nil,                                       // 38: onebot.GroupDigestEvent.ExtraEntry
+	nil,                                       // 39: onebot.GroupMemberPermissionChangedEvent.ExtraEntry
+	nil,                                       // 40: onebot.GroupNameUpdatedEvent.ExtraEntry
+	nil,                                       // 41: onebot.MemberSpecialTitleUpdatedEvent.ExtraEntry
+	nil,                                       // 42: onebot.RenameEvent.ExtraEntry
+	nil,                                       // 43: onebot.GroupPokeEvent.ExtraEntry
+	nil,                                       // 44: onebot.FriendPokeEvent.ExtraEntry
+	(*Message)(nil),                           // 45: onebot.Message
 }
 var file_onebot_event_proto_depIdxs = []int32{
-	31, // 0: onebot.PrivateMessageEvent.message:type_name -> onebot.Message
-	14, // 1: onebot.PrivateMessageEvent.sender:type_name -> onebot.PrivateMessageEvent.Sender
-	15, // 2: onebot.PrivateMessageEvent.extra:type_name -> onebot.PrivateMessageEvent.ExtraEntry
-	16, // 3: onebot.GroupMessageEvent.anonymous:type_name -> onebot.GroupMessageEvent.Anonymous
-	31, // 4: onebot.GroupMessageEvent.message:type_name -> onebot.Message
-	17, // 5: onebot.GroupMessageEvent.sender:type_name -> onebot.GroupMessageEvent.Sender
-	18, // 6: onebot.GroupMessageEvent.extra:type_name -> onebot.GroupMessageEvent.ExtraEntry
-	31, // 7: onebot.GroupTempMessageEvent.message:type_name -> onebot.Message
-	19, // 8: onebot.GroupTempMessageEvent.extra:type_name -> onebot.GroupTempMessageEvent.ExtraEntry
-	20, // 9: onebot.GroupUploadNoticeEvent.file:type_name -> onebot.GroupUploadNoticeEvent.File
-	21, // 10: onebot.GroupUploadNoticeEvent.extra:type_name -> onebot.GroupUploadNoticeEvent.ExtraEntry
-	22, // 11: onebot.GroupAdminNoticeEvent.extra:type_name -> onebot.GroupAdminNoticeEvent.ExtraEntry
-	23, // 12: onebot.GroupDecreaseNoticeEvent.extra:type_name -> onebot.GroupDecreaseNoticeEvent.ExtraEntry
-	24, // 13: onebot.GroupIncreaseNoticeEvent.extra:type_name -> onebot.GroupIncreaseNoticeEvent.ExtraEntry
-	25, // 14: onebot.GroupBanNoticeEvent.extra:type_name -> onebot.GroupBanNoticeEvent.ExtraEntry
-	26, // 15: onebot.FriendAddNoticeEvent.extra:type_name -> onebot.FriendAddNoticeEvent.ExtraEntry
-	27, // 16: onebot.GroupRecallNoticeEvent.extra:type_name -> onebot.GroupRecallNoticeEvent.ExtraEntry
-	28, // 17: onebot.FriendRecallNoticeEvent.extra:type_name -> onebot.FriendRecallNoticeEvent.ExtraEntry
-	29, // 18: onebot.FriendRequestEvent.extra:type_name -> onebot.FriendRequestEvent.ExtraEntry
-	30, // 19: onebot.GroupRequestEvent.extra:type_name -> onebot.GroupRequestEvent.ExtraEntry
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	45, // 0: onebot.PrivateMessageEvent.message:type_name -> onebot.Message
+	21, // 1: onebot.PrivateMessageEvent.sender:type_name -> onebot.PrivateMessageEvent.Sender
+	22, // 2: onebot.PrivateMessageEvent.extra:type_name -> onebot.PrivateMessageEvent.ExtraEntry
+	23, // 3: onebot.GroupMessageEvent.anonymous:type_name -> onebot.GroupMessageEvent.Anonymous
+	45, // 4: onebot.GroupMessageEvent.message:type_name -> onebot.Message
+	24, // 5: onebot.GroupMessageEvent.sender:type_name -> onebot.GroupMessageEvent.Sender
+	25, // 6: onebot.GroupMessageEvent.extra:type_name -> onebot.GroupMessageEvent.ExtraEntry
+	45, // 7: onebot.GroupTempMessageEvent.message:type_name -> onebot.Message
+	26, // 8: onebot.GroupTempMessageEvent.extra:type_name -> onebot.GroupTempMessageEvent.ExtraEntry
+	27, // 9: onebot.GroupUploadNoticeEvent.file:type_name -> onebot.GroupUploadNoticeEvent.File
+	28, // 10: onebot.GroupUploadNoticeEvent.extra:type_name -> onebot.GroupUploadNoticeEvent.ExtraEntry
+	29, // 11: onebot.GroupAdminNoticeEvent.extra:type_name -> onebot.GroupAdminNoticeEvent.ExtraEntry
+	30, // 12: onebot.GroupDecreaseNoticeEvent.extra:type_name -> onebot.GroupDecreaseNoticeEvent.ExtraEntry
+	31, // 13: onebot.GroupIncreaseNoticeEvent.extra:type_name -> onebot.GroupIncreaseNoticeEvent.ExtraEntry
+	32, // 14: onebot.GroupBanNoticeEvent.extra:type_name -> onebot.GroupBanNoticeEvent.ExtraEntry
+	33, // 15: onebot.FriendAddNoticeEvent.extra:type_name -> onebot.FriendAddNoticeEvent.ExtraEntry
+	34, // 16: onebot.GroupRecallNoticeEvent.extra:type_name -> onebot.GroupRecallNoticeEvent.ExtraEntry
+	35, // 17: onebot.FriendRecallNoticeEvent.extra:type_name -> onebot.FriendRecallNoticeEvent.ExtraEntry
+	36, // 18: onebot.FriendRequestEvent.extra:type_name -> onebot.FriendRequestEvent.ExtraEntry
+	37, // 19: onebot.GroupRequestEvent.extra:type_name -> onebot.GroupRequestEvent.ExtraEntry
+	38, // 20: onebot.GroupDigestEvent.extra:type_name -> onebot.GroupDigestEvent.ExtraEntry
+	1,  // 21: onebot.GroupMemberPermissionChangedEvent.group_event:type_name -> onebot.GroupMessageEvent
+	39, // 22: onebot.GroupMemberPermissionChangedEvent.extra:type_name -> onebot.GroupMemberPermissionChangedEvent.ExtraEntry
+	40, // 23: onebot.GroupNameUpdatedEvent.extra:type_name -> onebot.GroupNameUpdatedEvent.ExtraEntry
+	41, // 24: onebot.MemberSpecialTitleUpdatedEvent.extra:type_name -> onebot.MemberSpecialTitleUpdatedEvent.ExtraEntry
+	42, // 25: onebot.RenameEvent.extra:type_name -> onebot.RenameEvent.ExtraEntry
+	43, // 26: onebot.GroupPokeEvent.extra:type_name -> onebot.GroupPokeEvent.ExtraEntry
+	44, // 27: onebot.FriendPokeEvent.extra:type_name -> onebot.FriendPokeEvent.ExtraEntry
+	28, // [28:28] is the sub-list for method output_type
+	28, // [28:28] is the sub-list for method input_type
+	28, // [28:28] is the sub-list for extension type_name
+	28, // [28:28] is the sub-list for extension extendee
+	0,  // [0:28] is the sub-list for field type_name
 }
 
 func init() { file_onebot_event_proto_init() }
@@ -2886,7 +3967,19 @@ func file_onebot_event_proto_init() {
 			}
 		}
 		file_onebot_event_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PrivateMessageEvent_Sender); i {
+			switch v := v.(*GroupDigestEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GroupMemberPermissionChangedEvent); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2898,7 +3991,7 @@ func file_onebot_event_proto_init() {
 			}
 		}
 		file_onebot_event_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GroupMessageEvent_Anonymous); i {
+			switch v := v.(*GroupNameUpdatedEvent); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2910,7 +4003,31 @@ func file_onebot_event_proto_init() {
 			}
 		}
 		file_onebot_event_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GroupMessageEvent_Sender); i {
+			switch v := v.(*MemberSpecialTitleUpdatedEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RenameEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GroupPokeEvent); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2922,6 +4039,54 @@ func file_onebot_event_proto_init() {
 			}
 		}
 		file_onebot_event_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FriendPokeEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PrivateMessageEvent_Sender); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GroupMessageEvent_Anonymous); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GroupMessageEvent_Sender); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_onebot_event_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GroupUploadNoticeEvent_File); i {
 			case 0:
 				return &v.state
@@ -2940,7 +4105,7 @@ func file_onebot_event_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_onebot_event_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   31,
+			NumMessages:   45,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
