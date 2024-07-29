@@ -152,6 +152,11 @@ func init() {
 	plugin.AddNewFriendAddedPlugin(plugins.ReportNewFriendAdded)
 	plugin.AddGroupMutePlugin(plugins.ReportGroupMute)
 	plugin.AddNotifyPlugin(plugins.ReportPoke)
+	plugin.AddGroupDigestPlugin(plugins.ReportGroupDigest)
+	plugin.AddGroupMemberPermissionChangedPlugin(plugins.ReportGroupMemberPermissionChanged)
+	plugin.AddGroupNameUpdated(plugins.ReportGroupNameUpdated)
+	plugin.AddMemberSpecialTitleUpdated(plugins.ReportMemberSpecialTitleUpdated)
+	plugin.AddRenameEvent(plugins.ReportRename)
 }
 
 func DeleteBot(c *gin.Context) {

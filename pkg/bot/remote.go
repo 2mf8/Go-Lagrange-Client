@@ -992,6 +992,90 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
+			if p, ok := eventFrame.PbData.(*onebot.Frame_GroupPokeEvent);ok{
+				sendingString, err := json.Marshal(p.GroupPokeEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
+			if p, ok := eventFrame.PbData.(*onebot.Frame_FriendPokeEvent);ok{
+				sendingString, err := json.Marshal(p.FriendPokeEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
+			if gd, ok := eventFrame.PbData.(*onebot.Frame_GroupDigestEvent);ok{
+				sendingString, err := json.Marshal(gd.GroupDigestEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
+			if gmpc, ok := eventFrame.PbData.(*onebot.Frame_GroupMemberPermissionChangeEvent);ok{
+				sendingString, err := json.Marshal(gmpc.GroupMemberPermissionChangeEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
+			if gn, ok := eventFrame.PbData.(*onebot.Frame_GroupNameUpdatedEvent);ok{
+				sendingString, err := json.Marshal(gn.GroupNameUpdatedEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
+			if mtc, ok := eventFrame.PbData.(*onebot.Frame_MemberSpecialTitleUpdatedEvent); ok{
+				sendingString, err := json.Marshal(mtc.MemberSpecialTitleUpdatedEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
+			if r, ok := eventFrame.PbData.(*onebot.Frame_RenameEvent);ok{
+				sendingString, err := json.Marshal(r.RenameEvent)
+				if err != nil {
+					log.Errorf("event 序列化错误 %v", err)
+					continue
+				}
+				if ws.Json {
+					_ = ws.Send(websocket.TextMessage, sendingString)
+				} else {
+					_ = ws.Send(websocket.BinaryMessage, sendingString)
+				}
+			}
 		}
 	}
 }
