@@ -27,8 +27,7 @@ var (
 	// RemoteServers key是botId，value是map（key是serverName，value是server）
 	RemoteServers RemoteMap
 	wsprotocol    = 0
-
-	ForwardBot []*client.QQClient
+	ForwardBot    *client.QQClient
 )
 
 type BotClient struct {
@@ -71,20 +70,6 @@ func UpgradeWebsocket(w http.ResponseWriter, r *http.Request) error {
 }
 
 func ConnectForward(conn *websocket.Conn) {
-	for _, cli := range ForwardBot {
-		util.SafeGo(func() {
-			plugin := config.Plugin{
-				Disabled: true,
-				Json:     true,
-				Protocol: 1,
-			}
-			safe_ws.NewSafeWebSocket(conn, onWsRecvMessage(cli, &plugin), func() {
-				defer func() {
-					_ = recover() // 可能多次触发
-				}()
-			})
-		})
-	}
 }
 
 func ConnectUniversal(cli *client.QQClient) {
@@ -195,57 +180,6 @@ func OnWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_
 			if err != nil {
 				log.Errorf("收到API text，解析错误 %v", err)
 				return
-			}
-		case websocket.TextMessage:
-			err := json.Unmarshal(data, &apiReq)
-			if err != nil {
-				log.Errorf("收到API text，解析错误 %v", err)
-				return
-			}
-		}
-
-		log.Debugf("收到 apiReq 信息, %+v", util.MustMarshal(apiReq))
-		handleOnebotApiFrame(cli, &apiReq, isApiAllow, plugin, ws)
-	}
-}
-
-func onWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_ws.SafeWebSocket, messageType int, data []byte) {
-	wsprotocol = int(plugin.Protocol)
-	apiFilter := map[onebot.Frame_FrameType]bool{}
-	for _, apiType := range plugin.ApiFilter {
-		apiFilter[onebot.Frame_FrameType(apiType)] = true
-	}
-	isApiAllow := func(frameType onebot.Frame_FrameType) bool {
-		if len(apiFilter) == 0 {
-			return true
-		}
-		return apiFilter[frameType]
-	}
-
-	return func(ws *safe_ws.SafeWebSocket, messageType int, data []byte) {
-		fmt.Println(string(data))
-		if messageType == websocket.PingMessage || messageType == websocket.PongMessage {
-			return
-		}
-		if !cli.Online.Load() {
-			log.Warnf("bot is not online, ignore API, %+v", fmt.Sprintf("%v", cli.Uin))
-			return
-		}
-		var apiReq onebot.Frame
-		switch messageType {
-		case websocket.BinaryMessage:
-			if plugin.Protocol == 1 {
-				err := json.Unmarshal(data, &apiReq)
-				if err != nil {
-					log.Errorf("收到API text，解析错误 %v", err)
-					return
-				}
-			} else {
-				err := proto.Unmarshal(data, &apiReq)
-				if err != nil {
-					log.Errorf("收到API binary，解析错误 %v", err)
-					return
-				}
 			}
 		case websocket.TextMessage:
 			err := json.Unmarshal(data, &apiReq)
@@ -992,7 +926,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if p, ok := eventFrame.PbData.(*onebot.Frame_GroupPokeEvent);ok{
+			if p, ok := eventFrame.PbData.(*onebot.Frame_GroupPokeEvent); ok {
 				sendingString, err := json.Marshal(p.GroupPokeEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)
@@ -1004,7 +938,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if p, ok := eventFrame.PbData.(*onebot.Frame_FriendPokeEvent);ok{
+			if p, ok := eventFrame.PbData.(*onebot.Frame_FriendPokeEvent); ok {
 				sendingString, err := json.Marshal(p.FriendPokeEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)
@@ -1016,7 +950,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if gd, ok := eventFrame.PbData.(*onebot.Frame_GroupDigestEvent);ok{
+			if gd, ok := eventFrame.PbData.(*onebot.Frame_GroupDigestEvent); ok {
 				sendingString, err := json.Marshal(gd.GroupDigestEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)
@@ -1028,7 +962,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if gmpc, ok := eventFrame.PbData.(*onebot.Frame_GroupMemberPermissionChangeEvent);ok{
+			if gmpc, ok := eventFrame.PbData.(*onebot.Frame_GroupMemberPermissionChangeEvent); ok {
 				sendingString, err := json.Marshal(gmpc.GroupMemberPermissionChangeEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)
@@ -1040,7 +974,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if gn, ok := eventFrame.PbData.(*onebot.Frame_GroupNameUpdatedEvent);ok{
+			if gn, ok := eventFrame.PbData.(*onebot.Frame_GroupNameUpdatedEvent); ok {
 				sendingString, err := json.Marshal(gn.GroupNameUpdatedEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)
@@ -1052,7 +986,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if mtc, ok := eventFrame.PbData.(*onebot.Frame_MemberSpecialTitleUpdatedEvent); ok{
+			if mtc, ok := eventFrame.PbData.(*onebot.Frame_MemberSpecialTitleUpdatedEvent); ok {
 				sendingString, err := json.Marshal(mtc.MemberSpecialTitleUpdatedEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)
@@ -1064,7 +998,7 @@ func HandleEventFrame(cli *client.QQClient, eventFrame *onebot.Frame) {
 					_ = ws.Send(websocket.BinaryMessage, sendingString)
 				}
 			}
-			if r, ok := eventFrame.PbData.(*onebot.Frame_RenameEvent);ok{
+			if r, ok := eventFrame.PbData.(*onebot.Frame_RenameEvent); ok {
 				sendingString, err := json.Marshal(r.RenameEvent)
 				if err != nil {
 					log.Errorf("event 序列化错误 %v", err)

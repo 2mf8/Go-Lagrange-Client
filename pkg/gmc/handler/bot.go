@@ -449,8 +449,6 @@ func AfterLogin(cli *client.QQClient) {
 	} else {
 		log.Infof("共加载 %v 个好友.", len(fs))
 	}
-
-	bot.ForwardBot = append(bot.ForwardBot, cli)
 	bot.ConnectUniversal(cli)
 
 	defer cli.Release()
