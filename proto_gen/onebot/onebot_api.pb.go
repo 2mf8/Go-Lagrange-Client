@@ -226,6 +226,48 @@ type Params struct {
 	AioUin           int64      `protobuf:"varint,35,opt,name=aio_uin,json=aioUin,proto3" json:"aio_uin,omitempty"`
 }
 
+type OParams struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId           int64      `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	GroupId          int64      `protobuf:"varint,2,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	Message          string `protobuf:"bytes,3,rep,name=message,proto3" json:"message,omitempty"`
+	Messages         *anypb.Any `protobuf:"bytes,4,opt,name=messages,proto3" json:"messages,omitempty"`
+	MessageType      string     `protobuf:"bytes,5,opt,name=message_type,json=messageType,proto3" json:"message_type,omitempty"`
+	AutoEscape       bool       `protobuf:"varint,6,opt,name=auto_escape,json=autoEscape,proto3" json:"auto_escape,omitempty"`
+	MessageId        int64      `protobuf:"varint,7,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	Id               string     `protobuf:"bytes,8,opt,name=id,proto3" json:"id,omitempty"`
+	RejectAddRequest bool       `protobuf:"varint,9,opt,name=reject_add_request,json=rejectAddRequest,proto3" json:"reject_add_request,omitempty"`
+	Duration         int64      `protobuf:"varint,10,opt,name=duration,proto3" json:"duration,omitempty"`
+	Enable           bool       `protobuf:"varint,11,opt,name=enable,proto3" json:"enable,omitempty"`
+	Card             string     `protobuf:"bytes,12,opt,name=card,proto3" json:"card,omitempty"`
+	GroupName        string     `protobuf:"bytes,13,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
+	Flag             string     `protobuf:"bytes,14,opt,name=flag,proto3" json:"flag,omitempty"`
+	Approve          bool       `protobuf:"varint,15,opt,name=approve,proto3" json:"approve,omitempty"`
+	Remark           string     `protobuf:"bytes,16,opt,name=remark,proto3" json:"remark,omitempty"`
+	IsDismiss        bool       `protobuf:"varint,17,opt,name=is_dismiss,json=isDismiss,proto3" json:"is_dismiss,omitempty"`
+	SpecialTitle     string     `protobuf:"bytes,18,opt,name=special_title,json=specialTitle,proto3" json:"special_title,omitempty"`
+	SubType          string     `protobuf:"bytes,19,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	Type             string     `protobuf:"bytes,20,opt,name=type,proto3" json:"type,omitempty"`
+	Reason           string     `protobuf:"bytes,21,opt,name=reason,proto3" json:"reason,omitempty"`
+	NickName         string     `protobuf:"bytes,22,opt,name=nick_name,json=nickName,proto3" json:"nick_name,omitempty"`
+	NoCache          bool       `protobuf:"varint,23,opt,name=no_cache,json=noCache,proto3" json:"no_cache,omitempty"`
+	Domain           string     `protobuf:"bytes,24,opt,name=domain,proto3" json:"domain,omitempty"`
+	File             string     `protobuf:"bytes,25,opt,name=file,proto3" json:"file,omitempty"`
+	Delay            int32      `protobuf:"varint,26,opt,name=delay,proto3" json:"delay,omitempty"`
+	OutFormat        string     `protobuf:"bytes,27,opt,name=out_format,json=outFormat,proto3" json:"out_format,omitempty"`
+	Times            int32      `protobuf:"varint,28,opt,name=times,proto3" json:"times,omitempty"`
+	Anonymous        *Anonymous `protobuf:"bytes,29,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
+	AnonymousFlag    string     `protobuf:"bytes,30,opt,name=anonymous_flag,json=anonymousFlag,proto3" json:"anonymous_flag,omitempty"`
+	Name             string     `protobuf:"bytes,31,opt,name=name,proto3" json:"name,omitempty"`
+	Uin              string     `protobuf:"bytes,32,opt,name=uin,proto3" json:"uin,omitempty"`
+	Content          string     `protobuf:"bytes,33,opt,name=content,proto3" json:"content,omitempty"`
+	ToUin            int64      `protobuf:"varint,34,opt,name=to_uin,json=toUin,proto3" json:"to_uin,omitempty"`
+	AioUin           int64      `protobuf:"varint,35,opt,name=aio_uin,json=aioUin,proto3" json:"aio_uin,omitempty"`
+}
+
 func (x *Params) Reset() {
 	*x = Params{}
 	if protoimpl.UnsafeEnabled {

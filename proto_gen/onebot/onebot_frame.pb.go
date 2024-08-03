@@ -718,6 +718,219 @@ type Frame struct {
 	//	*Frame_OSendFriendPokeResp
 	PbData isFrame_PbData `protobuf_oneof:"pb_data"`
 }
+type OFrame struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BotId         int64             `protobuf:"varint,1,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
+	FrameType     Frame_FrameType   `protobuf:"varint,2,opt,name=frame_type,json=frameType,proto3,enum=onebot.Frame_FrameType" json:"frame_type,omitempty"`
+	Echo          uint64            `protobuf:"bytes,3,opt,name=echo,proto3" json:"echo,omitempty"`
+	Ok            bool              `protobuf:"varint,4,opt,name=ok,proto3" json:"ok,omitempty"` // 是否正常 （API resp)
+	Time          int64             `protobuf:"varint,5,opt,name=time,proto3" json:"time,omitempty"`
+	SelfId        int64             `protobuf:"varint,6,opt,name=self_id,json=selfId,proto3" json:"self_id,omitempty"`
+	PostType      string            `protobuf:"bytes,7,opt,name=post_type,json=postType,proto3" json:"post_type,omitempty"`
+	SubType       string            `protobuf:"bytes,8,opt,name=sub_type,json=subType,proto3" json:"sub_type,omitempty"`
+	MessageType   string            `protobuf:"bytes,9,opt,name=message_type,json=messageType,proto3" json:"message_type,omitempty"`
+	NoticeType    string            `protobuf:"bytes,10,opt,name=notice_type,json=noticeType,proto3" json:"notice_type,omitempty"`
+	RequestType   string            `protobuf:"bytes,11,opt,name=request_type,json=requestType,proto3" json:"request_type,omitempty"`
+	MetaEventType string            `protobuf:"bytes,12,opt,name=meta_event_type,json=metaEventType,proto3" json:"meta_event_type,omitempty"`
+	Status        *anypb.Any        `protobuf:"bytes,13,opt,name=status,proto3" json:"status,omitempty"`
+	Code          int32             `protobuf:"varint,14,opt,name=code,proto3" json:"code,omitempty"`
+	Data          *anypb.Any        `protobuf:"bytes,15,opt,name=data,proto3" json:"data,omitempty"`
+	Params        *OParams           `protobuf:"bytes,16,opt,name=params,proto3" json:"params,omitempty"`
+	MessageId     int32             `protobuf:"varint,17,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	UserId        int64             `protobuf:"varint,18,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Message       []*Message        `protobuf:"bytes,19,rep,name=message,proto3" json:"message,omitempty"`
+	RawMessage    string            `protobuf:"bytes,20,opt,name=raw_message,json=rawMessage,proto3" json:"raw_message,omitempty"`
+	Font          int32             `protobuf:"varint,21,opt,name=font,proto3" json:"font,omitempty"`
+	Sender        *Frame_Sender     `protobuf:"bytes,22,opt,name=sender,proto3" json:"sender,omitempty"`
+	Anonymous     *Frame_Anonymous  `protobuf:"bytes,23,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
+	GroupId       int64             `protobuf:"varint,24,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	File          *Frame_File       `protobuf:"bytes,25,opt,name=file,proto3" json:"file,omitempty"`
+	GroupName     string            `protobuf:"bytes,26,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
+	SenderCard    string            `protobuf:"bytes,27,opt,name=sender_card,json=senderCard,proto3" json:"sender_card,omitempty"`
+	TargetId      int64             `protobuf:"varint,28,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	TargetCard    string            `protobuf:"bytes,29,opt,name=target_card,json=targetCard,proto3" json:"target_card,omitempty"`
+	Honor         string            `protobuf:"bytes,30,opt,name=honor,proto3" json:"honor,omitempty"`
+	OperatorId    int64             `protobuf:"varint,31,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	MemberUid     string            `protobuf:"bytes,32,opt,name=member_uid,json=memberUid,proto3" json:"member_uid,omitempty"`
+	OperatorUid   string            `protobuf:"bytes,33,opt,name=operator_uid,json=operatorUid,proto3" json:"operator_uid,omitempty"`
+	ExitType      uint32            `protobuf:"varint,34,opt,name=exit_type,json=exitType,proto3" json:"exit_type,omitempty"`
+	InvitorUid    string            `protobuf:"bytes,35,opt,name=invitor_uid,json=invitorUid,proto3" json:"invitor_uid,omitempty"`
+	JoinType      uint32            `protobuf:"varint,36,opt,name=join_type,json=joinType,proto3" json:"join_type,omitempty"`
+	Duration      int64             `protobuf:"varint,37,opt,name=duration,proto3" json:"duration,omitempty"`
+	TargetUid     string            `protobuf:"bytes,38,opt,name=target_uid,json=targetUid,proto3" json:"target_uid,omitempty"`
+	SourceUin     uint32            `protobuf:"varint,39,opt,name=source_uin,json=sourceUin,proto3" json:"source_uin,omitempty"`
+	SourceUid     string            `protobuf:"bytes,40,opt,name=source_uid,json=sourceUid,proto3" json:"source_uid,omitempty"`
+	Msg           string            `protobuf:"bytes,41,opt,name=msg,proto3" json:"msg,omitempty"`
+	Source        string            `protobuf:"bytes,42,opt,name=source,proto3" json:"source,omitempty"`
+	AuthorUid     string            `protobuf:"bytes,43,opt,name=author_uid,json=authorUid,proto3" json:"author_uid,omitempty"`
+	Sequence      uint64            `protobuf:"varint,44,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Random        uint32            `protobuf:"varint,45,opt,name=random,proto3" json:"random,omitempty"`
+	FromUid       string            `protobuf:"bytes,46,opt,name=from_uid,json=fromUid,proto3" json:"from_uid,omitempty"`
+	Comment       string            `protobuf:"bytes,47,opt,name=comment,proto3" json:"comment,omitempty"`
+	Flag          string            `protobuf:"bytes,48,opt,name=flag,proto3" json:"flag,omitempty"`
+	RequestId     int64             `protobuf:"varint,49,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	UserNick      string            `protobuf:"bytes,50,opt,name=user_nick,json=userNick,proto3" json:"user_nick,omitempty"`
+	Action        string            `protobuf:"bytes,51,opt,name=action,proto3" json:"action,omitempty"`
+	ActionUinNick string            `protobuf:"bytes,52,opt,name=action_uin_nick,json=actionUinNick,proto3" json:"action_uin_nick,omitempty"`
+	ActionUin     int64             `protobuf:"varint,53,opt,name=action_uin,json=actionUin,proto3" json:"action_uin,omitempty"`
+	Check         bool              `protobuf:"varint,54,opt,name=check,proto3" json:"check,omitempty"`
+	Suspicious    bool              `protobuf:"varint,55,opt,name=suspicious,proto3" json:"suspicious,omitempty"`
+	Answer        string            `protobuf:"bytes,56,opt,name=answer,proto3" json:"answer,omitempty"`
+	Extra         map[string]string `protobuf:"bytes,100,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Types that are assignable to PbData:
+	//
+	//	*Frame_PrivateMessageEvent
+	//	*Frame_GroupMessageEvent
+	//	*Frame_GroupUploadNoticeEvent
+	//	*Frame_GroupAdminNoticeEvent
+	//	*Frame_GroupDecreaseNoticeEvent
+	//	*Frame_GroupIncreaseNoticeEvent
+	//	*Frame_GroupBanNoticeEvent
+	//	*Frame_FriendAddNoticeEvent
+	//	*Frame_GroupRecallNoticeEvent
+	//	*Frame_FriendRecallNoticeEvent
+	//	*Frame_FriendRequestEvent
+	//	*Frame_GroupRequestEvent
+	//	*Frame_GroupTempMessageEvent
+	//	*Frame_GroupNotifyEvent
+	//	*Frame_GroupPokeEvent
+	//	*Frame_FriendPokeEvent
+	//	*Frame_GroupDigestEvent
+	//	*Frame_GroupNameUpdatedEvent
+	//	*Frame_MemberSpecialTitleUpdatedEvent
+	//	*Frame_GroupMemberPermissionChangeEvent
+	//	*Frame_RenameEvent
+	//	*Frame_SendPrivateMsgReq
+	//	*Frame_SendGroupMsgReq
+	//	*Frame_SendMsgReq
+	//	*Frame_DeleteMsgReq
+	//	*Frame_GetMsgReq
+	//	*Frame_GetForwardMsgReq
+	//	*Frame_SendLikeReq
+	//	*Frame_SetGroupKickReq
+	//	*Frame_SetGroupBanReq
+	//	*Frame_SetGroupAnonymousBanReq
+	//	*Frame_SetGroupWholeBanReq
+	//	*Frame_SetGroupAdminReq
+	//	*Frame_SetGroupAnonymousReq
+	//	*Frame_SetGroupCardReq
+	//	*Frame_SetGroupNameReq
+	//	*Frame_SetGroupLeaveReq
+	//	*Frame_SetGroupSpecialTitleReq
+	//	*Frame_SetFriendAddRequestReq
+	//	*Frame_SetGroupAddRequestReq
+	//	*Frame_GetLoginInfoReq
+	//	*Frame_GetStrangerInfoReq
+	//	*Frame_GetFriendListReq
+	//	*Frame_GetGroupInfoReq
+	//	*Frame_GetGroupListReq
+	//	*Frame_GetGroupMemberInfoReq
+	//	*Frame_GetGroupMemberListReq
+	//	*Frame_GetGroupHonorInfoReq
+	//	*Frame_GetCookiesReq
+	//	*Frame_GetCsrfTokenReq
+	//	*Frame_GetCredentialsReq
+	//	*Frame_GetRecordReq
+	//	*Frame_GetImageReq
+	//	*Frame_CanSendImageReq
+	//	*Frame_CanSendRecordReq
+	//	*Frame_GetStatusReq
+	//	*Frame_GetVersionInfoReq
+	//	*Frame_SetRestartReq
+	//	*Frame_CleanCacheReq
+	//	*Frame_SetGroupSignInReq
+	//	*Frame_SendMusicReq
+	//	*Frame_SendGroupPokeReq
+	//	*Frame_SendFriendPokeReq
+	//	*Frame_SendPrivateMsgResp
+	//	*Frame_SendGroupMsgResp
+	//	*Frame_SendMsgResp
+	//	*Frame_DeleteMsgResp
+	//	*Frame_GetMsgResp
+	//	*Frame_GetForwardMsgResp
+	//	*Frame_SendLikeResp
+	//	*Frame_SetGroupKickResp
+	//	*Frame_SetGroupBanResp
+	//	*Frame_SetGroupAnonymousBanResp
+	//	*Frame_SetGroupWholeBanResp
+	//	*Frame_SetGroupAdminResp
+	//	*Frame_SetGroupAnonymousResp
+	//	*Frame_SetGroupCardResp
+	//	*Frame_SetGroupNameResp
+	//	*Frame_SetGroupLeaveResp
+	//	*Frame_SetGroupSpecialTitleResp
+	//	*Frame_SetFriendAddRequestResp
+	//	*Frame_SetGroupAddRequestResp
+	//	*Frame_GetLoginInfoResp
+	//	*Frame_GetStrangerInfoResp
+	//	*Frame_GetFriendListResp
+	//	*Frame_GetGroupInfoResp
+	//	*Frame_GetGroupListResp
+	//	*Frame_GetGroupMemberInfoResp
+	//	*Frame_GetGroupMemberListResp
+	//	*Frame_GetGroupHonorInfoResp
+	//	*Frame_GetCookiesResp
+	//	*Frame_GetCsrfTokenResp
+	//	*Frame_GetCredentialsResp
+	//	*Frame_GetRecordResp
+	//	*Frame_GetImageResp
+	//	*Frame_CanSendImageResp
+	//	*Frame_CanSendRecordResp
+	//	*Frame_GetStatusResp
+	//	*Frame_GetVersionInfoResp
+	//	*Frame_SetRestartResp
+	//	*Frame_CleanCacheResp
+	//	*Frame_SetGroupSignInResp
+	//	*Frame_SendMusicResp
+	//	*Frame_SendGroupPokeResp
+	//	*Frame_SendFriendPokeResp
+	//	*Frame_OSendPrivateMsgResp
+	//	*Frame_OSendGroupMsgResp
+	//	*Frame_OSendMsgResp
+	//	*Frame_ODeleteMsgResp
+	//	*Frame_OGetMsgResp
+	//	*Frame_OGetForwardMsgResp
+	//	*Frame_OSendLikeResp
+	//	*Frame_OSetGroupKickResp
+	//	*Frame_OSetGroupBanResp
+	//	*Frame_OSetGroupAnonymousBanResp
+	//	*Frame_OSetGroupWholeBanResp
+	//	*Frame_OSetGroupAdminResp
+	//	*Frame_OSetGroupAnonymousResp
+	//	*Frame_OSetGroupCardResp
+	//	*Frame_OSetGroupNameResp
+	//	*Frame_OSetGroupLeaveResp
+	//	*Frame_OSetGroupSpecialTitleResp
+	//	*Frame_OSetFriendAddRequestResp
+	//	*Frame_OSetGroupAddRequestResp
+	//	*Frame_OGetLoginInfoResp
+	//	*Frame_OGetStrangerInfoResp
+	//	*Frame_OGetFriendListResp
+	//	*Frame_OGetGroupInfoResp
+	//	*Frame_OGetGroupListResp
+	//	*Frame_OGetGroupMemberInfoResp
+	//	*Frame_OGetGroupMemberListResp
+	//	*Frame_OGetGroupHonorInfoResp
+	//	*Frame_OGetCookiesResp
+	//	*Frame_OGetCsrfTokenResp
+	//	*Frame_OGetCredentialsResp
+	//	*Frame_OGetRecordResp
+	//	*Frame_OGetImageResp
+	//	*Frame_OCanSendImageResp
+	//	*Frame_OCanSendRecordResp
+	//	*Frame_OGetStatusResp
+	//	*Frame_OGetVersionInfoResp
+	//	*Frame_OSetRestartResp
+	//	*Frame_OCleanCacheResp
+	//	*Frame_OSetGroupSignInResp
+	//	*Frame_OSendMusicResp
+	//	*Frame_OSendGroupPokeResp
+	//	*Frame_OSendFriendPokeResp
+	PbData isFrame_PbData `protobuf_oneof:"pb_data"`
+}
 
 func (x *Frame) Reset() {
 	*x = Frame{}

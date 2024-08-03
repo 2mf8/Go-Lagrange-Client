@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -449,6 +450,7 @@ func AfterLogin(cli *client.QQClient) {
 	} else {
 		log.Infof("共加载 %v 个好友.", len(fs))
 	}
+	go InitForwardGin(cli)
 	bot.ConnectUniversal(cli)
 
 	defer cli.Release()
@@ -483,4 +485,53 @@ func AfterLogin(cli *client.QQClient) {
 			return
 		}
 	}
+}
+
+func InitForwardGin(cli *client.QQClient) {
+	gin.SetMode(gin.ReleaseMode)
+	router := gin.New()
+	router.Use(gin.Recovery())
+	if len(config.HttpAuth) > 0 {
+		router.Use(gin.BasicAuth(config.HttpAuth))
+	}
+
+	router.Use(CORSMiddleware())
+	router.GET("/onebot/ws", func(c *gin.Context) {
+		if err := bot.UpgradeWebsocket(cli, c.Writer, c.Request); err != nil {
+			fmt.Println("创建机器人失败", err)
+		}
+	})
+	realPort, err := RunForwardGin(router, ":"+config.ForwardPort)
+	if err != nil {
+		for i := 9101; i <= 9120; i++ {
+			config.ForwardPort = strconv.Itoa(i)
+			realPort, err := RunForwardGin(router, ":"+config.ForwardPort)
+			if err != nil {
+				log.Warn(fmt.Errorf("failed to run gin, err: %+v", err))
+				continue
+			}
+			config.ForwardPort = realPort
+			log.Infof("端口号 %s", realPort)
+			log.Infof(fmt.Sprintf("正向 WebSocket 地址为 ws://localhost:%s/onebot/ws", realPort))
+			break
+		}
+	} else {
+		config.ForwardPort = realPort
+		log.Infof("端口号 %s", realPort)
+		log.Infof(fmt.Sprintf("正向 WebSocket 地址为 ws://localhost:%s/onebot/ws", realPort))
+	}
+}
+
+func RunForwardGin(engine *gin.Engine, port string) (string, error) {
+	ln, err := net.Listen("tcp", port)
+	if err != nil {
+		return "", err
+	}
+	_, randPort, _ := net.SplitHostPort(ln.Addr().String())
+	go func() {
+		if err := http.Serve(ln, engine); err != nil {
+			util.FatalError(fmt.Errorf("failed to serve http, err: %+v", err))
+		}
+	}()
+	return randPort, nil
 }

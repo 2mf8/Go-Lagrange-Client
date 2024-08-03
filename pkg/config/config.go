@@ -15,12 +15,13 @@ import (
 //go:generate go run github.com/2mf8/syncmap -o "gen_plugin_map.go" -pkg config -name PluginMap "map[string]*Plugin"
 //go:generate go run github.com/2mf8/syncmap -o "gen_device_info_map.go" -pkg config -name PluginMap "map[string]*DeviceInfo"
 var (
-	Fragment = false // 是否分片
-	Port     = "9000"
-	SMS      = false
-	Device   = ""
-	Plugins  = &PluginMap{}
-	HttpAuth = map[string]string{}
+	Fragment    = false // 是否分片
+	Port        = "9000"
+	ForwardPort = "9100"
+	SMS         = false
+	Device      = ""
+	Plugins     = &PluginMap{}
+	HttpAuth    = map[string]string{}
 )
 
 func init() {
