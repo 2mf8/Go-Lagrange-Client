@@ -286,18 +286,49 @@ func OnWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_
 			return
 		}
 		var apiReq onebot.Frame
+		var oframe onebot.OFrame
 		switch messageType {
 		case websocket.BinaryMessage:
 			err := json.Unmarshal(data, &apiReq)
 			if err != nil {
-				log.Errorf("收到API text，解析错误 %v", err)
-				return
+				if err != nil {
+					err := json.Unmarshal(data, &oframe)
+					if err != nil {
+						log.Errorf("收到API text，解析错误 %v", err)
+						return
+					}
+					apiReq.Action = oframe.Action
+					apiReq.Echo = fmt.Sprintf("%v", oframe.Echo)
+					apiReq.Params.Message = []*onebot.Message{
+						{
+							Type: "text",
+							Data: map[string]string{
+								"text": oframe.Params.Message,
+							},
+						},
+					}
+				}
 			}
 		case websocket.TextMessage:
 			err := json.Unmarshal(data, &apiReq)
 			if err != nil {
-				log.Errorf("收到API text，解析错误 %v", err)
-				return
+				if err != nil {
+					err := json.Unmarshal(data, &oframe)
+					if err != nil {
+						log.Errorf("收到API text，解析错误 %v", err)
+						return
+					}
+					apiReq.Action = oframe.Action
+					apiReq.Echo = fmt.Sprintf("%v", oframe.Echo)
+					apiReq.Params.Message = []*onebot.Message{
+						{
+							Type: "text",
+							Data: map[string]string{
+								"text": oframe.Params.Message,
+							},
+						},
+					}
+				}
 			}
 		}
 
