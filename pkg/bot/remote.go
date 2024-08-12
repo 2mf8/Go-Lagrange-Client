@@ -28,9 +28,15 @@ var (
 	// RemoteServers key是botId，value是map（key是serverName，value是server）
 	RemoteServers  RemoteMap
 	wsprotocol     = 0
-	ForwardServers = make(map[string]*ForwardServer, 0)
-	Mu             sync.Mutex
+	forwardServers = make(map[string]*ForwardServer, 0)
+	lock           = new(sync.RWMutex)
+	SafeForwardMap = NewForwards()
 )
+
+type SafeForwards struct {
+	Map map[string]*ForwardServer
+	RW  *sync.RWMutex
+}
 
 type LifeTime struct {
 	Time          int64  `json:"time,omitempty"`
@@ -67,6 +73,31 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
+}
+
+func NewForwards() *SafeForwards {
+	return &SafeForwards{
+		Map: forwardServers,
+		RW:  lock,
+	}
+}
+
+func (f *SafeForwards) SetForward(key string, value *ForwardServer) {
+	f.RW.Lock()
+	defer f.RW.Unlock()
+	f.Map[key] = value
+}
+
+func (f *SafeForwards) GetForward(key string) *ForwardServer {
+	f.RW.RLock()
+	defer f.RW.RUnlock()
+	return f.Map[key]
+}
+
+func (f *SafeForwards) DeleteForward(key string) {
+	f.RW.Lock()
+	defer f.RW.Unlock()
+	delete(f.Map, key)
 }
 
 func UpgradeWebsocket(cli *client.QQClient, w http.ResponseWriter, r *http.Request) error {
@@ -116,7 +147,7 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 			}, &config.Plugin{
 				Json:     true,
 				Protocol: 1,
-			}, ForwardServers[url].Session)
+			}, SafeForwardMap.GetForward(url).Session)
 		} else if messageType == websocket.BinaryMessage {
 			fmt.Println(string(data))
 			err := json.Unmarshal(data, &frame)
@@ -142,25 +173,16 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 			}, &config.Plugin{
 				Json:     true,
 				Protocol: 1,
-			}, ForwardServers[url].Session)
+			}, SafeForwardMap.GetForward(url).Session)
 		} else {
 			log.Errorf("invalid websocket messageType: %+v", messageType)
 			return
 		}
-
-		_, ok := ForwardServers[url]
-		if !ok {
-			_ = conn.Close()
-			return
-		}
 	}
 	closeHandler := func(code int, message string) {
-		ForwardServers[url].Mu.Lock()
-		defer ForwardServers[url].Mu.Unlock()
-		ForwardServers[url].Session.Conn.Close()
-		Mu.Lock()
-		delete(ForwardServers, url)
-		Mu.Unlock()
+		SafeForwardMap.GetForward(url).Session.Conn.Close()
+		SafeForwardMap.DeleteForward(url)
+		log.Infof("正向 WebSocket 已断连，断连 账号_地址 为 %s", url)
 	}
 	safews := safe_ws.NewForwardSafeWebSocket(conn, messageHandler, closeHandler)
 	fs := &ForwardServer{
@@ -168,9 +190,7 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 		Session:       safews,
 		WaitingFrames: make(map[string]*promise.Promise),
 	}
-	Mu.Lock()
-	ForwardServers[url] = fs
-	Mu.Unlock()
+	SafeForwardMap.SetForward(url, fs)
 	b, err := json.Marshal(lt)
 	if err == nil {
 		fs.Mu.Lock()
@@ -184,9 +204,11 @@ func ForwrdSendMsg(cli *client.QQClient, f *onebot.Frame) {
 	if gm, ok := f.PbData.(*onebot.Frame_GroupMessageEvent); ok {
 		b, e := json.Marshal(gm.GroupMessageEvent)
 		if e == nil {
-			for i, _ := range ForwardServers {
+			for i, _ := range SafeForwardMap.Map {
 				if strings.HasPrefix(i, fmt.Sprintf("%v", cli.Uin)) {
-					ForwardServers[i].Session.ForwardSend(websocket.TextMessage, b)
+					SafeForwardMap.GetForward(i).Mu.Lock()
+					defer SafeForwardMap.GetForward(i).Mu.Unlock()
+					SafeForwardMap.GetForward(i).Session.ForwardSend(websocket.TextMessage, b)
 				}
 			}
 		}
