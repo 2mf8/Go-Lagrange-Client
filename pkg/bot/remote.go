@@ -29,6 +29,7 @@ var (
 	RemoteServers  RemoteMap
 	wsprotocol     = 0
 	ForwardServers = make(map[string]*ForwardServer, 0)
+	Mu             sync.Mutex
 )
 
 type LifeTime struct {
@@ -75,7 +76,7 @@ func UpgradeWebsocket(cli *client.QQClient, w http.ResponseWriter, r *http.Reque
 	}
 	log.Infof("正向 WebSocket 已连接，远程地址为 %s", c.RemoteAddr().String())
 	bs := fmt.Sprintf("%v_%s", cli.Uin, c.RemoteAddr().String())
-	ForwradConnect(cli, bs, c)
+	go ForwradConnect(cli, bs, c)
 	return nil
 }
 
@@ -154,8 +155,12 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 		}
 	}
 	closeHandler := func(code int, message string) {
-		ForwardServers[url].Session.OnClose(code, message)
+		ForwardServers[url].Mu.Lock()
+		defer ForwardServers[url].Mu.Unlock()
+		ForwardServers[url].Session.Conn.Close()
+		Mu.Lock()
 		delete(ForwardServers, url)
+		Mu.Unlock()
 	}
 	safews := safe_ws.NewForwardSafeWebSocket(conn, messageHandler, closeHandler)
 	fs := &ForwardServer{
@@ -163,9 +168,13 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 		Session:       safews,
 		WaitingFrames: make(map[string]*promise.Promise),
 	}
+	Mu.Lock()
 	ForwardServers[url] = fs
+	Mu.Unlock()
 	b, err := json.Marshal(lt)
 	if err == nil {
+		fs.Mu.Lock()
+		defer fs.Mu.Unlock()
 		fs.Session.ForwardSend(websocket.TextMessage, b)
 	}
 	return fs
