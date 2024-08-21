@@ -8,24 +8,6 @@ import (
 //go:generate go run github.com/a8m/syncmap -o "gen_token_map.go" -pkg bot -name TokenMap "map[int64][]byte"
 var (
 	Clients                    ClientMap
-	LoginTokens                TokenMap
-	EnergyCount                = 0
-	EnergyStop                 = false
-	SignCount                  = 0
-	SignStop                   = false
-	RegisterSignCount          = 0
-	RegisterSignStop           = false
-	SubmitRequestCallbackCount = 0
-	SubmitRequestCallbackStop  = false
-	RequestTokenCount          = 0
-	RequestTokenStop           = false
-	DestoryInstanceCount       = 0
-	DestoryInstanceStop        = false
-	RSR                        RequestSignResult
-	GTL                        *GMCLogin
-	SR                         SignRegister
-	IsRequestTokenAgain        bool = false
-	TTI_i                           = 30
 )
 
 type Logger struct {

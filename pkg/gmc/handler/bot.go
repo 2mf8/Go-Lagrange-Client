@@ -279,7 +279,6 @@ func QueryQRCodeStatus(c *gin.Context) {
 			queryQRCodeMutex.Lock()
 			defer queryQRCodeMutex.Unlock()
 			err := qrCodeBot.QRCodeConfirmed()
-			fmt.Println(err)
 			if err == nil {
 				go func() {
 					queryQRCodeMutex.Lock()
