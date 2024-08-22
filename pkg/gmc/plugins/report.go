@@ -171,7 +171,7 @@ func ReportGroupMute(cli *client.QQClient, event *event.GroupMute) int32 {
 }
 
 func ReportNewFriendRequest(cli *client.QQClient, event *event.NewFriendRequest) int32 {
-	flag := strconv.FormatInt(int64(event.SourceUin), 10)
+	flag := event.SourceUid
 	cache.FriendRequestLru.Add(flag, event)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TFriendRequestEvent,

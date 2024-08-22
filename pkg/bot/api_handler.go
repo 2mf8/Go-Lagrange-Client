@@ -517,3 +517,8 @@ func HandleSendFriendPoke(cli *client.QQClient, req *onebot.SendFriendPokeReq) *
 	}
 	return nil
 }
+
+func HandleSetFriendAddRequest(cli *client.QQClient, req *onebot.SetFriendAddRequestReq) *onebot.SetFriendAddRequestResp{
+	cli.SetFriendRequest(req.Approve, req.Flag)
+	return nil
+}
