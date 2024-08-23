@@ -1,6 +1,7 @@
 package plugins
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -216,7 +217,8 @@ func ReportUserJoinGroupRequest(cli *client.QQClient, event *event.GroupMemberJo
 }
 
 func ReportGroupInvitedRequest(cli *client.QQClient, event *event.GroupInvite) int32 {
-	flag := strconv.FormatInt(int64(event.GroupUin), 10)
+	flag := strconv.FormatInt(int64(event.RequestSeq), 10)
+	uin := cli.GetUin(event.InvitorUid)
 	cache.GroupInvitedRequestLru.Add(flag, event)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupRequestEvent,
@@ -232,6 +234,10 @@ func ReportGroupInvitedRequest(cli *client.QQClient, event *event.GroupInvite) i
 			InvitorUid:  event.InvitorUid,
 			Comment:     "",
 			Flag:        flag,
+			Extra: map[string]string{
+				"invite_uin":  fmt.Sprintf("%v", uin),
+				"invite_nick": event.InvitorNick,
+			},
 		},
 	}
 	bot.HandleEventFrame(cli, eventProto)

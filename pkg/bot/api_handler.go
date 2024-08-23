@@ -518,7 +518,51 @@ func HandleSendFriendPoke(cli *client.QQClient, req *onebot.SendFriendPokeReq) *
 	return nil
 }
 
-func HandleSetFriendAddRequest(cli *client.QQClient, req *onebot.SetFriendAddRequestReq) *onebot.SetFriendAddRequestResp{
+func HandleSetFriendAddRequest(cli *client.QQClient, req *onebot.SetFriendAddRequestReq) *onebot.SetFriendAddRequestResp {
 	cli.SetFriendRequest(req.Approve, req.Flag)
+	return nil
+}
+
+// accept bool, sequence uint64, typ uint32, groupUin uint32, message string
+func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddRequestReq) *onebot.SetGroupAddRequestResp {
+	msgs, err := cli.GetGroupSystemMessages()
+	if err != nil {
+		log.Warnf("获取群系统消息失败：%v", err)
+		return nil
+	}
+	if req.SubType == "invite" {
+		for _, ireq := range msgs {
+			if req.Flag == fmt.Sprintf("%v", ireq.Sequence) {
+				if ireq.Checked() {
+					log.Warnf("处理群系统消息失败: 无法操作已处理的消息.")
+					return nil
+				}
+			}
+			if req.Approve {
+				cli.SetGroupRequest(true, ireq.Sequence, ireq.EventType, ireq.GroupUin, "")
+				return nil
+			} else {
+				cli.SetGroupRequest(false, ireq.Sequence, ireq.EventType, ireq.GroupUin, req.Reason)
+				return nil
+			}
+		}
+	} else {
+		for _, ireq := range msgs {
+			if req.Flag == fmt.Sprintf("%v", ireq.Sequence) {
+				if ireq.Checked() {
+					log.Warnf("处理群系统消息失败: 无法操作已处理的消息.")
+					return nil
+				}
+			}
+			if req.Approve {
+				cli.SetGroupRequest(true, ireq.Sequence, ireq.EventType, ireq.GroupUin, "")
+				return nil
+			} else {
+				cli.SetGroupRequest(false, ireq.Sequence, ireq.EventType, ireq.GroupUin, req.Reason)
+				return nil
+			}
+		}
+	}
+	log.Warnf("处理群系统消息失败: 消息 %v 不存在.", req.Flag)
 	return nil
 }

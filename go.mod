@@ -3,7 +3,7 @@ module github.com/2mf8/Go-Lagrange-Client
 go 1.23
 
 require (
-	github.com/2mf8/LagrangeGo v0.0.18
+	github.com/2mf8/LagrangeGo v0.0.24
 	github.com/BurntSushi/toml v1.3.2
 	github.com/fanliao/go-promise v0.0.0-20141029170127-1890db352a72
 	github.com/gin-gonic/gin v1.9.1

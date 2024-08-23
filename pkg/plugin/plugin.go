@@ -55,6 +55,7 @@ var MemberSpecialTitleUpdatedPluginList = make([]MemberSpecialTitleUpdatedPlugin
 var RenamePluginList = make([]RenamePlugin, 0)
 
 func Serve(cli *client.QQClient) {
+	cli.GroupInvitedEvent.Subscribe(handleGroupInvitedRequest)
 	cli.GroupNotifyEvent.Subscribe(handleNotify)
 	cli.FriendNotifyEvent.Subscribe(handleNotify)
 	cli.PrivateMessageEvent.Subscribe(handlePrivateMessage)
@@ -63,7 +64,6 @@ func Serve(cli *client.QQClient) {
 	cli.GroupMemberLeaveEvent.Subscribe(handleMemberLeaveGroup)
 	cli.GroupMemberLeaveEvent.Subscribe(handleLeaveGroup)
 	cli.NewFriendRequestEvent.Subscribe(handleNewFriendRequest)
-	cli.GroupInvitedEvent.Subscribe(handleGroupInvitedRequest)
 	cli.GroupRecallEvent.Subscribe(handleGroupMessageRecalled)
 	cli.FriendRecallEvent.Subscribe(handleFriendMessageRecalled)
 	cli.GroupMuteEvent.Subscribe(handleGroupMute)
@@ -77,12 +77,12 @@ func Serve(cli *client.QQClient) {
 }
 
 // 精华消息
-func AddGroupDigestPlugin(plugin DigestPlugin){
+func AddGroupDigestPlugin(plugin DigestPlugin) {
 	DigestPluginList = append(DigestPluginList, plugin)
 }
 
 // 管理员变动
-func AddGroupMemberPermissionChangedPlugin(plugin GroupMemberPermissionChangedPlugin){
+func AddGroupMemberPermissionChangedPlugin(plugin GroupMemberPermissionChangedPlugin) {
 	GroupMemberPermissionChangedPluginList = append(GroupMemberPermissionChangedPluginList, plugin)
 }
 
@@ -92,12 +92,12 @@ func AddGroupNameUpdated(plugin GroupNameUpdatedPlugin) {
 }
 
 // 群头衔变动
-func AddMemberSpecialTitleUpdated(plugin MemberSpecialTitleUpdatedPlugin){
+func AddMemberSpecialTitleUpdated(plugin MemberSpecialTitleUpdatedPlugin) {
 	MemberSpecialTitleUpdatedPluginList = append(MemberSpecialTitleUpdatedPluginList, plugin)
 }
 
 // 重命名
-func AddRenameEvent(plugin RenamePlugin){
+func AddRenameEvent(plugin RenamePlugin) {
 	RenamePluginList = append(RenamePluginList, plugin)
 }
 
