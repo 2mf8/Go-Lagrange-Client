@@ -322,22 +322,21 @@ func OnWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_
 		case websocket.BinaryMessage:
 			err := json.Unmarshal(data, &apiReq)
 			if err != nil {
+				log.Errorf("收到API text，解析错误 %v", err)
+				err := json.Unmarshal(data, &oframe)
 				if err != nil {
-					err := json.Unmarshal(data, &oframe)
-					if err != nil {
-						log.Errorf("收到API text，解析错误 %v", err)
-						return
-					}
-					apiReq.Action = oframe.Action
-					apiReq.Echo = fmt.Sprintf("%v", oframe.Echo)
-					apiReq.Params.Message = []*onebot.Message{
-						{
-							Type: "text",
-							Data: map[string]string{
-								"text": oframe.Params.Message,
-							},
+					log.Errorf("收到API text，解析错误 %v", err)
+					return
+				}
+				apiReq.Action = oframe.Action
+				apiReq.Echo = fmt.Sprintf("%v", oframe.Echo)
+				apiReq.Params.Message = []*onebot.Message{
+					{
+						Type: "text",
+						Data: map[string]string{
+							"text": oframe.Params.Message,
 						},
-					}
+					},
 				}
 			}
 		case websocket.TextMessage:
@@ -373,7 +372,7 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		Echo: req.Echo,
 	}
 	data, _ := json.Marshal(req)
-	fmt.Println(string(data))
+	fmt.Println(string(data), "\n\n", req.Action, onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)])
 	if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_group_msg)] {
 		reqData := &onebot.Frame_SendGroupMsgReq{
 			SendGroupMsgReq: &onebot.SendGroupMsgReq{
@@ -687,19 +686,6 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
-	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
-		resp.FrameType = onebot.Frame_TSendGroupMsgResp
-		if resp.Ok = isApiAllow(onebot.Frame_TSendGroupMsgReq); !resp.Ok {
-			return
-		}
-		r := &onebot.SendGroupMsgResp{}
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r,
-			Echo:    req.Echo,
-		}
-		sendActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_set_friend_add_request)] {
 		reqData := &onebot.Frame_SetFriendAddRequestReq{
 			SetFriendAddRequestReq: &onebot.SetFriendAddRequestReq{
@@ -758,6 +744,26 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
+	/* } else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
+		reqData := &onebot.Frame_SendForwardMsgReq{
+			SendForwardMsgReq: &onebot.SendForwardMsgReq{
+				GroupId: req.Params.GroupId,
+				UserId: req.Params.UserId,
+				Messages: req.Params.Messages,
+			},
+		}
+		resp.FrameType = onebot.Frame_TSendForwardMsgResp
+		if resp.Ok = isApiAllow(onebot.Frame_TSendForwardMsgReq); !resp.Ok {
+			return
+		}
+		r := HandleSendForwardMsg(cli, reqData.SendForwardMsgReq)
+		data := &actionResp{
+			Status:  "ok",
+			RetCode: 0,
+			Data:    &r,
+			Echo:    req.Echo,
+		}
+		sendActionRespData(data, plugin, ws) */
 	} else {
 		data := &actionResp{
 			Status:  "failure",
@@ -1081,19 +1087,6 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 			return
 		}
 		r := &onebot.GetVersionInfoResp{}
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r,
-			Echo:    req.Echo,
-		}
-		sendForwardActionRespData(data, plugin, ws)
-	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
-		resp.FrameType = onebot.Frame_TSendGroupMsgResp
-		if resp.Ok = isApiAllow(onebot.Frame_TSendGroupMsgReq); !resp.Ok {
-			return
-		}
-		r := &onebot.SendGroupMsgResp{}
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,

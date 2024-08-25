@@ -207,6 +207,13 @@ func ProtoSleep(data map[string]string) {
 	time.Sleep(time.Duration(ms) * time.Millisecond)
 }
 
+func ProtoNodeToMiraiNode(data map[string]string) *message.ForwardMessage {
+	/* node := []map[string]string{}
+
+	content, ok := data["content"] */
+	return nil
+}
+
 /*func ProtoMusicToMiraiMusic(_ *client.QQClient, data map[string]string) (m message.IMessageElement) {
 	if data["type"] == "qq" {
 		info, err := util.QQMusicSongInfo(data["id"])

@@ -26,6 +26,18 @@ import (
 
 const MAX_TEXT_LENGTH = 80
 
+type ForwardNode struct {
+	Type string            `json:"type,omitempty"`
+	Data *ForwardChildNode `json:"data,omitempty"`
+}
+
+type ForwardChildNode struct {
+	Uin     int64             `json:"uin,omitempty"`
+	Name    string            `json:"name,omitempty"`
+	GroupId int64             `json:"group_id,omitempty"`
+	Content []*onebot.Message `json:"content,omitempty"`
+}
+
 // 风控临时解决方案
 func splitText(content string, limit int) []string {
 	text := []rune(content)
@@ -195,6 +207,70 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 		MessageId: ret.Id,
 	}
 }
+
+/* func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *onebot.SendForwardMsgResp {
+fmessageChain := make([]message.IMessageElement, 0)
+ms := []*ForwardNode{}
+db, err := json.Marshal(req.Messages)
+log.Warn(string(db), err)
+if err != nil {
+	return nil
+}
+err = json.Unmarshal(db, &ms)
+if err != nil {
+	return nil
+}
+nodes := []*message.ForwardNode{}
+for _, v := range ms {
+	tUid := cli.GetUid(uint32(v.Data.Uin))
+	messageChain := make([]message.IMessageElement, 0)
+	miraiMsg := ProtoMsgToMiraiMsg(cli, v.Data.Content, false)
+	for _, iv := range miraiMsg {
+		if iv.Type() == message.Image {
+			t, ok := iv.(*message.ImageElement)
+			if ok {
+				if v.Data.GroupId > 0 {
+					fn, elem, err := preprocessImageMessage(cli, uint32(v.Data.GroupId), t.Url)
+					if fn != "" {
+						os.Remove(fn)
+					}
+					if err == nil {
+						messageChain = append(messageChain, elem)
+					}
+				} else {
+					fn, elem, err := preprocessImageMessagePrivate(cli, tUid, t.Url)
+					if fn != "" {
+						os.Remove(fn)
+					}
+					if err == nil {
+						messageChain = append(messageChain, elem)
+					}
+				}
+			}
+		} else {
+			messageChain = append(messageChain, iv)
+		}
+	}
+	sendingMessage := &message.SendingMessage{Elements: messageChain}
+	node := &message.ForwardNode{
+		GroupId:    v.Data.GroupId,
+		SenderId:   v.Data.Uin,
+		SenderName: v.Data.Name,
+		Time:       int32(time.Now().Unix()),
+		Message:    sendingMessage.Elements,
+	}
+	nodes = append(nodes, node)
+}
+fmessageChain = append(fmessageChain, &message.ForwardMessage{Nodes: nodes})
+fsendMessage := &message.SendingMessage{Elements: fmessageChain}
+/* fd := &message.ForwardMessage{
+	ResID: "rJM5ZVB0j2vd/twZIiowoaG8qTg5X82f0fCyv2xg5/Q9ZiQknfQbqTypHAuK/27S",
+}
+fmessageChain = append(fmessageChain, fd)
+fdMessage := &message.SendingMessage{Elements: fmessageChain} */
+/* cli.SendGroupMessage(uint32(req.GroupId), fsendMessage.Elements)
+	return nil
+} */
 
 func HandleSendMsg(cli *client.QQClient, req *onebot.SendMsgReq) *onebot.SendMsgResp {
 	miraiMsg := ProtoMsgToMiraiMsg(cli, req.Message, req.AutoEscape)
