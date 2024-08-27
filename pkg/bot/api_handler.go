@@ -525,9 +525,9 @@ func HandleGetGroupMemberInfo(cli *client.QQClient, req *onebot.GetGroupMemberIn
 
 func HandleGetGroupMemberList(cli *client.QQClient, req *onebot.GetGroupMemberListReq) *onebot.GetGroupMemberListResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
-		members, err := cli.GetGroupMembersData(group.GroupUin)
+		members, err := cli.GetGroupMembersData(uint32(group.GroupUin))
 		if err != nil {
-			log.Errorf("获取群成员列表失败")
+			log.Errorf("获取群成员列表失败, %v", err)
 			return nil
 		}
 		memberList := make([]*onebot.GetGroupMemberListResp_GroupMember, 0)

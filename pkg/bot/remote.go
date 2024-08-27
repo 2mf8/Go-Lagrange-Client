@@ -120,8 +120,8 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 		SubType:       "connect",
 	}
 	messageHandler := func(messageType int, data []byte) {
-		var frame onebot.Frame
-		var oframe onebot.OFrame
+		var frame = onebot.Frame{}
+		var oframe = onebot.OFrame{}
 		if messageType == websocket.TextMessage {
 			fmt.Println(string(data))
 			err := json.Unmarshal(data, &frame)
@@ -316,8 +316,8 @@ func OnWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_
 			log.Warnf("bot is not online, ignore API, %+v", fmt.Sprintf("%v", cli.Uin))
 			return
 		}
-		var apiReq onebot.Frame
-		var oframe onebot.OFrame
+		var apiReq = onebot.Frame{}
+		var oframe = onebot.OFrame{}
 		switch messageType {
 		case websocket.BinaryMessage:
 			err := json.Unmarshal(data, &apiReq)
@@ -389,7 +389,7 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
-			Data:    &r.MessageId,
+			Data:    &r,
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
@@ -413,7 +413,7 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
-			Data:    ra.SendPrivateMsgResp.MessageId,
+			Data:    ra.SendPrivateMsgResp,
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
@@ -439,7 +439,7 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
-			Data:    ra.SendMsgResp.MessageId,
+			Data:    ra.SendMsgResp,
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
@@ -722,6 +722,24 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
+	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_get_group_member_list)] {
+		reqData := &onebot.Frame_GetGroupMemberListReq{
+			GetGroupMemberListReq: &onebot.GetGroupMemberListReq{
+				GroupId: req.Params.GroupId,
+			},
+		}
+		resp.FrameType = onebot.Frame_TGetGroupMemberListResp
+		if resp.Ok = isApiAllow(onebot.Frame_TGetGroupMemberListReq); !resp.Ok {
+			return
+		}
+		r := HandleGetGroupMemberList(cli, reqData.GetGroupMemberListReq)
+		data := &actionResp{
+			Status:  "ok",
+			RetCode: 0,
+			Data:    &r.GroupMember,
+			Echo:    req.Echo,
+		}
+		sendActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_set_group_add_request)] {
 		reqData := &onebot.Frame_SetGroupAddRequestReq{
 			SetGroupAddRequestReq: &onebot.SetGroupAddRequestReq{
@@ -744,7 +762,7 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
-	/* } else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
+		/* } else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
 		reqData := &onebot.Frame_SendForwardMsgReq{
 			SendForwardMsgReq: &onebot.SendForwardMsgReq{
 				GroupId: req.Params.GroupId,
@@ -1127,6 +1145,25 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 			Status:  "ok",
 			RetCode: 0,
 			Data:    &r.Group,
+			Echo:    req.Echo,
+		}
+		sendForwardActionRespData(data, plugin, ws)
+	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_get_group_member_list)] {
+		fmt.Println(req.GroupId)
+		reqData := &onebot.Frame_GetGroupMemberListReq{
+			GetGroupMemberListReq: &onebot.GetGroupMemberListReq{
+				GroupId: req.Params.GroupId,
+			},
+		}
+		resp.FrameType = onebot.Frame_TGetGroupMemberListResp
+		if resp.Ok = isApiAllow(onebot.Frame_TGetGroupMemberListReq); !resp.Ok {
+			return
+		}
+		r := HandleGetGroupMemberList(cli, reqData.GetGroupMemberListReq)
+		data := &actionResp{
+			Status:  "ok",
+			RetCode: 0,
+			Data:    &r.GroupMember,
 			Echo:    req.Echo,
 		}
 		sendForwardActionRespData(data, plugin, ws)
