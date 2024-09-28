@@ -53,6 +53,8 @@ func ProtoMsgToMiraiMsg(cli *client.QQClient, msgList []*onebot.Message, notConv
 			}
 		case "sleep":
 			ProtoSleep(protoMsg.Data)
+		case "forward":
+			messageChain = append(messageChain, ProtoForwardToMiraiForward(protoMsg.Data))
 		default:
 			log.Errorf("不支持的消息类型 %+v", protoMsg)
 		}
@@ -207,11 +209,17 @@ func ProtoSleep(data map[string]string) {
 	time.Sleep(time.Duration(ms) * time.Millisecond)
 }
 
-func ProtoNodeToMiraiNode(data map[string]string) *message.ForwardMessage {
-	/* node := []map[string]string{}
-
-	content, ok := data["content"] */
-	return nil
+func ProtoForwardToMiraiForward(data map[string]string) *message.ForwardMessage {
+	r,ok := data["id"]
+	if !ok {
+		log.Warnf("failed to get resId")
+		return nil
+	}
+	nodes := ForwardContents.Content[r]
+	return &message.ForwardMessage{
+		ResID: r,
+		Nodes: nodes,
+	}
 }
 
 /*func ProtoMusicToMiraiMusic(_ *client.QQClient, data map[string]string) (m message.IMessageElement) {

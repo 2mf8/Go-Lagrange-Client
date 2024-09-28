@@ -123,7 +123,6 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 		var frame = onebot.Frame{}
 		var oframe = onebot.OFrame{}
 		if messageType == websocket.TextMessage {
-			fmt.Println(string(data))
 			err := json.Unmarshal(data, &frame)
 			if err != nil {
 				err := json.Unmarshal(data, &oframe)
@@ -149,7 +148,6 @@ func ForwradConnect(cli *client.QQClient, url string, conn *websocket.Conn) *For
 				Protocol: 1,
 			}, SafeForwardMap.GetForward(url).Session)
 		} else if messageType == websocket.BinaryMessage {
-			fmt.Println(string(data))
 			err := json.Unmarshal(data, &frame)
 			if err != nil {
 				err := json.Unmarshal(data, &oframe)
@@ -371,8 +369,6 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 	resp := &onebot.Frame{
 		Echo: req.Echo,
 	}
-	data, _ := json.Marshal(req)
-	fmt.Println(string(data), "\n\n", req.Action, onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)])
 	if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_group_msg)] {
 		reqData := &onebot.Frame_SendGroupMsgReq{
 			SendGroupMsgReq: &onebot.SendGroupMsgReq{
@@ -408,8 +404,6 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		ra := &onebot.Frame_SendPrivateMsgResp{
 			SendPrivateMsgResp: HandleSendPrivateMsg(cli, reqData.SendPrivateMsgReq),
 		}
-		rd, _ := json.Marshal(ra)
-		fmt.Println(string(rd))
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
@@ -434,8 +428,6 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		ra := &onebot.Frame_SendMsgResp{
 			SendMsgResp: HandleSendMsg(cli, reqData.SendMsgReq),
 		}
-		rd, _ := json.Marshal(ra)
-		fmt.Println(string(rd))
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
@@ -762,11 +754,11 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			Echo:    req.Echo,
 		}
 		sendActionRespData(data, plugin, ws)
-		/* } else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
+	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_forward_msg)] {
 		reqData := &onebot.Frame_SendForwardMsgReq{
 			SendForwardMsgReq: &onebot.SendForwardMsgReq{
-				GroupId: req.Params.GroupId,
-				UserId: req.Params.UserId,
+				GroupId:  req.Params.GroupId,
+				UserId:   req.Params.UserId,
 				Messages: req.Params.Messages,
 			},
 		}
@@ -778,10 +770,10 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
-			Data:    &r,
+			Data:    &r.ResId,
 			Echo:    req.Echo,
 		}
-		sendActionRespData(data, plugin, ws) */
+		sendActionRespData(data, plugin, ws)
 	} else {
 		data := &actionResp{
 			Status:  "failure",
@@ -797,8 +789,6 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 	resp := &onebot.Frame{
 		Echo: req.Echo,
 	}
-	data, _ := json.Marshal(req)
-	fmt.Println(string(data))
 	if req.Action == onebot.ActionType_name[int32(onebot.ActionType_send_group_msg)] {
 		reqData := &onebot.Frame_SendGroupMsgReq{
 			SendGroupMsgReq: &onebot.SendGroupMsgReq{
@@ -834,8 +824,6 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 		ra := &onebot.Frame_SendPrivateMsgResp{
 			SendPrivateMsgResp: HandleSendPrivateMsg(cli, reqData.SendPrivateMsgReq),
 		}
-		rd, _ := json.Marshal(ra)
-		fmt.Println(string(rd))
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
@@ -860,8 +848,6 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 		ra := &onebot.Frame_SendMsgResp{
 			SendMsgResp: HandleSendMsg(cli, reqData.SendMsgReq),
 		}
-		rd, _ := json.Marshal(ra)
-		fmt.Println(string(rd))
 		data := &actionResp{
 			Status:  "ok",
 			RetCode: 0,
@@ -1149,7 +1135,6 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 		}
 		sendForwardActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_get_group_member_list)] {
-		fmt.Println(req.GroupId)
 		reqData := &onebot.Frame_GetGroupMemberListReq{
 			GetGroupMemberListReq: &onebot.GetGroupMemberListReq{
 				GroupId: req.Params.GroupId,

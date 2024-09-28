@@ -66,8 +66,8 @@ func RawMsgToMiraiMsg(cli *client.QQClient, str string) []message.IMessageElemen
 				}
 			case "sleep":
 				ProtoSleep(attrMap)
-			/*case "forward":
-			elemList = append(elemList, ProtoForwardToMiraiForward(cli, 0, int64(cli.Uin), cli.NickName(), int32(time.Now().Unix()), attrMap, true))*/
+			case "forward":
+				elemList = append(elemList, ProtoForwardToMiraiForward(attrMap))
 			default:
 				log.Warnf("不支持的类型 %s", code)
 				elemList = append(elemList, message.NewText(code))
