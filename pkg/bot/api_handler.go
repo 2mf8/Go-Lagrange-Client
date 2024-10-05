@@ -12,7 +12,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 	_ "unsafe"
 
@@ -27,13 +26,6 @@ import (
 )
 
 const MAX_TEXT_LENGTH = 80
-
-var ForwardContents = ForwardContent{}
-
-type ForwardContent struct {
-	RW      sync.Mutex
-	Content map[string][]*message.ForwardNode
-}
 
 type ForwardNode struct {
 	Type string            `json:"type,omitempty"`
@@ -177,8 +169,6 @@ func HandleSendPrivateMsg(cli *client.QQClient, req *onebot.SendPrivateMsgReq) *
 }
 
 func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *onebot.SendGroupMsgResp {
-	containForward := false
-	resId := ""
 	messageChain := make([]message.IMessageElement, 0)
 	if g := cli.GetCachedGroupInfo(uint32(req.GroupId)); g == nil {
 		log.Warnf("发送消息失败，群聊 %d 不存在", req.GroupId)
@@ -198,13 +188,6 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 				}
 			}
 		} else {
-			if v.Type() == message.Forward {
-				containForward = true
-				fmsg, ok := v.(*message.ForwardMessage)
-				if ok {
-					resId = fmsg.ResID
-				}
-			}
 			messageChain = append(messageChain, v)
 		}
 	}
@@ -215,11 +198,6 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 		return nil
 	}
 	ret, _ := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
-	if containForward && resId != "" {
-		ForwardContents.RW.Lock()
-		defer ForwardContents.RW.Unlock()
-		delete(ForwardContents.Content, resId)
-	}
 	if ret.Id < 1 {
 		config.Fragment = !config.Fragment
 		log.Warnf("发送群消息失败，可能被风控，下次发送将改变分片策略，Fragment: %+v", config.Fragment)
@@ -233,7 +211,6 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 
 func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *onebot.SendForwardMsgResp {
 	ms := []*ForwardNode{}
-	mfn := make(map[string][]*message.ForwardNode, 0)
 	db, err := json.Marshal(req.Messages)
 	log.Warn(string(db), err)
 	if err != nil {
@@ -252,7 +229,7 @@ func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *
 			if iv.Type() == message.Image {
 				t, ok := iv.(*message.ImageElement)
 				if ok {
-					if v.Data.GroupId > 0 {
+					if req.GroupId > 0 && v.Data.GroupId > 0 {
 						fn, elem, err := preprocessImageMessage(cli, uint32(v.Data.GroupId), t.Url)
 						if fn != "" {
 							os.Remove(fn)
@@ -276,34 +253,26 @@ func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *
 		}
 		sendingMessage := &message.SendingMessage{Elements: messageChain}
 		node := &message.ForwardNode{
-			GroupId:    v.Data.GroupId,
-			SenderId:   v.Data.Uin,
+			GroupId:    uint32(v.Data.GroupId),
+			SenderId:   uint32(v.Data.Uin),
 			SenderName: v.Data.Name,
-			Time:       int32(time.Now().Unix()),
+			Time:       uint32(time.Now().Unix()),
 			Message:    sendingMessage.Elements,
 		}
 		nodes = append(nodes, node)
 	}
-	resId, err := cli.UploadForwardMsg(nodes, uint32(req.GroupId))
+	ifm := &message.ForwardMessage{
+		Nodes: nodes,
+	}
+	fmt.Println(req.GroupId)
+	fm, err := cli.UploadForwardMsg(ifm, uint32(req.GroupId))
 	if err != nil {
-		log.Warnf("发送合并转发消息失败，%s 不存在", resId)
+		log.Warn("发送合并转发消息失败")
 	}
-	ForwardContents.RW.Lock()
-	defer ForwardContents.RW.Unlock()
-	if ForwardContents.Content == nil {
-		mfn[resId] = nodes
-		ForwardContents.Content = mfn
-	} else {
-		ForwardContents.Content[resId] = nodes
-	}
-	/* msg, err := cli.FetchForwardMsg(resId)
-	if err != nil {
-		log.Warnf("获取合并转发消息失败，%s 不存在", resId)
-	}
-	fmessageChain = append(fmessageChain, msg)
-	cli.SendGroupMessage(uint32(req.GroupId), fmessageChain) */
+	fml, _ := json.Marshal(fm)
+	fmt.Println(string(fml))
 	return &onebot.SendForwardMsgResp{
-		ResId: resId,
+		ResId: fm.ResID,
 	}
 }
 

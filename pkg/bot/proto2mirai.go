@@ -215,10 +215,8 @@ func ProtoForwardToMiraiForward(data map[string]string) *message.ForwardMessage 
 		log.Warnf("failed to get resId")
 		return nil
 	}
-	nodes := ForwardContents.Content[r]
 	return &message.ForwardMessage{
 		ResID: r,
-		Nodes: nodes,
 	}
 }
 
