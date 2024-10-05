@@ -707,13 +707,23 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			return
 		}
 		r := HandleGetGroupList(cli, reqData.GetGroupListReq)
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r.Group,
-			Echo:    req.Echo,
+		if r == nil {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    nil,
+				Echo:    req.Echo,
+			}
+			sendActionRespData(data, plugin, ws)
+		} else {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    &r.Group,
+				Echo:    req.Echo,
+			}
+			sendActionRespData(data, plugin, ws)
 		}
-		sendActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_get_group_member_list)] {
 		reqData := &onebot.Frame_GetGroupMemberListReq{
 			GetGroupMemberListReq: &onebot.GetGroupMemberListReq{
@@ -725,13 +735,23 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			return
 		}
 		r := HandleGetGroupMemberList(cli, reqData.GetGroupMemberListReq)
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r.GroupMember,
-			Echo:    req.Echo,
+		if r == nil {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    nil,
+				Echo:    req.Echo,
+			}
+			sendActionRespData(data, plugin, ws)
+		} else {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    &r.GroupMember,
+				Echo:    req.Echo,
+			}
+			sendActionRespData(data, plugin, ws)
 		}
-		sendActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_set_group_add_request)] {
 		reqData := &onebot.Frame_SetGroupAddRequestReq{
 			SetGroupAddRequestReq: &onebot.SetGroupAddRequestReq{
@@ -767,13 +787,23 @@ func handleOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiAllow fu
 			return
 		}
 		r := HandleSendForwardMsg(cli, reqData.SendForwardMsgReq)
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r.ResId,
-			Echo:    req.Echo,
+		if r == nil {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    nil,
+				Echo:    req.Echo,
+			}
+			sendActionRespData(data, plugin, ws)
+		} else {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    &r.ResId,
+				Echo:    req.Echo,
+			}
+			sendActionRespData(data, plugin, ws)
 		}
-		sendActionRespData(data, plugin, ws)
 	} else {
 		data := &actionResp{
 			Status:  "failure",
@@ -1127,13 +1157,23 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 			return
 		}
 		r := HandleGetGroupList(cli, reqData.GetGroupListReq)
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r.Group,
-			Echo:    req.Echo,
+		if r == nil {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    nil,
+				Echo:    req.Echo,
+			}
+			sendForwardActionRespData(data, plugin, ws)
+		} else {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    &r.Group,
+				Echo:    req.Echo,
+			}
+			sendForwardActionRespData(data, plugin, ws)
 		}
-		sendForwardActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_get_group_member_list)] {
 		reqData := &onebot.Frame_GetGroupMemberListReq{
 			GetGroupMemberListReq: &onebot.GetGroupMemberListReq{
@@ -1145,13 +1185,23 @@ func handleForwardOnebotApiFrame(cli *client.QQClient, req *onebot.Frame, isApiA
 			return
 		}
 		r := HandleGetGroupMemberList(cli, reqData.GetGroupMemberListReq)
-		data := &actionResp{
-			Status:  "ok",
-			RetCode: 0,
-			Data:    &r.GroupMember,
-			Echo:    req.Echo,
+		if r == nil {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    nil,
+				Echo:    req.Echo,
+			}
+			sendForwardActionRespData(data, plugin, ws)
+		} else {
+			data := &actionResp{
+				Status:  "ok",
+				RetCode: 0,
+				Data:    &r.GroupMember,
+				Echo:    req.Echo,
+			}
+			sendForwardActionRespData(data, plugin, ws)
 		}
-		sendForwardActionRespData(data, plugin, ws)
 	} else if req.Action == onebot.ActionType_name[int32(onebot.ActionType_set_group_add_request)] {
 		reqData := &onebot.Frame_SetGroupAddRequestReq{
 			SetGroupAddRequestReq: &onebot.SetGroupAddRequestReq{
