@@ -8,7 +8,7 @@ import (
 
 	"github.com/2mf8/Go-Lagrange-Client/pkg/config"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
-	"github.com/2mf8/LagrangeGo/client/auth"
+	"github.com/LagrangeDev/LagrangeGo/client/auth"
 	log "github.com/sirupsen/logrus"
 )
 

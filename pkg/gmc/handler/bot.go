@@ -22,8 +22,8 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/dto"
 
-	"github.com/2mf8/LagrangeGo/client"
-	"github.com/2mf8/LagrangeGo/client/auth"
+	"github.com/LagrangeDev/LagrangeGo/client"
+	"github.com/LagrangeDev/LagrangeGo/client/auth"
 	_ "github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -72,7 +72,7 @@ func TokenLogin() {
 										cli := client.NewClient(0, appInfo, set.SignServer)
 										cli.UseDevice(devi)
 										cli.UseSig(sig)
-										cli.SessionLogin()
+										cli.FastLogin(&sig)
 										bot.Clients.Store(int64(cli.Uin), cli)
 										go AfterLogin(cli)
 									}()
@@ -119,7 +119,7 @@ func TokenReLogin(userId int64, retryInterval int, retryCount int) {
 					cli := client.NewClient(0, appInfo, set.SignServer)
 					cli.UseDevice(devi)
 					cli.UseSig(sig)
-					cli.SessionLogin()
+					cli.FastLogin(&sig)
 					bot.Clients.Store(userId, cli)
 					go AfterLogin(cli)
 				} else {
@@ -278,7 +278,8 @@ func QueryQRCodeStatus(c *gin.Context) {
 		go func() {
 			queryQRCodeMutex.Lock()
 			defer queryQRCodeMutex.Unlock()
-			err := qrCodeBot.QRCodeConfirmed()
+			err := QRCodeConfirmedAfter(qrCodeBot)
+			fmt.Println(err)
 			if err == nil {
 				go func() {
 					queryQRCodeMutex.Lock()

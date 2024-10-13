@@ -18,7 +18,7 @@ import (
 	"github.com/fanliao/go-promise"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/2mf8/LagrangeGo/client"
+	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/gorilla/websocket"
 	log "github.com/sirupsen/logrus"
 )

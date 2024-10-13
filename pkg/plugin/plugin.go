@@ -2,9 +2,9 @@ package plugin
 
 import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
-	"github.com/2mf8/LagrangeGo/client"
-	"github.com/2mf8/LagrangeGo/client/event"
-	"github.com/2mf8/LagrangeGo/message"
+	"github.com/LagrangeDev/LagrangeGo/client"
+	"github.com/LagrangeDev/LagrangeGo/client/event"
+	"github.com/LagrangeDev/LagrangeGo/message"
 )
 
 type (

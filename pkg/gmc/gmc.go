@@ -15,8 +15,8 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/gmc/handler"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/static"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
-	"github.com/2mf8/LagrangeGo/client"
-	auth2 "github.com/2mf8/LagrangeGo/client/auth"
+	"github.com/LagrangeDev/LagrangeGo/client"
+	auth2 "github.com/LagrangeDev/LagrangeGo/client/auth"
 
 	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
