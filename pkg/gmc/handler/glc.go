@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	_ "fmt"
 	"reflect"
 	_ "unsafe"
@@ -56,8 +55,6 @@ func QRCodeConfirmedAfter(c *client.QQClient) error {
 				tlv.T166(5),
 				tlv.T521(0x13, "basicim"),
 			).ToBytes()))
-
-			fmt.Println(t106, t16a)
 
 	if err != nil {
 		return err
