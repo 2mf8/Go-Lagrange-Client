@@ -616,7 +616,7 @@ func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddReque
 		return nil
 	}
 	if req.SubType == "invite" {
-		for _, ireq := range msgs {
+		for _, ireq := range msgs.InvitedRequests {
 			if req.Flag == fmt.Sprintf("%v", ireq.Sequence) {
 				if ireq.Checked() {
 					log.Warnf("处理群系统消息失败: 无法操作已处理的消息.")
@@ -624,15 +624,15 @@ func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddReque
 				}
 			}
 			if req.Approve {
-				cli.SetGroupRequest(false, true, ireq.Sequence, ireq.EventType, ireq.GroupUin, "")
+				cli.SetGroupRequest(false, true, ireq.Sequence, uint32(ireq.EventType), ireq.GroupUin, "")
 				return nil
 			} else {
-				cli.SetGroupRequest(false, false, ireq.Sequence, ireq.EventType, ireq.GroupUin, req.Reason)
+				cli.SetGroupRequest(false, false, ireq.Sequence, uint32(ireq.EventType), ireq.GroupUin, req.Reason)
 				return nil
 			}
 		}
 	} else {
-		for _, ireq := range msgs {
+		for _, ireq := range msgs.JoinRequests {
 			if req.Flag == fmt.Sprintf("%v", ireq.Sequence) {
 				if ireq.Checked() {
 					log.Warnf("处理群系统消息失败: 无法操作已处理的消息.")
@@ -640,10 +640,10 @@ func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddReque
 				}
 			}
 			if req.Approve {
-				cli.SetGroupRequest(false, true, ireq.Sequence, ireq.EventType, ireq.GroupUin, "")
+				cli.SetGroupRequest(false, true, ireq.Sequence, uint32(ireq.EventType), ireq.GroupUin, "")
 				return nil
 			} else {
-				cli.SetGroupRequest(false, false, ireq.Sequence, ireq.EventType, ireq.GroupUin, req.Reason)
+				cli.SetGroupRequest(false, false, ireq.Sequence, uint32(ireq.EventType), ireq.GroupUin, req.Reason)
 				return nil
 			}
 		}
