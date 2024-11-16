@@ -22,9 +22,9 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/dto"
 
+	_ "github.com/BurntSushi/toml"
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/auth"
-	_ "github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/golang/protobuf/proto"
@@ -69,10 +69,12 @@ func TokenLogin() {
 										queryQRCodeMutex.Lock()
 										defer queryQRCodeMutex.Unlock()
 										appInfo := auth.AppList[set.Platform][set.AppVersion]
-										cli := client.NewClient(0, appInfo, set.SignServer)
+										cli := client.NewClient(0, "")
+										cli.UseVersion(appInfo)
 										cli.UseDevice(devi)
+										cli.AddSignServer(set.SignServer)
 										cli.UseSig(sig)
-										cli.FastLogin(&sig)
+										cli.FastLogin()
 										bot.Clients.Store(int64(cli.Uin), cli)
 										go AfterLogin(cli)
 									}()
@@ -116,10 +118,12 @@ func TokenReLogin(userId int64, retryInterval int, retryCount int) {
 				if err == nil {
 					log.Warnf("%v 第 %v 次登录尝试", userId, times)
 					appInfo := auth.AppList[set.Platform][set.AppVersion]
-					cli := client.NewClient(0, appInfo, set.SignServer)
+					cli := client.NewClient(0, "")
+					cli.UseVersion(appInfo)
 					cli.UseDevice(devi)
+					cli.AddSignServer(set.SignServer)
 					cli.UseSig(sig)
-					cli.FastLogin(&sig)
+					cli.FastLogin()
 					bot.Clients.Store(userId, cli)
 					go AfterLogin(cli)
 				} else {
@@ -231,8 +235,10 @@ func FetchQrCode(c *gin.Context) {
 	}
 	newDeviceInfo := device.GetDevice(req.DeviceSeed)
 	appInfo := auth.AppList[set.Platform][set.AppVersion]
-	qqclient := client.NewClient(0, appInfo, set.SignServer)
+	qqclient := client.NewClient(0, "")
+	qqclient.UseVersion(appInfo)
 	qqclient.UseDevice(newDeviceInfo)
+	qqclient.AddSignServer(set.SignServer)
 	qrCodeBot = qqclient
 	b, s, err := qrCodeBot.FetchQRCode(3, 4, 2)
 	if err != nil {
@@ -278,28 +284,21 @@ func QueryQRCodeStatus(c *gin.Context) {
 		go func() {
 			queryQRCodeMutex.Lock()
 			defer queryQRCodeMutex.Unlock()
-			err := QRCodeConfirmedAfter(qrCodeBot)
-			if err == nil {
-				go func() {
-					queryQRCodeMutex.Lock()
-					defer queryQRCodeMutex.Unlock()
-					err := qrCodeBot.Register()
-					if err != nil {
-						fmt.Println(err)
-					}
-					time.Sleep(time.Second * 5)
-					log.Infof("登录成功")
-					originCli, ok := bot.Clients.Load(int64(qrCodeBot.Uin))
-
-					// 重复登录，旧的断开
-					if ok {
-						originCli.Release()
-					}
-					bot.Clients.Store(int64(qrCodeBot.Uin), qrCodeBot)
-					go AfterLogin(qrCodeBot)
-					qrCodeBot = nil
-				}()
+			_, err := qrCodeBot.QRCodeLogin()
+			if err != nil {
+				fmt.Println(err)
 			}
+			time.Sleep(time.Second * 5)
+			log.Infof("登录成功")
+			originCli, ok := bot.Clients.Load(int64(qrCodeBot.Uin))
+
+			// 重复登录，旧的断开
+			if ok {
+				originCli.Release()
+			}
+			bot.Clients.Store(int64(qrCodeBot.Uin), qrCodeBot)
+			go AfterLogin(qrCodeBot)
+			qrCodeBot = nil
 		}()
 	}
 	if ok.Name() == "Expired" {

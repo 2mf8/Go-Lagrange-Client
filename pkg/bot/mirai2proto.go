@@ -47,9 +47,9 @@ func MiraiImageToProtoImage(elem *message.ImageElement) *onebot.Message {
 	msg := &onebot.Message{
 		Type: "image",
 		Data: map[string]string{
-			"image_id": elem.ImageId,
-			"file":     elem.Url,
-			"url":      elem.Url,
+			"image_id": elem.ImageID,
+			"file":     elem.URL,
+			"url":      elem.URL,
 		},
 	}
 	if elem.Flash {
@@ -89,8 +89,8 @@ func MiraiVoiceToProtoVoice(elem *message.VoiceElement) *onebot.Message {
 	return &onebot.Message{
 		Type: "record",
 		Data: map[string]string{
-			"file": elem.Url,
-			"url":  elem.Url,
+			"file": elem.URL,
+			"url":  elem.URL,
 		},
 	}
 }
@@ -100,7 +100,7 @@ func MiraiVideoToProtoVideo(cli *client.QQClient, elem *message.ShortVideoElemen
 		Type: "video",
 		Data: map[string]string{
 			"name": elem.Name,
-			"url":  elem.Url,
+			"url":  elem.URL,
 		},
 	}
 }

@@ -17,7 +17,7 @@ import (
 )
 
 func ReportPrivateMessage(cli *client.QQClient, event *message.PrivateMessage) int32 {
-	cache.PrivateMessageLru.Add(event.Id, event)
+	cache.PrivateMessageLru.Add(event.ID, event)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TPrivateMessageEvent,
 	}
@@ -28,7 +28,7 @@ func ReportPrivateMessage(cli *client.QQClient, event *message.PrivateMessage) i
 			PostType:    "message",
 			MessageType: "private",
 			SubType:     "normal",
-			MessageId:   int32(event.Id),
+			MessageId:   int32(event.ID),
 			UserId:      int64(event.Sender.Uin),
 			Message:     bot.MiraiMsgToProtoMsg(cli, event.Elements),
 			RawMessage:  bot.MiraiMsgToRawMsg(cli, event.Elements),
@@ -43,7 +43,7 @@ func ReportPrivateMessage(cli *client.QQClient, event *message.PrivateMessage) i
 }
 
 func ReportGroupMessage(cli *client.QQClient, event *message.GroupMessage) int32 {
-	cache.GroupMessageLru.Add(event.Id, event)
+	cache.GroupMessageLru.Add(event.ID, event)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupMessageEvent,
 	}
@@ -53,7 +53,7 @@ func ReportGroupMessage(cli *client.QQClient, event *message.GroupMessage) int32
 		PostType:    "message",
 		MessageType: "group",
 		SubType:     "normal",
-		MessageId:   int32(event.Id),
+		MessageId:   int32(event.ID),
 		GroupId:     int64(event.GroupUin),
 		UserId:      int64(event.Sender.Uin),
 		Message:     bot.MiraiMsgToProtoMsg(cli, event.Elements),
@@ -86,8 +86,8 @@ func ReportMemberJoin(cli *client.QQClient, event *event.GroupMemberIncrease) in
 			GroupId:    int64(event.GroupUin),
 			UserId:     0,
 			OperatorId: 0,
-			MemberUid:  event.MemberUid,
-			InvitorUid: event.InvitorUid,
+			MemberUid:  event.MemberUID,
+			InvitorUid: event.InvitorUID,
 			JoinType:   event.JoinType,
 		},
 	}
@@ -103,7 +103,7 @@ func ReportMemberLeave(cli *client.QQClient, event *event.GroupMemberDecrease) i
 	var operatorUid string = ""
 	if event.IsKicked() {
 		subType = "kick"
-		operatorUid = event.OperatorUid
+		operatorUid = event.OperatorUID
 	}
 
 	eventProto.PbData = &onebot.Frame_GroupDecreaseNoticeEvent{
@@ -114,7 +114,7 @@ func ReportMemberLeave(cli *client.QQClient, event *event.GroupMemberDecrease) i
 			NoticeType:  "group_decrease",
 			SubType:     subType,
 			GroupId:     int64(event.GroupUin),
-			MemberUid:   event.MemberUid,
+			MemberUid:   event.MemberUID,
 			OperatorUid: operatorUid,
 		},
 	}
@@ -136,9 +136,9 @@ func ReportJoinGroup(cli *client.QQClient, event *event.GroupMemberIncrease) int
 			GroupId:    int64(event.GroupUin),
 			UserId:     int64(cli.Uin),
 			OperatorId: 0,
-			MemberUid:  event.MemberUid,
+			MemberUid:  event.MemberUID,
 			JoinType:   event.JoinType,
-			InvitorUid: event.InvitorUid,
+			InvitorUid: event.InvitorUID,
 		},
 	}
 	bot.HandleEventFrame(cli, eventProto)
@@ -162,8 +162,8 @@ func ReportGroupMute(cli *client.QQClient, event *event.GroupMute) int32 {
 				return "ban"
 			}(),
 			GroupId:     int64(event.GroupUin),
-			OperatorUid: event.OperatorUid,
-			TargetUid:   event.TargetUid,
+			OperatorUid: event.OperatorUID,
+			TargetUid:   event.TargetUID,
 			Duration:    int64(event.Duration),
 		},
 	}
@@ -172,7 +172,7 @@ func ReportGroupMute(cli *client.QQClient, event *event.GroupMute) int32 {
 }
 
 func ReportNewFriendRequest(cli *client.QQClient, event *event.NewFriendRequest) int32 {
-	flag := event.SourceUid
+	flag := event.SourceUID
 	cache.FriendRequestLru.Add(flag, event)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TFriendRequestEvent,
@@ -184,7 +184,7 @@ func ReportNewFriendRequest(cli *client.QQClient, event *event.NewFriendRequest)
 			PostType:    "request",
 			RequestType: "friend",
 			Flag:        flag,
-			SourceUid:   event.SourceUid,
+			SourceUid:   event.SourceUID,
 			Msg:         event.Msg,
 			Source:      event.Source,
 		},
@@ -208,8 +208,8 @@ func ReportUserJoinGroupRequest(cli *client.QQClient, event *event.GroupMemberJo
 			SubType:     "add",
 			GroupId:     int64(event.GroupUin),
 			Flag:        flag,
-			TargetUid:   event.TargetUid,
-			InvitorUid:  event.InvitorUid,
+			TargetUid:   event.TargetUID,
+			InvitorUid:  event.InvitorUID,
 		},
 	}
 	bot.HandleEventFrame(cli, eventProto)
@@ -218,7 +218,7 @@ func ReportUserJoinGroupRequest(cli *client.QQClient, event *event.GroupMemberJo
 
 func ReportGroupInvitedRequest(cli *client.QQClient, event *event.GroupInvite) int32 {
 	flag := strconv.FormatInt(int64(event.RequestSeq), 10)
-	uin := cli.GetUin(event.InvitorUid)
+	uin := cli.GetUin(event.InvitorUID)
 	cache.GroupInvitedRequestLru.Add(flag, event)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupRequestEvent,
@@ -231,7 +231,7 @@ func ReportGroupInvitedRequest(cli *client.QQClient, event *event.GroupInvite) i
 			RequestType: "group",
 			SubType:     "invite",
 			GroupId:     int64(event.GroupUin),
-			InvitorUid:  event.InvitorUid,
+			InvitorUid:  event.InvitorUID,
 			Comment:     "",
 			Flag:        flag,
 			Extra: map[string]string{
@@ -245,12 +245,12 @@ func ReportGroupInvitedRequest(cli *client.QQClient, event *event.GroupInvite) i
 }
 
 func ReportGroupMessageRecalled(cli *client.QQClient, event *event.GroupRecall) int32 {
-	opuin := cli.GetUin(event.OperatorUid, event.GroupUin)
-	auuin := cli.GetUin(event.AuthorUid, event.GroupUin)
-	if event.AuthorUid == event.OperatorUid {
-		log.Infof("群 %v 内 %v(%s) 撤回了一条消息, 消息Id为 %v", event.GroupUin, auuin, event.AuthorUid, event.Sequence)
+	opuin := cli.GetUin(event.OperatorUID, event.GroupUin)
+	auuin := cli.GetUin(event.AuthorUID, event.GroupUin)
+	if event.AuthorUID == event.OperatorUID {
+		log.Infof("群 %v 内 %v(%s) 撤回了一条消息, 消息Id为 %v", event.GroupUin, auuin, event.AuthorUID, event.Sequence)
 	} else {
-		log.Infof("群 %v 内 %v(%s) 撤回了 %v(%s) 的一条消息, 消息Id为 %v", event.GroupUin, opuin, event.OperatorUid, auuin, event.AuthorUid, event.Sequence)
+		log.Infof("群 %v 内 %v(%s) 撤回了 %v(%s) 的一条消息, 消息Id为 %v", event.GroupUin, opuin, event.OperatorUID, auuin, event.AuthorUID, event.Sequence)
 	}
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupRecallNoticeEvent,
@@ -262,8 +262,8 @@ func ReportGroupMessageRecalled(cli *client.QQClient, event *event.GroupRecall) 
 			PostType:    "notice",
 			NoticeType:  "group_recall",
 			GroupId:     int64(event.GroupUin),
-			AuthorUid:   event.AuthorUid,
-			OperatorUid: event.OperatorUid,
+			AuthorUid:   event.AuthorUID,
+			OperatorUid: event.OperatorUID,
 			Sequence:    event.Sequence,
 			Random:      event.Random,
 		},
@@ -273,7 +273,7 @@ func ReportGroupMessageRecalled(cli *client.QQClient, event *event.GroupRecall) 
 }
 
 func ReportFriendMessageRecalled(cli *client.QQClient, event *event.FriendRecall) int32 {
-	log.Infof("好友 %s 撤回了一条消息, 消息Id为 %v", event.FromUid, event.Sequence)
+	log.Infof("好友 %s 撤回了一条消息, 消息Id为 %v", event.FromUID, event.Sequence)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TFriendRecallNoticeEvent,
 	}
@@ -283,7 +283,7 @@ func ReportFriendMessageRecalled(cli *client.QQClient, event *event.FriendRecall
 			SelfId:     int64(cli.Uin),
 			PostType:   "notice",
 			NoticeType: "friend_recall",
-			FromUid:    event.FromUid,
+			FromUid:    event.FromUID,
 			MessageId:  int32(event.Sequence),
 		},
 	}
@@ -303,7 +303,7 @@ func ReportNewFriendAdded(cli *client.QQClient, event *event.NewFriendRequest) i
 			NoticeType: "friend_add",
 			UserId:     int64(event.SourceUin),
 			SourceUin:  event.SourceUin,
-			SourceUid:  event.SourceUid,
+			SourceUid:  event.SourceUID,
 			Source:     event.Source,
 			Msg:        event.Msg,
 		},
@@ -420,7 +420,7 @@ func ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int3
 
 func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.GroupMemberPermissionChanged) int32 {
 	if event.IsAdmin {
-		log.Infof("群 %v 内 %v(%s) 成为了管理员", event.GroupUin, event.TargetUin, event.TargetUid)
+		log.Infof("群 %v 内 %v(%s) 成为了管理员", event.GroupUin, event.TargetUin, event.TargetUID)
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
 		}
@@ -435,13 +435,13 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 					GroupId: int64(event.GroupUin),
 				},
 				TargetUin: event.TargetUin,
-				TargetUid: event.TargetUid,
+				TargetUid: event.TargetUID,
 				IsAdmin:   event.IsAdmin,
 			},
 		}
 		bot.HandleEventFrame(cli, eventProto)
 	} else {
-		log.Infof("群 %v 内 %v(%s) 被取消了管理员", event.GroupUin, event.TargetUin, event.TargetUid)
+		log.Infof("群 %v 内 %v(%s) 被取消了管理员", event.GroupUin, event.TargetUin, event.TargetUID)
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
 		}
@@ -456,7 +456,7 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 					GroupId: int64(event.GroupUin),
 				},
 				TargetUin: event.TargetUin,
-				TargetUid: event.TargetUid,
+				TargetUid: event.TargetUID,
 				IsAdmin:   event.IsAdmin,
 			},
 		}
@@ -466,7 +466,7 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 }
 
 func ReportGroupNameUpdated(cli *client.QQClient, event *event.GroupNameUpdated) int32 {
-	log.Infof("群 %v 的名字变为了 %s ,操作者为 %v(%s)", event.GroupUin, event.NewName, event.OperatorUin, event.OperatorUid)
+	log.Infof("群 %v 的名字变为了 %s ,操作者为 %v(%s)", event.GroupUin, event.NewName, event.OperatorUin, event.OperatorUID)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupNameUpdatedEvent,
 	}
@@ -480,7 +480,7 @@ func ReportGroupNameUpdated(cli *client.QQClient, event *event.GroupNameUpdated)
 			GroupUin:    event.GroupUin,
 			NewName:     event.NewName,
 			OperatorUin: event.OperatorUin,
-			OperatorUid: event.OperatorUid,
+			OperatorUid: event.OperatorUID,
 		},
 	}
 	bot.HandleEventFrame(cli, eventProto)
@@ -522,13 +522,13 @@ func ReportRename(cli *client.QQClient, event *event.Rename) int32 {
 				NoticeType: "rename",
 				SubType:    "self",
 				Uin:        event.Uin,
-				Uid:        event.Uid,
+				Uid:        event.UID,
 				NickName:   event.Nickname,
 			},
 		}
 		bot.HandleEventFrame(cli, eventProto)
 	} else {
-		log.Infof("%v(%s) 的昵称被修改为 %s", event.Uin, event.Uid, event.Nickname)
+		log.Infof("%v(%s) 的昵称被修改为 %s", event.Uin, event.UID, event.Nickname)
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TRenameEvent,
 		}
@@ -540,7 +540,7 @@ func ReportRename(cli *client.QQClient, event *event.Rename) int32 {
 				NoticeType: "rename",
 				SubType:    "other",
 				Uin:        event.Uin,
-				Uid:        event.Uid,
+				Uid:        event.UID,
 				NickName:   event.Nickname,
 			},
 		}

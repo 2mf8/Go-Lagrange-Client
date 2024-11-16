@@ -319,6 +319,7 @@ func OnWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_
 		switch messageType {
 		case websocket.BinaryMessage:
 			err := json.Unmarshal(data, &apiReq)
+			fmt.Println(string(data))
 			if err != nil {
 				log.Errorf("收到API text，解析错误 %v", err)
 				err := json.Unmarshal(data, &oframe)
@@ -339,6 +340,7 @@ func OnWsRecvMessage(cli *client.QQClient, plugin *config.Plugin) func(ws *safe_
 			}
 		case websocket.TextMessage:
 			err := json.Unmarshal(data, &apiReq)
+			fmt.Println(string(data))
 			if err != nil {
 				if err != nil {
 					err := json.Unmarshal(data, &oframe)

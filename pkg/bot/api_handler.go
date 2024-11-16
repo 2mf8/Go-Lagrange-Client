@@ -140,14 +140,14 @@ func preprocessImageMessagePrivate(cli *client.QQClient, targetUid string, path 
 }
 
 func HandleSendPrivateMsg(cli *client.QQClient, req *onebot.SendPrivateMsgReq) *onebot.SendPrivateMsgResp {
-	tUid := cli.GetUid(uint32(req.UserId))
+	tUid := cli.GetUID(uint32(req.UserId))
 	messageChain := make([]message.IMessageElement, 0)
 	miraiMsg := ProtoMsgToMiraiMsg(cli, req.Message, req.AutoEscape)
 	for _, v := range miraiMsg {
 		if v.Type() == message.Image {
 			t, ok := v.(*message.ImageElement)
 			if ok {
-				fn, elem, err := preprocessImageMessagePrivate(cli, tUid, t.Url)
+				fn, elem, err := preprocessImageMessagePrivate(cli, tUid, t.URL)
 				if fn != "" {
 					os.Remove(fn)
 				}
@@ -162,9 +162,9 @@ func HandleSendPrivateMsg(cli *client.QQClient, req *onebot.SendPrivateMsgReq) *
 	sendingMessage := &message.SendingMessage{Elements: messageChain}
 	log.Infof("Bot(%d) Private(%d) <- %s", cli.Uin, req.UserId, MiraiMsgToRawMsg(cli, miraiMsg))
 	ret, _ := cli.SendPrivateMessage(uint32(req.UserId), sendingMessage.Elements)
-	cache.PrivateMessageLru.Add(ret.Id, ret)
+	cache.PrivateMessageLru.Add(ret.ID, ret)
 	return &onebot.SendPrivateMsgResp{
-		MessageId: int32(ret.Id),
+		MessageId: int32(ret.ID),
 	}
 }
 
@@ -179,7 +179,7 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 		if v.Type() == message.Image {
 			t, ok := v.(*message.ImageElement)
 			if ok {
-				fn, elem, err := preprocessImageMessage(cli, uint32(req.GroupId), t.Url)
+				fn, elem, err := preprocessImageMessage(cli, uint32(req.GroupId), t.URL)
 				if fn != "" {
 					os.Remove(fn)
 				}
@@ -198,14 +198,14 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 		return nil
 	}
 	ret, _ := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
-	if ret.Id < 1 {
+	if ret.ID < 1 {
 		config.Fragment = !config.Fragment
 		log.Warnf("发送群消息失败，可能被风控，下次发送将改变分片策略，Fragment: %+v", config.Fragment)
 		return nil
 	}
-	cache.GroupMessageLru.Add(ret.Id, ret)
+	cache.GroupMessageLru.Add(ret.ID, ret)
 	return &onebot.SendGroupMsgResp{
-		MessageId: int32(ret.Id),
+		MessageId: int32(ret.ID),
 	}
 }
 
@@ -222,7 +222,7 @@ func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *
 	}
 	nodes := []*message.ForwardNode{}
 	for _, v := range ms {
-		tUid := cli.GetUid(uint32(v.Data.Uin))
+		tUid := cli.GetUID(uint32(v.Data.Uin))
 		messageChain := make([]message.IMessageElement, 0)
 		miraiMsg := ProtoMsgToMiraiMsg(cli, v.Data.Content, false)
 		for _, iv := range miraiMsg {
@@ -230,7 +230,7 @@ func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *
 				t, ok := iv.(*message.ImageElement)
 				if ok {
 					if req.GroupId > 0 && v.Data.GroupId > 0 {
-						fn, elem, err := preprocessImageMessage(cli, uint32(v.Data.GroupId), t.Url)
+						fn, elem, err := preprocessImageMessage(cli, uint32(v.Data.GroupId), t.URL)
 						if fn != "" {
 							os.Remove(fn)
 						}
@@ -238,7 +238,7 @@ func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *
 							messageChain = append(messageChain, elem)
 						}
 					} else {
-						fn, elem, err := preprocessImageMessagePrivate(cli, tUid, t.Url)
+						fn, elem, err := preprocessImageMessagePrivate(cli, tUid, t.URL)
 						if fn != "" {
 							os.Remove(fn)
 						}
@@ -253,8 +253,8 @@ func HandleSendForwardMsg(cli *client.QQClient, req *onebot.SendForwardMsgReq) *
 		}
 		sendingMessage := &message.SendingMessage{Elements: messageChain}
 		node := &message.ForwardNode{
-			GroupId:    uint32(v.Data.GroupId),
-			SenderId:   uint32(v.Data.Uin),
+			GroupID:    uint32(v.Data.GroupId),
+			SenderID:   uint32(v.Data.Uin),
 			SenderName: v.Data.Name,
 			Time:       uint32(time.Now().Unix()),
 			Message:    sendingMessage.Elements,
@@ -282,9 +282,9 @@ func HandleSendMsg(cli *client.QQClient, req *onebot.SendMsgReq) *onebot.SendMsg
 
 	if req.GroupId != 0 && req.UserId != 0 { // 临时
 		ret, _ := cli.SendTempMessage(uint32(req.GroupId), uint32(req.UserId), sendingMessage.Elements)
-		cache.PrivateMessageLru.Add(ret.Id, ret)
+		cache.PrivateMessageLru.Add(ret.ID, ret)
 		return &onebot.SendMsgResp{
-			MessageId: int32(ret.Id),
+			MessageId: int32(ret.ID),
 		}
 	}
 
@@ -294,22 +294,22 @@ func HandleSendMsg(cli *client.QQClient, req *onebot.SendMsgReq) *onebot.SendMsg
 			return nil
 		}
 		ret, _ := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
-		if ret.Id < 1 {
+		if ret.ID < 1 {
 			config.Fragment = !config.Fragment
 			log.Warnf("发送群消息失败，可能被风控，下次发送将改变分片策略，Fragment: %+v", config.Fragment)
 			return nil
 		}
-		cache.GroupMessageLru.Add(ret.Id, ret)
+		cache.GroupMessageLru.Add(ret.ID, ret)
 		return &onebot.SendMsgResp{
-			MessageId: int32(ret.Id),
+			MessageId: int32(ret.ID),
 		}
 	}
 
 	if req.UserId != 0 { // 私聊
 		ret, _ := cli.SendPrivateMessage(uint32(req.UserId), sendingMessage.Elements)
-		cache.PrivateMessageLru.Add(ret.Id, ret)
+		cache.PrivateMessageLru.Add(ret.ID, ret)
 		return &onebot.SendMsgResp{
-			MessageId: int32(ret.Id),
+			MessageId: int32(ret.ID),
 		}
 	}
 	log.Warnf("failed to send msg")
@@ -328,7 +328,7 @@ func HandleGetMsg(cli *client.QQClient, req *onebot.GetMsgReq) *onebot.GetMsgRes
 			Time:        int32(event.Time),
 			MessageType: messageType,
 			MessageId:   req.MessageId,
-			RealId:      int32(event.InternalId), // 不知道是什么？
+			RealId:      int32(event.InternalID), // 不知道是什么？
 			Message:     MiraiMsgToProtoMsg(cli, event.Elements),
 			RawMessage:  MiraiMsgToRawMsg(cli, event.Elements),
 			Sender: &onebot.GetMsgResp_Sender{
@@ -349,7 +349,7 @@ func HandleGetMsg(cli *client.QQClient, req *onebot.GetMsgReq) *onebot.GetMsgRes
 			Time:        int32(event.Time),
 			MessageType: messageType,
 			MessageId:   req.MessageId,
-			RealId:      int32(event.InternalId), // 不知道是什么？
+			RealId:      int32(event.InternalID), // 不知道是什么？
 			Message:     MiraiMsgToProtoMsg(cli, event.Elements),
 			RawMessage:  MiraiMsgToRawMsg(cli, event.Elements),
 			Sender: &onebot.GetMsgResp_Sender{
@@ -364,7 +364,7 @@ func HandleGetMsg(cli *client.QQClient, req *onebot.GetMsgReq) *onebot.GetMsgRes
 func HandleDeletMsg(cli *client.QQClient, req *onebot.DeleteMsgReq) *onebot.DeleteMsgResp {
 	if eventInterface, ok := cache.GroupMessageLru.Get(req.MessageId); ok {
 		if event, ok := eventInterface.(*message.GroupMessage); ok {
-			if err := cli.RecallGroupMessage(event.GroupUin, uint32(event.Id)); err != nil {
+			if err := cli.RecallGroupMessage(event.GroupUin, uint32(event.ID)); err != nil {
 				return &onebot.DeleteMsgResp{}
 			}
 		}

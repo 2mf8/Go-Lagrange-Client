@@ -31,7 +31,7 @@ func HelloGroupMessage(cli *client.QQClient, event *message.GroupMessage) int32 
 	if bot.MiraiMsgToRawMsg(cli, event.Elements) != "hi" {
 		return plugin.MessageIgnore
 	}
-	resp, err := http.Get("https://www.2mf8.cn/static/image/cube3/b1.png")
+	resp, err := http.Get("http://www.2mf8.cn/static/image/cube3/b1.png")
 	defer resp.Body.Close()
 	fmt.Println(err)
 	if err != nil {

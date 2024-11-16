@@ -83,7 +83,7 @@ func ProtoImageToMiraiImage(data map[string]string) message.IMessageElement {
 		log.Warnf("imageUrl不存在")
 		return EmptyText()
 	}
-	return &message.ImageElement{Url: url}
+	return &message.ImageElement{URL: url}
 }
 
 func ProtoVoiceToMiraiVoice(data map[string]string) message.IMessageElement {
@@ -157,7 +157,7 @@ func ProtoReplyToMiraiReply(data map[string]string) *message.ReplyElement {
 		groupMessage, ok := eventInterface.(*message.GroupMessage)
 		if ok {
 			return &message.ReplyElement{
-				ReplySeq:  uint32(groupMessage.Id),
+				ReplySeq:  uint32(groupMessage.ID),
 				SenderUin: groupMessage.Sender.Uin,
 				Time:      uint32(groupMessage.Time),
 				Elements: func() []message.IMessageElement {
@@ -175,7 +175,7 @@ func ProtoReplyToMiraiReply(data map[string]string) *message.ReplyElement {
 		privateMessage, ok := eventInterface.(*message.PrivateMessage)
 		if ok {
 			return &message.ReplyElement{
-				ReplySeq:  uint32(privateMessage.Id),
+				ReplySeq:  uint32(privateMessage.ID),
 				SenderUin: privateMessage.Sender.Uin,
 				Time:      uint32(privateMessage.Time),
 				Elements: func() []message.IMessageElement {

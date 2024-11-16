@@ -15,8 +15,6 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/gmc/handler"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/static"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
-	"github.com/LagrangeDev/LagrangeGo/client"
-	auth2 "github.com/LagrangeDev/LagrangeGo/client/auth"
 
 	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -81,40 +79,6 @@ func InitLog() {
 			LogFormat:       "[%time%] [%lvl%]: %msg% \r\n",
 		},
 	))
-}
-
-func Login() {
-	set := config.ReadSetting()
-	appInfo := auth2.AppList[set.Platform][set.AppVersion]
-	deviceInfo := &auth2.DeviceInfo{
-		Guid:          "cfcd208495d565ef66e7dff9f98764da",
-		DeviceName:    "Lagrange-DCFCD07E",
-		SystemKernel:  "Windows 10.0.22631",
-		KernelVersion: "10.0.22631",
-	}
-
-	qqclient := client.NewClient(0, appInfo, set.SignServer)
-	qqclient.UseDevice(deviceInfo)
-	data, err := os.ReadFile("sig.bin")
-	if err != nil {
-		log.Warnln("read sig error:", err)
-	} else {
-		sig, err := auth2.UnmarshalSigInfo(data, true)
-		if err != nil {
-			log.Warnln("load sig error:", err)
-		} else {
-			qqclient.UseSig(sig)
-		}
-	}
-	err = qqclient.Login("", "qrcode.png")
-	if err != nil {
-		log.Errorln("login err:", err)
-		return
-	}
-	handler.AfterLogin(qqclient)
-
-	defer qqclient.Release()
-	select {}
 }
 
 func Start() {
