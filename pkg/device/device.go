@@ -8,6 +8,7 @@ import (
 
 	"github.com/2mf8/Go-Lagrange-Client/pkg/config"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
+	"github.com/2mf8/Go-Lagrange-Client/proto_gen/dto"
 	"github.com/LagrangeDev/LagrangeGo/client/auth"
 	log "github.com/sirupsen/logrus"
 )
@@ -59,4 +60,19 @@ func GetDevice(seed int64) *auth.DeviceInfo {
 		log.Warnf("写设备信息文件 %s 失败", devicePath)
 	}
 	return deviceInfo
+}
+
+func GetAppList() *dto.GetAllVersionResp {
+	aais := []*dto.GetAllVersionResp_AllVersion{}
+	for i, v := range auth.AppList {
+		aai := &dto.GetAllVersionResp_AllVersion{}
+		aai.Platform = i
+		for ii, _ := range v {
+			aai.AppVersion = append(aai.AppVersion, ii)
+		}
+		aais = append(aais, aai)
+	}
+	return &dto.GetAllVersionResp{
+		AllVersion: aais,
+	}
 }

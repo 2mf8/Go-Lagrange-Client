@@ -22,6 +22,7 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/dto"
 
+	"github.com/BurntSushi/toml"
 	_ "github.com/BurntSushi/toml"
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/auth"
@@ -33,6 +34,8 @@ import (
 
 var queryQRCodeMutex = &sync.RWMutex{}
 var qrCodeBot *client.QQClient
+
+var AppList = device.GetAppList()
 
 type QRCodeResp int
 
@@ -202,6 +205,50 @@ func DeleteBot(c *gin.Context) {
 	bot.Clients.Delete(int64(cli.Uin))
 	bot.ReleaseClient(cli)
 	resp := &dto.DeleteBotResp{}
+	Return(c, resp)
+}
+
+func GetAllVersion(c *gin.Context) {
+	req := &dto.GetAllVersionReq{}
+	err := Bind(c, req)
+	if err != nil {
+		c.String(http.StatusBadRequest, "bad request, not protobuf")
+		return
+	}
+	var resp = &dto.GetAllVersionResp{
+		AllVersion: []*dto.GetAllVersionResp_AllVersion{},
+	}
+	resp = device.GetAppList()
+	Return(c, resp)
+}
+
+func SetBaseInfo(c *gin.Context) {
+	req := &dto.SetBaseInfoReq{}
+	err := Bind(c, req)
+	if err != nil {
+		c.String(http.StatusBadRequest, "bad request, not protobuf")
+		return
+	}
+	if req.Platform == "default" {
+		config.AllSetting.Platform = "linux"
+	} else {
+		config.AllSetting.Platform = req.Platform
+	}
+	if req.AppVersion == "default" {
+		config.AllSetting.AppVersion = "3.2.10-25765"
+	} else {
+		config.AllSetting.AppVersion = req.AppVersion
+	}
+	if req.SignServer == "default" {
+		config.AllSetting.SignServer = "https://sign.lagrangecore.org/api/sign/25765"
+	} else {
+		config.AllSetting.SignServer = req.SignServer
+	}
+	filepath := "./setting/setting.toml"
+	file, _ := os.Create(filepath)
+	defer file.Close()
+	toml.NewEncoder(file).Encode(config.AllSetting)
+	var resp = &dto.SetBaseInfoResp{}
 	Return(c, resp)
 }
 

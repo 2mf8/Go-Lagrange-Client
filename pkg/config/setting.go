@@ -11,9 +11,9 @@ import (
 )
 
 type Setting struct {
-	Platform   string
-	AppVersion string
-	SignServer string
+	Platform   string `json:"platform,omitempty" toml:"Platform"`
+	AppVersion string `json:"app_version,omitempty" toml:"AppVersion"`
+	SignServer string `json:"sign_server,omitempty" toml:"SignServer"`
 }
 
 var SettingPath = "setting"

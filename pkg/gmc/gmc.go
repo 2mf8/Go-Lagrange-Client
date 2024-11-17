@@ -1,6 +1,7 @@
 package gmc
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net"
@@ -141,6 +142,9 @@ func InitGin() {
 		router.Use(gin.BasicAuth(config.HttpAuth))
 	}
 
+	b, _ := json.Marshal(handler.AppList)
+	fmt.Println(string(b))
+
 	router.Use(handler.CORSMiddleware())
 	router.StaticFS("/dashcard", http.FS(static.MustGetStatic()))
 	router.POST("/dashcard/bot/delete/v1", handler.DeleteBot)
@@ -150,6 +154,8 @@ func InitGin() {
 	router.POST("/dashcard/plugin/list/v1", handler.ListPlugin)
 	router.POST("/dashcard/plugin/save/v1", handler.SavePlugin)
 	router.POST("/dashcard/plugin/delete/v1", handler.DeletePlugin)
+	router.POST("/dashcard/all/app/version/get/v1", handler.GetAllVersion)
+	router.POST("/dashcard/base/info/set/v1", handler.SetBaseInfo)
 	realPort, err := RunGin(router, ":"+config.Port)
 	if err != nil {
 		for i := 9001; i <= 9020; i++ {
