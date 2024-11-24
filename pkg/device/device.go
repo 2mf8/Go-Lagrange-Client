@@ -64,6 +64,11 @@ func GetDevice(seed int64) *auth.DeviceInfo {
 
 func GetAppList() *dto.GetAllVersionResp {
 	aais := []*dto.GetAllVersionResp_AllVersion{}
+	uv := &dto.GetAllVersionResp_UsedVersion{
+		Platform: config.AllSetting.Platform,
+		AppVersion: config.AllSetting.AppVersion,
+		SignServer: config.AllSetting.SignServer,
+	}
 	for i, v := range auth.AppList {
 		aai := &dto.GetAllVersionResp_AllVersion{}
 		aai.Platform = i
@@ -74,5 +79,6 @@ func GetAppList() *dto.GetAllVersionResp {
 	}
 	return &dto.GetAllVersionResp{
 		AllVersion: aais,
+		UsedVersion: uv,
 	}
 }
