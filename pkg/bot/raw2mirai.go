@@ -55,6 +55,8 @@ func RawMsgToMiraiMsg(cli *client.QQClient, str string) []message.IMessageElemen
 				elemList = append(elemList, ProtoFaceToMiraiFace(attrMap))
 			case "voice":
 				elemList = append(elemList, ProtoVoiceToMiraiVoice(attrMap))
+			case "video":
+				elemList = append(elemList, ProtoVideoToMiraiVideo(attrMap))
 			case "record":
 				elemList = append(elemList, ProtoVoiceToMiraiVoice(attrMap))
 			case "text":

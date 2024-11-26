@@ -15,6 +15,7 @@ import (
 	"time"
 	_ "unsafe"
 
+	"github.com/2mf8/Go-Lagrange-Client/pkg/bot/clz"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/cache"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/config"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/onebot"
@@ -99,6 +100,23 @@ func preprocessImageMessage(cli *client.QQClient, groupUin uint32, path string) 
 	}
 }
 
+func preprocessVideoMessage(cli *client.QQClient, groupUin uint32, video *clz.LocalVideo) (*message.ShortVideoElement, error) {
+	v, err := os.Open(video.File)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = v.Close() }()
+	return cli.VideoUploadGroup(groupUin, message.NewStreamVideo(v, v))
+}
+func preprocessVideoMessagePrivate(cli *client.QQClient, targetUid string, video *clz.LocalVideo) (*message.ShortVideoElement, error) {
+	v, err := os.Open(video.File)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = v.Close() }()
+	return cli.VideoUploadPrivate(targetUid, message.NewStreamVideo(v, v))
+}
+
 func preprocessImageMessagePrivate(cli *client.QQClient, targetUid string, path string) (string, *message.ImageElement, error) {
 	if strings.Contains(path, "http") {
 		resp, err := http.Get(path)
@@ -155,6 +173,15 @@ func HandleSendPrivateMsg(cli *client.QQClient, req *onebot.SendPrivateMsgReq) *
 					messageChain = append(messageChain, elem)
 				}
 			}
+		} else if v.Type() == message.Video {
+			iv, ok := v.(*clz.LocalVideo)
+			if ok {
+				elem, err := preprocessVideoMessagePrivate(cli, tUid, iv)
+				fmt.Println(err)
+				if err == nil {
+					messageChain = append(messageChain, elem)
+				}
+			}
 		} else {
 			messageChain = append(messageChain, v)
 		}
@@ -187,6 +214,15 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 					messageChain = append(messageChain, elem)
 				}
 			}
+		} else if v.Type() == message.Video {
+			iv, ok := v.(*clz.LocalVideo)
+			if ok {
+				elem, err := preprocessVideoMessage(cli, uint32(req.GroupId), iv)
+				fmt.Println(err)
+				if err == nil {
+					messageChain = append(messageChain, elem)
+				}
+			}
 		} else {
 			messageChain = append(messageChain, v)
 		}
@@ -197,7 +233,8 @@ func HandleSendGroupMsg(cli *client.QQClient, req *onebot.SendGroupMsgReq) *oneb
 		log.Warnf("发送消息内容为空")
 		return nil
 	}
-	ret, _ := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
+	ret, err := cli.SendGroupMessage(uint32(req.GroupId), sendingMessage.Elements)
+	fmt.Println(err)
 	if ret.ID < 1 {
 		config.Fragment = !config.Fragment
 		log.Warnf("发送群消息失败，可能被风控，下次发送将改变分片策略，Fragment: %+v", config.Fragment)

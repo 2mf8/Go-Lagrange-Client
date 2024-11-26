@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/2mf8/Go-Lagrange-Client/pkg/bot/clz"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/cache"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/onebot"
@@ -44,6 +45,8 @@ func ProtoMsgToMiraiMsg(cli *client.QQClient, msgList []*onebot.Message, notConv
 			messageChain = append(messageChain, ProtoImageToMiraiImage(protoMsg.Data))
 		case "record":
 			messageChain = append(messageChain, ProtoVoiceToMiraiVoice(protoMsg.Data))
+		case "video":
+			messageChain = append(messageChain, ProtoVideoToMiraiVideo(protoMsg.Data))
 		case "face":
 			messageChain = append(messageChain, ProtoFaceToMiraiFace(protoMsg.Data))
 		case "reply":
@@ -217,6 +220,17 @@ func ProtoForwardToMiraiForward(data map[string]string) *message.ForwardMessage 
 	}
 	return &message.ForwardMessage{
 		ResID: r,
+	}
+}
+
+func ProtoVideoToMiraiVideo(data map[string]string) *clz.LocalVideo {
+	r, ok := data["file"]
+	if !ok {
+		log.Warnf("video路径不存在")
+		return nil
+	}
+	return &clz.LocalVideo{
+		File: r,
 	}
 }
 

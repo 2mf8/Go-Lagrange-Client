@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/BurntSushi/toml v1.4.0
-	github.com/LagrangeDev/LagrangeGo v0.1.2-0.20241116133215-c2b3cc85e751
+	github.com/LagrangeDev/LagrangeGo v0.1.2-0.20241123020035-566cbd22ddb7
 	github.com/fanliao/go-promise v0.0.0-20141029170127-1890db352a72
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
