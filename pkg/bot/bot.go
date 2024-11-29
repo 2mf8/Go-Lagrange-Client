@@ -7,7 +7,7 @@ import (
 //go:generate go run github.com/a8m/syncmap -o "gen_client_map.go" -pkg bot -name ClientMap "map[int64]*client.QQClient"
 //go:generate go run github.com/a8m/syncmap -o "gen_token_map.go" -pkg bot -name TokenMap "map[int64][]byte"
 var (
-	Clients                    ClientMap
+	Clients ClientMap
 )
 
 type Logger struct {

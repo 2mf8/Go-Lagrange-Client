@@ -156,6 +156,7 @@ func InitGin() {
 	router.POST("/dashcard/plugin/delete/v1", handler.DeletePlugin)
 	router.POST("/dashcard/all/app/version/get/v1", handler.GetAllVersion)
 	router.POST("/dashcard/base/info/set/v1", handler.SetBaseInfo)
+	router.POST("/dashcard/bot/create/v1", handler.CreateBot)
 	realPort, err := RunGin(router, ":"+config.Port)
 	if err != nil {
 		for i := 9001; i <= 9020; i++ {

@@ -53,7 +53,7 @@ func HelloGroupMessage(cli *client.QQClient, event *message.GroupMessage) int32 
 	if err != nil {
 		return plugin.MessageIgnore
 	}
-	ir, err := cli.ImageUploadGroup(event.GroupUin, message.NewStreamImage(f))
+	ir, err := cli.UploadGroupImage(event.GroupUin, message.NewStreamImage(f))
 	fmt.Println(err)
 	if err != nil {
 		return plugin.MessageIgnore

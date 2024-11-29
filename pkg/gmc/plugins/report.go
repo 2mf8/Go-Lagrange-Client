@@ -86,7 +86,7 @@ func ReportMemberJoin(cli *client.QQClient, event *event.GroupMemberIncrease) in
 			GroupId:    int64(event.GroupUin),
 			UserId:     0,
 			OperatorId: 0,
-			MemberUid:  event.MemberUID,
+			MemberUid:  event.UserUID,
 			InvitorUid: event.InvitorUID,
 			JoinType:   event.JoinType,
 		},
@@ -114,7 +114,7 @@ func ReportMemberLeave(cli *client.QQClient, event *event.GroupMemberDecrease) i
 			NoticeType:  "group_decrease",
 			SubType:     subType,
 			GroupId:     int64(event.GroupUin),
-			MemberUid:   event.MemberUID,
+			MemberUid:   event.UserUID,
 			OperatorUid: operatorUid,
 		},
 	}
@@ -136,7 +136,7 @@ func ReportJoinGroup(cli *client.QQClient, event *event.GroupMemberIncrease) int
 			GroupId:    int64(event.GroupUin),
 			UserId:     int64(cli.Uin),
 			OperatorId: 0,
-			MemberUid:  event.MemberUID,
+			MemberUid:  event.UserUID,
 			JoinType:   event.JoinType,
 			InvitorUid: event.InvitorUID,
 		},
@@ -163,7 +163,7 @@ func ReportGroupMute(cli *client.QQClient, event *event.GroupMute) int32 {
 			}(),
 			GroupId:     int64(event.GroupUin),
 			OperatorUid: event.OperatorUID,
-			TargetUid:   event.TargetUID,
+			TargetUid:   event.UserUID,
 			Duration:    int64(event.Duration),
 		},
 	}
@@ -208,7 +208,7 @@ func ReportUserJoinGroupRequest(cli *client.QQClient, event *event.GroupMemberJo
 			SubType:     "add",
 			GroupId:     int64(event.GroupUin),
 			Flag:        flag,
-			TargetUid:   event.TargetUID,
+			TargetUid:   event.UserUID,
 			InvitorUid:  event.InvitorUID,
 		},
 	}
@@ -246,11 +246,11 @@ func ReportGroupInvitedRequest(cli *client.QQClient, event *event.GroupInvite) i
 
 func ReportGroupMessageRecalled(cli *client.QQClient, event *event.GroupRecall) int32 {
 	opuin := cli.GetUin(event.OperatorUID, event.GroupUin)
-	auuin := cli.GetUin(event.AuthorUID, event.GroupUin)
-	if event.AuthorUID == event.OperatorUID {
-		log.Infof("群 %v 内 %v(%s) 撤回了一条消息, 消息Id为 %v", event.GroupUin, auuin, event.AuthorUID, event.Sequence)
+	auuin := cli.GetUin(event.UserUID, event.GroupUin)
+	if event.UserUID == event.OperatorUID {
+		log.Infof("群 %v 内 %v(%s) 撤回了一条消息, 消息Id为 %v", event.GroupUin, auuin, event.UserUID, event.Sequence)
 	} else {
-		log.Infof("群 %v 内 %v(%s) 撤回了 %v(%s) 的一条消息, 消息Id为 %v", event.GroupUin, opuin, event.OperatorUID, auuin, event.AuthorUID, event.Sequence)
+		log.Infof("群 %v 内 %v(%s) 撤回了 %v(%s) 的一条消息, 消息Id为 %v", event.GroupUin, opuin, event.OperatorUID, auuin, event.UserUID, event.Sequence)
 	}
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupRecallNoticeEvent,
@@ -262,7 +262,7 @@ func ReportGroupMessageRecalled(cli *client.QQClient, event *event.GroupRecall) 
 			PostType:    "notice",
 			NoticeType:  "group_recall",
 			GroupId:     int64(event.GroupUin),
-			AuthorUid:   event.AuthorUID,
+			AuthorUid:   event.UserUID,
 			OperatorUid: event.OperatorUID,
 			Sequence:    event.Sequence,
 			Random:      event.Random,
@@ -316,9 +316,9 @@ func ReportPoke(cli *client.QQClient, ievent event.INotifyEvent) int32 {
 	gp, ok := ievent.(*event.GroupPokeEvent)
 	if ok {
 		if gp.Suffix != "" {
-			log.Infof("群 %v 内 %d%s%d的%s", gp.GroupUin, gp.Sender, gp.Action, gp.Receiver, gp.Suffix)
+			log.Infof("群 %v 内 %d%s%d的%s", gp.GroupUin, gp.UserUin, gp.Action, gp.Receiver, gp.Suffix)
 		} else {
-			log.Infof("群 %v 内 %d%s%d", gp.GroupUin, gp.Sender, gp.Action, gp.Receiver)
+			log.Infof("群 %v 内 %d%s%d", gp.GroupUin, gp.UserUin, gp.Action, gp.Receiver)
 		}
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TGroupPokeEvent,
@@ -330,7 +330,7 @@ func ReportPoke(cli *client.QQClient, ievent event.INotifyEvent) int32 {
 				PostType:   "notice",
 				NoticeType: "group_poke",
 				GroupUin:   gp.GroupUin,
-				Sender:     gp.Sender,
+				Sender:     gp.UserUin,
 				Receiver:   gp.Receiver,
 				Suffix:     gp.Suffix,
 				Action:     gp.Action,
@@ -383,7 +383,7 @@ func ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int3
 				InternalMessageId: event.InternalMessageID,
 				OperationType:     event.OperationType,
 				OperationTime:     event.OperateTime,
-				SenderUin:         event.SenderUin,
+				SenderUin:         event.UserUin,
 				OperatorUin:       event.OperatorUin,
 				SenderNick:        event.SenderNick,
 				OperationNick:     event.OperatorNick,
@@ -407,7 +407,7 @@ func ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int3
 				InternalMessageId: event.InternalMessageID,
 				OperationType:     event.OperationType,
 				OperationTime:     event.OperateTime,
-				SenderUin:         event.SenderUin,
+				SenderUin:         event.UserUin,
 				OperatorUin:       event.OperatorUin,
 				SenderNick:        event.SenderNick,
 				OperationNick:     event.OperatorNick,
@@ -420,7 +420,7 @@ func ReportGroupDigest(cli *client.QQClient, event *event.GroupDigestEvent) int3
 
 func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.GroupMemberPermissionChanged) int32 {
 	if event.IsAdmin {
-		log.Infof("群 %v 内 %v(%s) 成为了管理员", event.GroupUin, event.TargetUin, event.TargetUID)
+		log.Infof("群 %v 内 %v(%s) 成为了管理员", event.GroupUin, event.UserUin, event.UserUin)
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
 		}
@@ -434,14 +434,14 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 				GroupEvent: &onebot.GroupMessageEvent{
 					GroupId: int64(event.GroupUin),
 				},
-				TargetUin: event.TargetUin,
-				TargetUid: event.TargetUID,
+				TargetUin: event.UserUin,
+				TargetUid: event.UserUID,
 				IsAdmin:   event.IsAdmin,
 			},
 		}
 		bot.HandleEventFrame(cli, eventProto)
 	} else {
-		log.Infof("群 %v 内 %v(%s) 被取消了管理员", event.GroupUin, event.TargetUin, event.TargetUID)
+		log.Infof("群 %v 内 %v(%s) 被取消了管理员", event.GroupUin, event.UserUin, event.UserUID)
 		eventProto := &onebot.Frame{
 			FrameType: onebot.Frame_TGroupMemberPermissionChangedEvent,
 		}
@@ -455,8 +455,8 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 				GroupEvent: &onebot.GroupMessageEvent{
 					GroupId: int64(event.GroupUin),
 				},
-				TargetUin: event.TargetUin,
-				TargetUid: event.TargetUID,
+				TargetUin: event.UserUin,
+				TargetUid: event.UserUID,
 				IsAdmin:   event.IsAdmin,
 			},
 		}
@@ -466,7 +466,7 @@ func ReportGroupMemberPermissionChanged(cli *client.QQClient, event *event.Group
 }
 
 func ReportGroupNameUpdated(cli *client.QQClient, event *event.GroupNameUpdated) int32 {
-	log.Infof("群 %v 的名字变为了 %s ,操作者为 %v(%s)", event.GroupUin, event.NewName, event.OperatorUin, event.OperatorUID)
+	log.Infof("群 %v 的名字变为了 %s ,操作者为 %v(%s)", event.GroupUin, event.NewName, event.UserUin, event.UserUID)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TGroupNameUpdatedEvent,
 	}
@@ -479,8 +479,8 @@ func ReportGroupNameUpdated(cli *client.QQClient, event *event.GroupNameUpdated)
 			SubType:     "change",
 			GroupUin:    event.GroupUin,
 			NewName:     event.NewName,
-			OperatorUin: event.OperatorUin,
-			OperatorUid: event.OperatorUID,
+			OperatorUin: event.UserUin,
+			OperatorUid: event.UserUID,
 		},
 	}
 	bot.HandleEventFrame(cli, eventProto)
@@ -488,7 +488,7 @@ func ReportGroupNameUpdated(cli *client.QQClient, event *event.GroupNameUpdated)
 }
 
 func ReportMemberSpecialTitleUpdated(cli *client.QQClient, event *event.MemberSpecialTitleUpdated) int32 {
-	log.Infof("群 %v 内 %v 获得了 %s 头衔", event.GroupUin, event.Uin, event.NewTitle)
+	log.Infof("群 %v 内 %v 获得了 %s 头衔", event.GroupUin, event.UserUin, event.NewTitle)
 	eventProto := &onebot.Frame{
 		FrameType: onebot.Frame_TMemberSpecialTitleUpdatedEvent,
 	}
@@ -500,7 +500,7 @@ func ReportMemberSpecialTitleUpdated(cli *client.QQClient, event *event.MemberSp
 			NoticeType: "group_member_titile",
 			SubType:    "change",
 			GroupUin:   event.GroupUin,
-			Uin:        event.Uin,
+			Uin:        event.UserUin,
 			NewTitle:   event.NewTitle,
 		},
 	}

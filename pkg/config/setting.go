@@ -14,6 +14,7 @@ type Setting struct {
 	Platform   string `json:"platform,omitempty" toml:"Platform"`
 	AppVersion string `json:"app_version,omitempty" toml:"AppVersion"`
 	SignServer string `json:"sign_server,omitempty" toml:"SignServer"`
+	SMS        bool   `json:"sms,omitempty" toml:"SMS"`
 }
 
 var SettingPath = "setting"
@@ -34,6 +35,7 @@ Platform = "linux"
 AppVersion = "3.2.10-25765"
 # 默认 linux 3.2.10-25765 可用 master:https://sign.lagrangecore.org/api/sign,Mirror:https://sign.0w0.ing/api/sign/25765
 SignServer = "https://sign.lagrangecore.org/api/sign/25765"
+SMS = false
 	`
 	if !util.PathExists(SettingPath) {
 		if err := os.MkdirAll(SettingPath, 0777); err != nil {

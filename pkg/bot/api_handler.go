@@ -81,7 +81,7 @@ func preprocessImageMessage(cli *client.QQClient, groupUin uint32, path string) 
 			return "", nil, err
 		}
 		defer func() { _ = f.Close() }()
-		ir, err := cli.ImageUploadGroup(groupUin, message.NewStreamImage(f))
+		ir, err := cli.UploadGroupImage(groupUin, message.NewStreamImage(f))
 		if err != nil {
 			return "", nil, err
 		}
@@ -92,7 +92,7 @@ func preprocessImageMessage(cli *client.QQClient, groupUin uint32, path string) 
 			return "", nil, err
 		}
 		defer func() { _ = f.Close() }()
-		ir, err := cli.ImageUploadGroup(groupUin, message.NewStreamImage(f))
+		ir, err := cli.UploadGroupImage(groupUin, message.NewStreamImage(f))
 		if err != nil {
 			return "", nil, err
 		}
@@ -106,7 +106,7 @@ func preprocessVideoMessage(cli *client.QQClient, groupUin uint32, video *clz.Lo
 		return nil, err
 	}
 	defer func() { _ = v.Close() }()
-	return cli.VideoUploadGroup(groupUin, message.NewStreamVideo(v, v))
+	return cli.UploadGroupVideo(groupUin, message.NewStreamVideo(v, v))
 }
 func preprocessVideoMessagePrivate(cli *client.QQClient, targetUid string, video *clz.LocalVideo) (*message.ShortVideoElement, error) {
 	v, err := os.Open(video.File)
@@ -114,7 +114,7 @@ func preprocessVideoMessagePrivate(cli *client.QQClient, targetUid string, video
 		return nil, err
 	}
 	defer func() { _ = v.Close() }()
-	return cli.VideoUploadPrivate(targetUid, message.NewStreamVideo(v, v))
+	return cli.UploadPrivateVideo(targetUid, message.NewStreamVideo(v, v))
 }
 
 func preprocessImageMessagePrivate(cli *client.QQClient, targetUid string, path string) (string, *message.ImageElement, error) {
@@ -138,7 +138,7 @@ func preprocessImageMessagePrivate(cli *client.QQClient, targetUid string, path 
 			return "", nil, err
 		}
 		defer func() { _ = f.Close() }()
-		ir, err := cli.ImageUploadPrivate(targetUid, message.NewStreamImage(f))
+		ir, err := cli.UploadPrivateImage(targetUid, message.NewStreamImage(f))
 		if err != nil {
 			return "", nil, err
 		}
@@ -149,7 +149,7 @@ func preprocessImageMessagePrivate(cli *client.QQClient, targetUid string, path 
 			return "", nil, err
 		}
 		defer func() { _ = f.Close() }()
-		ir, err := cli.ImageUploadPrivate(targetUid, message.NewStreamImage(f))
+		ir, err := cli.UploadPrivateImage(targetUid, message.NewStreamImage(f))
 		if err != nil {
 			return "", nil, err
 		}
@@ -422,7 +422,7 @@ func ReleaseClient(cli *client.QQClient) {
 func HandleSetGroupKick(cli *client.QQClient, req *onebot.SetGroupKickReq) *onebot.SetGroupKickResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
 		if member := cli.GetCachedMemberInfo(uint32(req.UserId), group.GroupUin); member != nil {
-			if err := cli.GroupKickMember(group.GroupUin, member.Uin, req.RejectAddRequest); err != nil {
+			if err := cli.KickGroupMember(group.GroupUin, member.Uin, req.RejectAddRequest); err != nil {
 				return nil
 			}
 			return &onebot.SetGroupKickResp{}
@@ -434,7 +434,7 @@ func HandleSetGroupKick(cli *client.QQClient, req *onebot.SetGroupKickReq) *oneb
 func HandleSetGroupBan(cli *client.QQClient, req *onebot.SetGroupBanReq) *onebot.SetGroupBanResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
 		if member := cli.GetCachedMemberInfo(uint32(req.UserId), group.GroupUin); member != nil {
-			if err := cli.GroupMuteMember(group.GroupUin, member.Uin, uint32(req.Duration)); err != nil {
+			if err := cli.SetGroupMemberMute(group.GroupUin, member.Uin, uint32(req.Duration)); err != nil {
 				return nil
 			}
 			return &onebot.SetGroupBanResp{}
@@ -445,7 +445,7 @@ func HandleSetGroupBan(cli *client.QQClient, req *onebot.SetGroupBanReq) *onebot
 
 func HandleSetGroupWholeBan(cli *client.QQClient, req *onebot.SetGroupWholeBanReq) *onebot.SetGroupWholeBanResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
-		cli.GroupMuteGlobal(group.GroupUin, req.Enable)
+		cli.SetGroupGlobalMute(group.GroupUin, req.Enable)
 		return &onebot.SetGroupWholeBanResp{}
 	}
 	return nil
@@ -454,7 +454,7 @@ func HandleSetGroupWholeBan(cli *client.QQClient, req *onebot.SetGroupWholeBanRe
 func HandleSetGroupCard(cli *client.QQClient, req *onebot.SetGroupCardReq) *onebot.SetGroupCardResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
 		if member := cli.GetCachedMemberInfo(uint32(req.UserId), group.GroupUin); member != nil {
-			cli.GroupRenameMember(group.GroupUin, member.Uin, req.Card)
+			cli.SetGroupMemberName(group.GroupUin, member.Uin, req.Card)
 			return &onebot.SetGroupCardResp{}
 		}
 	}
@@ -463,7 +463,7 @@ func HandleSetGroupCard(cli *client.QQClient, req *onebot.SetGroupCardReq) *oneb
 
 func HandleSetGroupName(cli *client.QQClient, req *onebot.SetGroupNameReq) *onebot.SetGroupNameResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
-		cli.GroupRename(group.GroupUin, req.GroupName)
+		cli.SetGroupName(group.GroupUin, req.GroupName)
 		return &onebot.SetGroupNameResp{}
 	}
 	return nil
@@ -471,7 +471,7 @@ func HandleSetGroupName(cli *client.QQClient, req *onebot.SetGroupNameReq) *oneb
 
 func HandleSetGroupLeave(cli *client.QQClient, req *onebot.SetGroupLeaveReq) *onebot.SetGroupLeaveResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
-		cli.GroupLeave(group.GroupUin)
+		cli.SetGroupLeave(group.GroupUin)
 		return &onebot.SetGroupLeaveResp{}
 	}
 	return nil
@@ -480,7 +480,7 @@ func HandleSetGroupLeave(cli *client.QQClient, req *onebot.SetGroupLeaveReq) *on
 func HandleSetGroupSpecialTitle(cli *client.QQClient, req *onebot.SetGroupSpecialTitleReq) *onebot.SetGroupSpecialTitleResp {
 	if group := cli.GetCachedGroupInfo(uint32(req.GroupId)); group != nil {
 		if member := cli.GetCachedMemberInfo(uint32(req.UserId), group.GroupUin); member != nil {
-			cli.GroupSetSpecialTitle(group.GroupUin, member.Uin, req.SpecialTitle)
+			cli.SetGroupMemberSpecialTitle(group.GroupUin, member.Uin, req.SpecialTitle)
 			return &onebot.SetGroupSpecialTitleResp{}
 		}
 	}
@@ -543,7 +543,7 @@ func HandleGetGroupMemberInfo(cli *client.QQClient, req *onebot.GetGroupMemberIn
 			return &onebot.GetGroupMemberInfoResp{
 				GroupId:      req.GroupId,
 				UserId:       req.UserId,
-				Nickname:     member.MemberName,
+				Nickname:     member.Nickname,
 				Card:         member.MemberCard,
 				JoinTime:     int64(member.JoinTime),
 				LastSentTime: int64(member.LastMsgTime),
@@ -576,7 +576,7 @@ func HandleGetGroupMemberList(cli *client.QQClient, req *onebot.GetGroupMemberLi
 			memberList = append(memberList, &onebot.GetGroupMemberListResp_GroupMember{
 				GroupId:      req.GroupId,
 				UserId:       int64(member.Uin),
-				Nickname:     member.MemberName,
+				Nickname:     member.Nickname,
 				Card:         member.MemberCard,
 				JoinTime:     int64(member.JoinTime),
 				LastSentTime: int64(member.LastMsgTime),
@@ -655,7 +655,7 @@ func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddReque
 	if req.SubType == "invite" {
 		for _, ireq := range msgs.InvitedRequests {
 			if req.Flag == fmt.Sprintf("%v", ireq.Sequence) {
-				if ireq.Checked() {
+				if ireq.Checked {
 					log.Warnf("处理群系统消息失败: 无法操作已处理的消息.")
 					return nil
 				}
@@ -671,7 +671,7 @@ func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddReque
 	} else {
 		for _, ireq := range msgs.JoinRequests {
 			if req.Flag == fmt.Sprintf("%v", ireq.Sequence) {
-				if ireq.Checked() {
+				if ireq.Checked {
 					log.Warnf("处理群系统消息失败: 无法操作已处理的消息.")
 					return nil
 				}
@@ -688,3 +688,5 @@ func HandleSetGroupAddRequest(cli *client.QQClient, req *onebot.SetGroupAddReque
 	log.Warnf("处理群系统消息失败: 消息 %v 不存在.", req.Flag)
 	return nil
 }
+
+func HandleImageOcr(cli *client.QQClient){}
