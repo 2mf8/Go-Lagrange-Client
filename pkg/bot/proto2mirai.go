@@ -139,7 +139,7 @@ func ProtoFaceToMiraiFace(data map[string]string) message.IMessageElement {
 		return EmptyText()
 	}
 	return &message.FaceElement{
-		FaceID: uint16(id),
+		FaceID: uint32(id),
 	}
 }
 
