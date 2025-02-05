@@ -1,7 +1,7 @@
 github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0=
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
-github.com/LagrangeDev/LagrangeGo v0.1.3-0.20250201021022-1df45ba1d420 h1:Dmb5x0UR3eLHG8UGJpyk8bgVKux4B46CGUBdjPb+xKY=
-github.com/LagrangeDev/LagrangeGo v0.1.3-0.20250201021022-1df45ba1d420/go.mod h1:DaPYW9z4rtbdulFPbsWjWbFXPCV3qN727WFvgPxu5a8=
+github.com/LagrangeDev/LagrangeGo v0.1.3-0.20250205061622-e590039b807c h1:eOil1OvHQBM19JhrAWST3n9yxsz+N08tI9e34F8QZ8U=
+github.com/LagrangeDev/LagrangeGo v0.1.3-0.20250205061622-e590039b807c/go.mod h1:DaPYW9z4rtbdulFPbsWjWbFXPCV3qN727WFvgPxu5a8=
 github.com/RomiChan/protobuf v0.1.1-0.20230204044148-2ed269a2e54d h1:/Xuj3fIiMY2ls1TwvPKmaqQrtJsPY+c9s+0lOScVHd8=
 github.com/RomiChan/protobuf v0.1.1-0.20230204044148-2ed269a2e54d/go.mod h1:2Ie+hdBFQpQFDHfeklgxoFmQRCE7O+KwFpISeXq7OwA=
 github.com/RomiChan/syncx v0.0.0-20240418144900-b7402ffdebc7 h1:S/ferNiehVjNaBMNNBxUjLtVmP/YWD6Yh79RfPv4ehU=
