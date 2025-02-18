@@ -1,5 +1,8 @@
 # Go-Lagrange-Client
 
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/2mf8/Go-Lagrange-Client.svg?variant=adaptive)](https://starchart.cc/2mf8/Go-Lagrange-Client)
+
 ## 默认端口9000，若启动失败，将依次在9001-9020端口中选择可用的端口启动。
 
 用于收发QQ消息，并通过 websocket + protobuf 或 websocket + json 上报给 server 进行处理。
