@@ -1,5 +1,7 @@
 # Go-Lagrange-Client
 
+<img width="100%" src="https://starify.komoridevs.icu/api/starify?owner=2mf8&repo=Go-Lagrange-Client" alt="starify" />
+
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/2mf8/Go-Lagrange-Client.svg?variant=adaptive)](https://starchart.cc/2mf8/Go-Lagrange-Client)
 
