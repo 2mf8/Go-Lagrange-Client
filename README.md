@@ -9,14 +9,18 @@
 
 用于收发QQ消息，并通过 websocket + protobuf 或 websocket + json 上报给 server 进行处理。
 
+### OneBot V11,请使用 `onebot` 分支
+
 已支持与 `OneBot V11` 协议的服务端通信, 使用前需要选用 OneBot V11 协议
 
 Golang 推荐使用 [GoneBot](https://github.com/2mf8/GoneBot)
 TypeScript / JavaScript 推荐使用 [ToneBot](https://github.com/2mf8/ToneBot)
 
+### Protobuf, 请使用 `protobuf` 分支（待更新）
+
 可以使用任意语言编写websocket server实现通信，协议：[onebot_glc](https://github.com/2mf8/onebot_glc)
 
-有问题发issue，或者进QQ群 `901125207`
+有问题发issue，或者进QQ群 `677742758`
 
 支持的开发语言(需要根据协议修改)：[Java/Kotlin](https://github.com/protobufbot/spring-mirai-server) , [JavaScript](https://github.com/2mf8/TSPbBot) , [TypeScript](https://github.com/2mf8/TSPbBot/blob/master/src/demo/index.ts) , [Python](https://github.com/PHIKN1GHT/pypbbot/tree/main/pypbbot_examples) , [Golang](https://github.com/2mf8/GoPbBot/blob/master/test/bot_test.go) , [C/C++](https://github.com/ProtobufBot/cpp-pbbot/blob/main/src/event_handler/event_handler.cpp) , [易语言](https://github.com/protobufbot/pbbot_e_sdk) 。详情查看 [Protobufbot](https://github.com/ProtobufBot/ProtobufBot) 。
 
