@@ -4,14 +4,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package bot
+package handler
 
 import (
 	"sync"
 	"sync/atomic"
 	"unsafe"
-
-	"github.com/LagrangeDev/LagrangeGo/client"
 )
 
 // Map is like a Go map[interface{}]interface{} but is safe for concurrent use
@@ -29,7 +27,7 @@ import (
 // contention compared to a Go map paired with a separate Mutex or RWMutex.
 //
 // The zero Map is empty and ready for use. A Map must not be copied after first use.
-type ClientMap struct {
+type CaptchaMap struct {
 	mu sync.Mutex
 
 	// read contains the portion of the map's contents that are safe for
@@ -53,7 +51,7 @@ type ClientMap struct {
 	//
 	// If the dirty map is nil, the next write to the map will initialize it by
 	// making a shallow copy of the clean map, omitting stale entries.
-	dirty map[int64]*entryClientMap
+	dirty map[int64]*entryCaptchaMap
 
 	// misses counts the number of loads since the read map was last updated that
 	// needed to lock mu to determine whether the key was present.
@@ -65,17 +63,17 @@ type ClientMap struct {
 }
 
 // readOnly is an immutable struct stored atomically in the Map.read field.
-type readOnlyClientMap struct {
-	m       map[int64]*entryClientMap
+type readOnlyCaptchaMap struct {
+	m       map[int64]*entryCaptchaMap
 	amended bool // true if the dirty map contains some key not in m.
 }
 
 // expunged is an arbitrary pointer that marks entries which have been deleted
 // from the dirty map.
-var expungedClientMap = unsafe.Pointer(new(*client.QQClient))
+var expungedCaptchaMap = unsafe.Pointer(new(*WaitingCaptcha))
 
 // An entry is a slot in the map corresponding to a particular key.
-type entryClientMap struct {
+type entryCaptchaMap struct {
 	// p points to the interface{} value stored for the entry.
 	//
 	// If p == nil, the entry has been deleted and m.dirty == nil.
@@ -97,22 +95,22 @@ type entryClientMap struct {
 	p unsafe.Pointer // *interface{}
 }
 
-func newEntryClientMap(i *client.QQClient) *entryClientMap {
-	return &entryClientMap{p: unsafe.Pointer(&i)}
+func newEntryCaptchaMap(i *WaitingCaptcha) *entryCaptchaMap {
+	return &entryCaptchaMap{p: unsafe.Pointer(&i)}
 }
 
 // Load returns the value stored in the map for a key, or nil if no
 // value is present.
 // The ok result indicates whether value was found in the map.
-func (m *ClientMap) Load(key int64) (value *client.QQClient, ok bool) {
-	read, _ := m.read.Load().(readOnlyClientMap)
+func (m *CaptchaMap) Load(key int64) (value *WaitingCaptcha, ok bool) {
+	read, _ := m.read.Load().(readOnlyCaptchaMap)
 	e, ok := read.m[key]
 	if !ok && read.amended {
 		m.mu.Lock()
 		// Avoid reporting a spurious miss if m.dirty got promoted while we were
 		// blocked on m.mu. (If further loads of the same key will not miss, it's
 		// not worth copying the dirty map for this key.)
-		read, _ = m.read.Load().(readOnlyClientMap)
+		read, _ = m.read.Load().(readOnlyCaptchaMap)
 		e, ok = read.m[key]
 		if !ok && read.amended {
 			e, ok = m.dirty[key]
@@ -129,23 +127,23 @@ func (m *ClientMap) Load(key int64) (value *client.QQClient, ok bool) {
 	return e.load()
 }
 
-func (e *entryClientMap) load() (value *client.QQClient, ok bool) {
+func (e *entryCaptchaMap) load() (value *WaitingCaptcha, ok bool) {
 	p := atomic.LoadPointer(&e.p)
-	if p == nil || p == expungedClientMap {
+	if p == nil || p == expungedCaptchaMap {
 		return value, false
 	}
-	return *(**client.QQClient)(p), true
+	return *(**WaitingCaptcha)(p), true
 }
 
 // Store sets the value for a key.
-func (m *ClientMap) Store(key int64, value *client.QQClient) {
-	read, _ := m.read.Load().(readOnlyClientMap)
+func (m *CaptchaMap) Store(key int64, value *WaitingCaptcha) {
+	read, _ := m.read.Load().(readOnlyCaptchaMap)
 	if e, ok := read.m[key]; ok && e.tryStore(&value) {
 		return
 	}
 
 	m.mu.Lock()
-	read, _ = m.read.Load().(readOnlyClientMap)
+	read, _ = m.read.Load().(readOnlyCaptchaMap)
 	if e, ok := read.m[key]; ok {
 		if e.unexpungeLocked() {
 			// The entry was previously expunged, which implies that there is a
@@ -160,9 +158,9 @@ func (m *ClientMap) Store(key int64, value *client.QQClient) {
 			// We're adding the first new key to the dirty map.
 			// Make sure it is allocated and mark the read-only map as incomplete.
 			m.dirtyLocked()
-			m.read.Store(readOnlyClientMap{m: read.m, amended: true})
+			m.read.Store(readOnlyCaptchaMap{m: read.m, amended: true})
 		}
-		m.dirty[key] = newEntryClientMap(value)
+		m.dirty[key] = newEntryCaptchaMap(value)
 	}
 	m.mu.Unlock()
 }
@@ -171,10 +169,10 @@ func (m *ClientMap) Store(key int64, value *client.QQClient) {
 //
 // If the entry is expunged, tryStore returns false and leaves the entry
 // unchanged.
-func (e *entryClientMap) tryStore(i **client.QQClient) bool {
+func (e *entryCaptchaMap) tryStore(i **WaitingCaptcha) bool {
 	for {
 		p := atomic.LoadPointer(&e.p)
-		if p == expungedClientMap {
+		if p == expungedCaptchaMap {
 			return false
 		}
 		if atomic.CompareAndSwapPointer(&e.p, p, unsafe.Pointer(i)) {
@@ -187,23 +185,23 @@ func (e *entryClientMap) tryStore(i **client.QQClient) bool {
 //
 // If the entry was previously expunged, it must be added to the dirty map
 // before m.mu is unlocked.
-func (e *entryClientMap) unexpungeLocked() (wasExpunged bool) {
-	return atomic.CompareAndSwapPointer(&e.p, expungedClientMap, nil)
+func (e *entryCaptchaMap) unexpungeLocked() (wasExpunged bool) {
+	return atomic.CompareAndSwapPointer(&e.p, expungedCaptchaMap, nil)
 }
 
 // storeLocked unconditionally stores a value to the entry.
 //
 // The entry must be known not to be expunged.
-func (e *entryClientMap) storeLocked(i **client.QQClient) {
+func (e *entryCaptchaMap) storeLocked(i **WaitingCaptcha) {
 	atomic.StorePointer(&e.p, unsafe.Pointer(i))
 }
 
 // LoadOrStore returns the existing value for the key if present.
 // Otherwise, it stores and returns the given value.
 // The loaded result is true if the value was loaded, false if stored.
-func (m *ClientMap) LoadOrStore(key int64, value *client.QQClient) (actual *client.QQClient, loaded bool) {
+func (m *CaptchaMap) LoadOrStore(key int64, value *WaitingCaptcha) (actual *WaitingCaptcha, loaded bool) {
 	// Avoid locking if it's a clean hit.
-	read, _ := m.read.Load().(readOnlyClientMap)
+	read, _ := m.read.Load().(readOnlyCaptchaMap)
 	if e, ok := read.m[key]; ok {
 		actual, loaded, ok := e.tryLoadOrStore(value)
 		if ok {
@@ -212,7 +210,7 @@ func (m *ClientMap) LoadOrStore(key int64, value *client.QQClient) (actual *clie
 	}
 
 	m.mu.Lock()
-	read, _ = m.read.Load().(readOnlyClientMap)
+	read, _ = m.read.Load().(readOnlyCaptchaMap)
 	if e, ok := read.m[key]; ok {
 		if e.unexpungeLocked() {
 			m.dirty[key] = e
@@ -226,9 +224,9 @@ func (m *ClientMap) LoadOrStore(key int64, value *client.QQClient) (actual *clie
 			// We're adding the first new key to the dirty map.
 			// Make sure it is allocated and mark the read-only map as incomplete.
 			m.dirtyLocked()
-			m.read.Store(readOnlyClientMap{m: read.m, amended: true})
+			m.read.Store(readOnlyCaptchaMap{m: read.m, amended: true})
 		}
-		m.dirty[key] = newEntryClientMap(value)
+		m.dirty[key] = newEntryCaptchaMap(value)
 		actual, loaded = value, false
 	}
 	m.mu.Unlock()
@@ -241,13 +239,13 @@ func (m *ClientMap) LoadOrStore(key int64, value *client.QQClient) (actual *clie
 //
 // If the entry is expunged, tryLoadOrStore leaves the entry unchanged and
 // returns with ok==false.
-func (e *entryClientMap) tryLoadOrStore(i *client.QQClient) (actual *client.QQClient, loaded, ok bool) {
+func (e *entryCaptchaMap) tryLoadOrStore(i *WaitingCaptcha) (actual *WaitingCaptcha, loaded, ok bool) {
 	p := atomic.LoadPointer(&e.p)
-	if p == expungedClientMap {
+	if p == expungedCaptchaMap {
 		return actual, false, false
 	}
 	if p != nil {
-		return *(**client.QQClient)(p), true, true
+		return *(**WaitingCaptcha)(p), true, true
 	}
 
 	// Copy the interface after the first load to make this method more amenable
@@ -259,23 +257,23 @@ func (e *entryClientMap) tryLoadOrStore(i *client.QQClient) (actual *client.QQCl
 			return i, false, true
 		}
 		p = atomic.LoadPointer(&e.p)
-		if p == expungedClientMap {
+		if p == expungedCaptchaMap {
 			return actual, false, false
 		}
 		if p != nil {
-			return *(**client.QQClient)(p), true, true
+			return *(**WaitingCaptcha)(p), true, true
 		}
 	}
 }
 
 // LoadAndDelete deletes the value for a key, returning the previous value if any.
 // The loaded result reports whether the key was present.
-func (m *ClientMap) LoadAndDelete(key int64) (value *client.QQClient, loaded bool) {
-	read, _ := m.read.Load().(readOnlyClientMap)
+func (m *CaptchaMap) LoadAndDelete(key int64) (value *WaitingCaptcha, loaded bool) {
+	read, _ := m.read.Load().(readOnlyCaptchaMap)
 	e, ok := read.m[key]
 	if !ok && read.amended {
 		m.mu.Lock()
-		read, _ = m.read.Load().(readOnlyClientMap)
+		read, _ = m.read.Load().(readOnlyCaptchaMap)
 		e, ok = read.m[key]
 		if !ok && read.amended {
 			e, ok = m.dirty[key]
@@ -294,18 +292,18 @@ func (m *ClientMap) LoadAndDelete(key int64) (value *client.QQClient, loaded boo
 }
 
 // Delete deletes the value for a key.
-func (m *ClientMap) Delete(key int64) {
+func (m *CaptchaMap) Delete(key int64) {
 	m.LoadAndDelete(key)
 }
 
-func (e *entryClientMap) delete() (value *client.QQClient, ok bool) {
+func (e *entryCaptchaMap) delete() (value *WaitingCaptcha, ok bool) {
 	for {
 		p := atomic.LoadPointer(&e.p)
-		if p == nil || p == expungedClientMap {
+		if p == nil || p == expungedCaptchaMap {
 			return value, false
 		}
 		if atomic.CompareAndSwapPointer(&e.p, p, nil) {
-			return *(**client.QQClient)(p), true
+			return *(**WaitingCaptcha)(p), true
 		}
 	}
 }
@@ -320,21 +318,21 @@ func (e *entryClientMap) delete() (value *client.QQClient, ok bool) {
 //
 // Range may be O(N) with the number of elements in the map even if f returns
 // false after a constant number of calls.
-func (m *ClientMap) Range(f func(key int64, value *client.QQClient) bool) {
+func (m *CaptchaMap) Range(f func(key int64, value *WaitingCaptcha) bool) {
 	// We need to be able to iterate over all of the keys that were already
 	// present at the start of the call to Range.
 	// If read.amended is false, then read.m satisfies that property without
 	// requiring us to hold m.mu for a long time.
-	read, _ := m.read.Load().(readOnlyClientMap)
+	read, _ := m.read.Load().(readOnlyCaptchaMap)
 	if read.amended {
 		// m.dirty contains keys not in read.m. Fortunately, Range is already O(N)
 		// (assuming the caller does not break out early), so a call to Range
 		// amortizes an entire copy of the map: we can promote the dirty copy
 		// immediately!
 		m.mu.Lock()
-		read, _ = m.read.Load().(readOnlyClientMap)
+		read, _ = m.read.Load().(readOnlyCaptchaMap)
 		if read.amended {
-			read = readOnlyClientMap{m: m.dirty}
+			read = readOnlyCaptchaMap{m: m.dirty}
 			m.read.Store(read)
 			m.dirty = nil
 			m.misses = 0
@@ -353,23 +351,23 @@ func (m *ClientMap) Range(f func(key int64, value *client.QQClient) bool) {
 	}
 }
 
-func (m *ClientMap) missLocked() {
+func (m *CaptchaMap) missLocked() {
 	m.misses++
 	if m.misses < len(m.dirty) {
 		return
 	}
-	m.read.Store(readOnlyClientMap{m: m.dirty})
+	m.read.Store(readOnlyCaptchaMap{m: m.dirty})
 	m.dirty = nil
 	m.misses = 0
 }
 
-func (m *ClientMap) dirtyLocked() {
+func (m *CaptchaMap) dirtyLocked() {
 	if m.dirty != nil {
 		return
 	}
 
-	read, _ := m.read.Load().(readOnlyClientMap)
-	m.dirty = make(map[int64]*entryClientMap, len(read.m))
+	read, _ := m.read.Load().(readOnlyCaptchaMap)
+	m.dirty = make(map[int64]*entryCaptchaMap, len(read.m))
 	for k, e := range read.m {
 		if !e.tryExpungeLocked() {
 			m.dirty[k] = e
@@ -377,13 +375,13 @@ func (m *ClientMap) dirtyLocked() {
 	}
 }
 
-func (e *entryClientMap) tryExpungeLocked() (isExpunged bool) {
+func (e *entryCaptchaMap) tryExpungeLocked() (isExpunged bool) {
 	p := atomic.LoadPointer(&e.p)
 	for p == nil {
-		if atomic.CompareAndSwapPointer(&e.p, nil, expungedClientMap) {
+		if atomic.CompareAndSwapPointer(&e.p, nil, expungedCaptchaMap) {
 			return true
 		}
 		p = atomic.LoadPointer(&e.p)
 	}
-	return p == expungedClientMap
+	return p == expungedCaptchaMap
 }

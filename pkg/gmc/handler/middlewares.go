@@ -2,7 +2,7 @@ package handler
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
@@ -25,7 +25,7 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 
 func Bind(c *gin.Context, req any) error {
-	buf, err := ioutil.ReadAll(c.Request.Body)
+	buf, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package gmc
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net"
@@ -15,8 +16,6 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/gmc/handler"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/static"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
-	"github.com/2mf8/LagrangeGo/client"
-	auth2 "github.com/2mf8/LagrangeGo/client/auth"
 
 	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -83,40 +82,6 @@ func InitLog() {
 	))
 }
 
-func Login() {
-	set := config.ReadSetting()
-	appInfo := auth2.AppList[set.Platform][set.AppVersion]
-	deviceInfo := &auth2.DeviceInfo{
-		Guid:          "cfcd208495d565ef66e7dff9f98764da",
-		DeviceName:    "Lagrange-DCFCD07E",
-		SystemKernel:  "Windows 10.0.22631",
-		KernelVersion: "10.0.22631",
-	}
-
-	qqclient := client.NewClient(0, appInfo, set.SignServer)
-	qqclient.UseDevice(deviceInfo)
-	data, err := os.ReadFile("sig.bin")
-	if err != nil {
-		log.Warnln("read sig error:", err)
-	} else {
-		sig, err := auth2.UnmarshalSigInfo(data, true)
-		if err != nil {
-			log.Warnln("load sig error:", err)
-		} else {
-			qqclient.UseSig(sig)
-		}
-	}
-	err = qqclient.Login("", "qrcode.png")
-	if err != nil {
-		log.Errorln("login err:", err)
-		return
-	}
-	handler.AfterLogin(qqclient)
-
-	defer qqclient.Release()
-	select {}
-}
-
 func Start() {
 	if help {
 		flag.Usage()
@@ -177,6 +142,9 @@ func InitGin() {
 		router.Use(gin.BasicAuth(config.HttpAuth))
 	}
 
+	b, _ := json.Marshal(handler.AppList)
+	fmt.Println(string(b))
+
 	router.Use(handler.CORSMiddleware())
 	router.StaticFS("/dashcard", http.FS(static.MustGetStatic()))
 	router.POST("/dashcard/bot/delete/v1", handler.DeleteBot)
@@ -186,6 +154,9 @@ func InitGin() {
 	router.POST("/dashcard/plugin/list/v1", handler.ListPlugin)
 	router.POST("/dashcard/plugin/save/v1", handler.SavePlugin)
 	router.POST("/dashcard/plugin/delete/v1", handler.DeletePlugin)
+	router.POST("/dashcard/all/app/version/get/v1", handler.GetAllVersion)
+	router.POST("/dashcard/base/info/set/v1", handler.SetBaseInfo)
+	router.POST("/dashcard/bot/create/v1", handler.CreateBot)
 	realPort, err := RunGin(router, ":"+config.Port)
 	if err != nil {
 		for i := 9001; i <= 9020; i++ {

@@ -21,18 +21,29 @@ import (
 	"github.com/2mf8/Go-Lagrange-Client/pkg/plugin"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/dto"
+	"github.com/fanliao/go-promise"
 
-	"github.com/2mf8/LagrangeGo/client"
-	"github.com/2mf8/LagrangeGo/client/auth"
+	"github.com/BurntSushi/toml"
 	_ "github.com/BurntSushi/toml"
+	"github.com/LagrangeDev/LagrangeGo/client"
+	"github.com/LagrangeDev/LagrangeGo/client/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"
 )
 
+type WaitingCaptcha struct {
+	Captcha *dto.Bot_Captcha
+	Prom    *promise.Promise
+}
+
 var queryQRCodeMutex = &sync.RWMutex{}
 var qrCodeBot *client.QQClient
+
+var WaitingCaptchas CaptchaMap
+
+var AppList = device.GetAppList()
 
 type QRCodeResp int
 
@@ -69,10 +80,12 @@ func TokenLogin() {
 										queryQRCodeMutex.Lock()
 										defer queryQRCodeMutex.Unlock()
 										appInfo := auth.AppList[set.Platform][set.AppVersion]
-										cli := client.NewClient(0, appInfo, set.SignServer)
+										cli := client.NewClient(0, "")
+										cli.UseVersion(appInfo)
 										cli.UseDevice(devi)
+										cli.AddSignServer(set.SignServer)
 										cli.UseSig(sig)
-										cli.SessionLogin()
+										cli.FastLogin()
 										bot.Clients.Store(int64(cli.Uin), cli)
 										go AfterLogin(cli)
 									}()
@@ -116,10 +129,12 @@ func TokenReLogin(userId int64, retryInterval int, retryCount int) {
 				if err == nil {
 					log.Warnf("%v 第 %v 次登录尝试", userId, times)
 					appInfo := auth.AppList[set.Platform][set.AppVersion]
-					cli := client.NewClient(0, appInfo, set.SignServer)
+					cli := client.NewClient(0, "")
+					cli.UseVersion(appInfo)
 					cli.UseDevice(devi)
+					cli.AddSignServer(set.SignServer)
 					cli.UseSig(sig)
-					cli.SessionLogin()
+					cli.FastLogin()
 					bot.Clients.Store(userId, cli)
 					go AfterLogin(cli)
 				} else {
@@ -152,12 +167,6 @@ func init() {
 	plugin.AddFriendMessageRecalledPlugin(plugins.ReportFriendMessageRecalled)
 	plugin.AddNewFriendAddedPlugin(plugins.ReportNewFriendAdded)
 	plugin.AddGroupMutePlugin(plugins.ReportGroupMute)
-	plugin.AddNotifyPlugin(plugins.ReportPoke)
-	plugin.AddGroupDigestPlugin(plugins.ReportGroupDigest)
-	plugin.AddGroupMemberPermissionChangedPlugin(plugins.ReportGroupMemberPermissionChanged)
-	plugin.AddGroupNameUpdated(plugins.ReportGroupNameUpdated)
-	plugin.AddMemberSpecialTitleUpdated(plugins.ReportMemberSpecialTitleUpdated)
-	plugin.AddRenameEvent(plugins.ReportRename)
 }
 
 func DeleteBot(c *gin.Context) {
@@ -201,6 +210,50 @@ func DeleteBot(c *gin.Context) {
 	Return(c, resp)
 }
 
+func GetAllVersion(c *gin.Context) {
+	req := &dto.GetAllVersionReq{}
+	err := Bind(c, req)
+	if err != nil {
+		c.String(http.StatusBadRequest, "bad request, not protobuf")
+		return
+	}
+	var resp = &dto.GetAllVersionResp{
+		AllVersion: []*dto.GetAllVersionResp_AllVersion{},
+	}
+	resp = device.GetAppList()
+	Return(c, resp)
+}
+
+func SetBaseInfo(c *gin.Context) {
+	req := &dto.SetBaseInfoReq{}
+	err := Bind(c, req)
+	if err != nil {
+		c.String(http.StatusBadRequest, "bad request, not protobuf")
+		return
+	}
+	if req.Platform == "default" {
+		config.AllSetting.Platform = "linux"
+	} else {
+		config.AllSetting.Platform = req.Platform
+	}
+	if req.AppVersion == "default" {
+		config.AllSetting.AppVersion = "3.2.10-25765"
+	} else {
+		config.AllSetting.AppVersion = req.AppVersion
+	}
+	if req.SignServer == "default" {
+		config.AllSetting.SignServer = "https://sign.lagrangecore.org/api/sign/25765"
+	} else {
+		config.AllSetting.SignServer = req.SignServer
+	}
+	filepath := "./setting/setting.toml"
+	file, _ := os.Create(filepath)
+	defer file.Close()
+	toml.NewEncoder(file).Encode(config.AllSetting)
+	var resp = &dto.SetBaseInfoResp{}
+	Return(c, resp)
+}
+
 func ListBot(c *gin.Context) {
 	req := &dto.ListBotReq{}
 	err := Bind(c, req)
@@ -221,6 +274,29 @@ func ListBot(c *gin.Context) {
 	Return(c, resp)
 }
 
+func CreateBot(c *gin.Context) {
+	req := &dto.CreateBotReq{}
+	err := Bind(c, req)
+	if err != nil {
+		c.String(http.StatusBadRequest, "bad request, not protobuf")
+		return
+	}
+	if req.BotId == 0 {
+		c.String(http.StatusBadRequest, "botId is 0")
+		return
+	}
+	_, ok := bot.Clients.Load(req.BotId)
+	if ok {
+		c.String(http.StatusInternalServerError, "botId already exists")
+		return
+	}
+	go func() {
+		PasswordLogin(uint32(req.BotId), req.Password)
+	}()
+	resp := &dto.CreateBotResp{}
+	Return(c, resp)
+}
+
 func FetchQrCode(c *gin.Context) {
 	set := config.ReadSetting()
 	req := &dto.FetchQRCodeReq{}
@@ -231,8 +307,10 @@ func FetchQrCode(c *gin.Context) {
 	}
 	newDeviceInfo := device.GetDevice(req.DeviceSeed)
 	appInfo := auth.AppList[set.Platform][set.AppVersion]
-	qqclient := client.NewClient(0, appInfo, set.SignServer)
+	qqclient := client.NewClient(0, "")
+	qqclient.UseVersion(appInfo)
 	qqclient.UseDevice(newDeviceInfo)
+	qqclient.AddSignServer(set.SignServer)
 	qrCodeBot = qqclient
 	b, s, err := qrCodeBot.FetchQRCode(3, 4, 2)
 	if err != nil {
@@ -278,28 +356,21 @@ func QueryQRCodeStatus(c *gin.Context) {
 		go func() {
 			queryQRCodeMutex.Lock()
 			defer queryQRCodeMutex.Unlock()
-			err := qrCodeBot.QRCodeConfirmed()
-			if err == nil {
-				go func() {
-					queryQRCodeMutex.Lock()
-					defer queryQRCodeMutex.Unlock()
-					err := qrCodeBot.Register()
-					if err != nil {
-						fmt.Println(err)
-					}
-					time.Sleep(time.Second * 5)
-					log.Infof("登录成功")
-					originCli, ok := bot.Clients.Load(int64(qrCodeBot.Uin))
-
-					// 重复登录，旧的断开
-					if ok {
-						originCli.Release()
-					}
-					bot.Clients.Store(int64(qrCodeBot.Uin), qrCodeBot)
-					go AfterLogin(qrCodeBot)
-					qrCodeBot = nil
-				}()
+			_, err := qrCodeBot.QRCodeLogin()
+			if err != nil {
+				fmt.Println(err)
 			}
+			time.Sleep(time.Second * 5)
+			log.Infof("登录成功")
+			originCli, ok := bot.Clients.Load(int64(qrCodeBot.Uin))
+
+			// 重复登录，旧的断开
+			if ok {
+				originCli.Release()
+			}
+			bot.Clients.Store(int64(qrCodeBot.Uin), qrCodeBot)
+			go AfterLogin(qrCodeBot)
+			qrCodeBot = nil
 		}()
 	}
 	if ok.Name() == "Expired" {
@@ -533,4 +604,94 @@ func RunForwardGin(engine *gin.Engine, port string) (string, error) {
 		}
 	}()
 	return randPort, nil
+}
+
+func PasswordLogin(uin uint32, password string) {
+	set := config.ReadSetting()
+	cli := client.NewClient(uin, password)
+	log.Infof("开始初始化设备信息")
+	newDeviceInfo := device.GetDevice(int64(uin))
+	di, _ := json.Marshal(newDeviceInfo)
+	log.Infof("设备信息 %+v", string(di))
+	log.Infof("创建机器人 %+v", uin)
+	appInfo := auth.AppList[set.Platform][set.AppVersion]
+	cli.UseVersion(appInfo)
+	cli.UseDevice(newDeviceInfo)
+	cli.AddSignServer(set.SignServer)
+	bot.Clients.Store(int64(uin), cli)
+	log.Infof("登录中...")
+	ok, err := LoginStatus(cli)
+	if err != nil {
+		// TODO 登录失败，是否需要删除？
+		log.Errorf("failed to login, err: %+v", err)
+		return
+	}
+	if ok {
+		log.Infof("登录成功")
+		AfterLogin(cli)
+	} else {
+		log.Infof("登录失败")
+	}
+}
+
+func LoginStatus(cli *client.QQClient) (bool, error) {
+	resp, err := cli.PasswordLogin()
+	if err != nil {
+		return false, err
+	}
+	if resp.Code == byte(45) {
+		log.Warn("您的账号被限制登录，请配置 SignServer 后重试")
+	}
+	if resp.Code == byte(235) {
+		log.Warn("设备信息被封禁，请删除设备（device）文件夹里对应设备文件后重试")
+	}
+	if resp.Code == byte(237) {
+		log.Warn("登录过于频繁，请在手机QQ登录并根据提示完成认证")
+	}
+	ok, err := ProcessLoginResp(cli, resp)
+	if err != nil {
+		return false, err
+	}
+	return ok, nil
+}
+
+func ProcessLoginResp(cli *client.QQClient, resp *client.LoginResponse) (bool, error) {
+	if resp.Success {
+		WaitingCaptchas.Delete(int64(cli.Uin))
+		return true, nil
+	}
+	if resp.Error == client.SMSOrVerifyNeededError {
+		if config.AllSetting.SMS {
+			resp.Error = client.SMSNeededError
+		} else {
+			resp.Error = client.UnsafeDeviceError
+		}
+	}
+	log.Infof("验证码处理页面: http://localhost:%s/dashcard", config.Port)
+	log.Infof("验证码处理页面: 暂不支持处理")
+	switch resp.Error {
+	case client.SMSNeededError:
+		log.Infof("遇到短信验证码，根据README提示操作 https://github.com/2mf8/Go-Lagrange-Client (顺便star)")
+	case client.TooManySMSRequestError:
+		log.Errorf("请求验证码太频繁")
+	case client.NeedCaptcha:
+		log.Infof("遇到图形验证码，遇到短信验证码，根据README提示操作 https://github.com/2mf8/Go-Lagrange-Client (顺便star)")
+	case client.SliderNeededError:
+		log.Infof("遇到滑块验证码，根据README提示操作https://github.com/2mf8/Go-Lagrange-Client (顺便star)")
+	case client.UnsafeDeviceError:
+		log.Infof("遇到设备锁扫码验证码，根据README提示操作 https://github.com/2mf8/Go-Lagrange-Client (顺便star)")
+		log.Info("设置基础设置 SMS = true 可优先使用短信验证码")
+	case client.OtherLoginError, client.UnknownLoginError:
+		log.Errorf(resp.ErrorMessage)
+		log.Warnf("登陆失败，建议开启/关闭设备锁后重试，或删除device-<QQ>.json文件后再次尝试")
+		msg := resp.ErrorMessage
+		if strings.Contains(msg, "版本") {
+			log.Errorf("密码错误或账号被冻结")
+		}
+		if strings.Contains(msg, "上网环境") {
+			log.Errorf("当前上网环境异常. 更换服务器并重试")
+		}
+		return false, fmt.Errorf("遇到不可处理的登录错误")
+	}
+	return false, fmt.Errorf("process login error")
 }

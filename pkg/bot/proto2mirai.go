@@ -6,12 +6,13 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/2mf8/Go-Lagrange-Client/pkg/bot/clz"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/cache"
 	"github.com/2mf8/Go-Lagrange-Client/pkg/util"
 	"github.com/2mf8/Go-Lagrange-Client/proto_gen/onebot"
 
-	"github.com/2mf8/LagrangeGo/client"
-	"github.com/2mf8/LagrangeGo/message"
+	"github.com/LagrangeDev/LagrangeGo/client"
+	"github.com/LagrangeDev/LagrangeGo/message"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -44,6 +45,8 @@ func ProtoMsgToMiraiMsg(cli *client.QQClient, msgList []*onebot.Message, notConv
 			messageChain = append(messageChain, ProtoImageToMiraiImage(protoMsg.Data))
 		case "record":
 			messageChain = append(messageChain, ProtoVoiceToMiraiVoice(protoMsg.Data))
+		case "video":
+			messageChain = append(messageChain, ProtoVideoToMiraiVideo(protoMsg.Data))
 		case "face":
 			messageChain = append(messageChain, ProtoFaceToMiraiFace(protoMsg.Data))
 		case "reply":
@@ -83,7 +86,7 @@ func ProtoImageToMiraiImage(data map[string]string) message.IMessageElement {
 		log.Warnf("imageUrl不存在")
 		return EmptyText()
 	}
-	return &message.ImageElement{Url: url}
+	return &message.ImageElement{URL: url}
 }
 
 func ProtoVoiceToMiraiVoice(data map[string]string) message.IMessageElement {
@@ -136,7 +139,7 @@ func ProtoFaceToMiraiFace(data map[string]string) message.IMessageElement {
 		return EmptyText()
 	}
 	return &message.FaceElement{
-		FaceID: uint16(id),
+		FaceID: uint32(id),
 	}
 }
 
@@ -157,7 +160,7 @@ func ProtoReplyToMiraiReply(data map[string]string) *message.ReplyElement {
 		groupMessage, ok := eventInterface.(*message.GroupMessage)
 		if ok {
 			return &message.ReplyElement{
-				ReplySeq:  uint32(groupMessage.Id),
+				ReplySeq:  uint32(groupMessage.ID),
 				SenderUin: groupMessage.Sender.Uin,
 				Time:      uint32(groupMessage.Time),
 				Elements: func() []message.IMessageElement {
@@ -175,7 +178,7 @@ func ProtoReplyToMiraiReply(data map[string]string) *message.ReplyElement {
 		privateMessage, ok := eventInterface.(*message.PrivateMessage)
 		if ok {
 			return &message.ReplyElement{
-				ReplySeq:  uint32(privateMessage.Id),
+				ReplySeq:  uint32(privateMessage.ID),
 				SenderUin: privateMessage.Sender.Uin,
 				Time:      uint32(privateMessage.Time),
 				Elements: func() []message.IMessageElement {
@@ -217,6 +220,17 @@ func ProtoForwardToMiraiForward(data map[string]string) *message.ForwardMessage 
 	}
 	return &message.ForwardMessage{
 		ResID: r,
+	}
+}
+
+func ProtoVideoToMiraiVideo(data map[string]string) *clz.LocalVideo {
+	r, ok := data["file"]
+	if !ok {
+		log.Warnf("video路径不存在")
+		return nil
+	}
+	return &clz.LocalVideo{
+		File: r,
 	}
 }
 

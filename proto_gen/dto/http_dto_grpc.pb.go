@@ -28,6 +28,8 @@ const (
 	HttpService_ListPlugin_FullMethodName        = "/dto.HttpService/ListPlugin"
 	HttpService_SavePlugin_FullMethodName        = "/dto.HttpService/SavePlugin"
 	HttpService_DeletePlugin_FullMethodName      = "/dto.HttpService/DeletePlugin"
+	HttpService_SetBaseInfo_FullMethodName       = "/dto.HttpService/SetBaseInfo"
+	HttpService_GetAllVersion_FullMethodName     = "/dto.HttpService/GetAllVersion"
 )
 
 // HttpServiceClient is the client API for HttpService service.
@@ -43,6 +45,8 @@ type HttpServiceClient interface {
 	ListPlugin(ctx context.Context, in *ListPluginReq, opts ...grpc.CallOption) (*ListPluginResp, error)
 	SavePlugin(ctx context.Context, in *SavePluginReq, opts ...grpc.CallOption) (*SavePluginResp, error)
 	DeletePlugin(ctx context.Context, in *DeletePluginReq, opts ...grpc.CallOption) (*DeletePluginResp, error)
+	SetBaseInfo(ctx context.Context, in *SetBaseInfoReq, opts ...grpc.CallOption) (*SetBaseInfoResp, error)
+	GetAllVersion(ctx context.Context, in *GetAllVersionReq, opts ...grpc.CallOption) (*GetAllVersionResp, error)
 }
 
 type httpServiceClient struct {
@@ -134,6 +138,24 @@ func (c *httpServiceClient) DeletePlugin(ctx context.Context, in *DeletePluginRe
 	return out, nil
 }
 
+func (c *httpServiceClient) SetBaseInfo(ctx context.Context, in *SetBaseInfoReq, opts ...grpc.CallOption) (*SetBaseInfoResp, error) {
+	out := new(SetBaseInfoResp)
+	err := c.cc.Invoke(ctx, HttpService_SetBaseInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *httpServiceClient) GetAllVersion(ctx context.Context, in *GetAllVersionReq, opts ...grpc.CallOption) (*GetAllVersionResp, error) {
+	out := new(GetAllVersionResp)
+	err := c.cc.Invoke(ctx, HttpService_GetAllVersion_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HttpServiceServer is the server API for HttpService service.
 // All implementations must embed UnimplementedHttpServiceServer
 // for forward compatibility
@@ -147,6 +169,8 @@ type HttpServiceServer interface {
 	ListPlugin(context.Context, *ListPluginReq) (*ListPluginResp, error)
 	SavePlugin(context.Context, *SavePluginReq) (*SavePluginResp, error)
 	DeletePlugin(context.Context, *DeletePluginReq) (*DeletePluginResp, error)
+	SetBaseInfo(context.Context, *SetBaseInfoReq) (*SetBaseInfoResp, error)
+	GetAllVersion(context.Context, *GetAllVersionReq) (*GetAllVersionResp, error)
 	mustEmbedUnimplementedHttpServiceServer()
 }
 
@@ -180,6 +204,12 @@ func (UnimplementedHttpServiceServer) SavePlugin(context.Context, *SavePluginReq
 }
 func (UnimplementedHttpServiceServer) DeletePlugin(context.Context, *DeletePluginReq) (*DeletePluginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePlugin not implemented")
+}
+func (UnimplementedHttpServiceServer) SetBaseInfo(context.Context, *SetBaseInfoReq) (*SetBaseInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetBaseInfo not implemented")
+}
+func (UnimplementedHttpServiceServer) GetAllVersion(context.Context, *GetAllVersionReq) (*GetAllVersionResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllVersion not implemented")
 }
 func (UnimplementedHttpServiceServer) mustEmbedUnimplementedHttpServiceServer() {}
 
@@ -356,6 +386,42 @@ func _HttpService_DeletePlugin_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HttpService_SetBaseInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetBaseInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HttpServiceServer).SetBaseInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HttpService_SetBaseInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HttpServiceServer).SetBaseInfo(ctx, req.(*SetBaseInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HttpService_GetAllVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllVersionReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HttpServiceServer).GetAllVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HttpService_GetAllVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HttpServiceServer).GetAllVersion(ctx, req.(*GetAllVersionReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HttpService_ServiceDesc is the grpc.ServiceDesc for HttpService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -398,6 +464,14 @@ var HttpService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeletePlugin",
 			Handler:    _HttpService_DeletePlugin_Handler,
+		},
+		{
+			MethodName: "SetBaseInfo",
+			Handler:    _HttpService_SetBaseInfo_Handler,
+		},
+		{
+			MethodName: "GetAllVersion",
+			Handler:    _HttpService_GetAllVersion_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
