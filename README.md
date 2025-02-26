@@ -16,7 +16,7 @@
 Golang 推荐使用 [GoneBot](https://github.com/2mf8/GoneBot)
 TypeScript / JavaScript 推荐使用 [ToneBot](https://github.com/2mf8/ToneBot)
 
-### Protobuf, 请使用 `protobuf` 分支（待更新）
+### Protobuf, 请使用 `protobuf` 分支
 
 可以使用任意语言编写websocket server实现通信，协议：[onebot](https://github.com/2mf8/Go-Lagrange-Client/tree/protobuf/onebot_proto)
 
